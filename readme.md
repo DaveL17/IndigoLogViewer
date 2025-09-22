@@ -44,14 +44,15 @@ The app supports a light and dark theme; the selection is transient aat this tim
 
 #### Viewing Area
 The log messages from the selected files are displayed. Initially, it will contain all loaded messages; however, the 
-list will update as filters are applied. You can click on a message and it will open in a modal dialog. This is
+list will update as filters are applied. Click on a message and it will open in a modal dialog. This is
 especially helpful for multiline log messages which are truncated in the main view. There is a <kbd>Copy</kbd> button
 in the modal for convenience.
 
 [Screenshot with Modal](src/Screenshot%20with%20Modal.png)
 
 #### Compatability
-- This web app is tested against Safari `18.6`, but it should work in other modern browsers.
+- This web app is tested against Safari `18.6`, but it should work in other modern browsers (it loads in current 
+  versions of FireFox and Chrome).
 - This web app is not intended to be run on small screens, but it should theoretically work if your small screen device 
   can read the Indigo logs folder.
 

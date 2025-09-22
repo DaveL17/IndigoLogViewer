@@ -13,6 +13,7 @@ let visibleEnd = 0;
 let selectedRowIndex = -1;
 
 function getClassColorClass(className) {
+	// Used to color log message class field error=red, warning=orange, debug=green
 	const lowerClass = className.toLowerCase();
 	if (lowerClass.includes('error')) {
 		return 'error-class';
@@ -49,7 +50,7 @@ function parseLogEntry(entryText) {
 function parseLogContent(content) {
 	content = content.replace(/^\uFEFF/, '');  // Remove BOM if present
 
-	// Timestamp pattern to match your format: YYYY-MM-DD HH:MM:SS.fff
+	// Timestamp pattern to match format: YYYY-MM-DD HH:MM:SS.fff
 	const timestampPattern = /^\d{4}-\d{2}-\d{2}\s\d{2}:\d{2}:\d{2}(?:\.\d{3})?/;
 
 	const lines = content.split('\n');
@@ -131,7 +132,7 @@ async function loadLogFiles(files = null) {
 
 		let processedFiles = 0;
 		const totalFiles = logFiles.length;
-		
+
 		for (let file of logFiles) {
 			try {
 				let content = await readFileContent(file);
@@ -142,12 +143,12 @@ async function loadLogFiles(files = null) {
 					availableClasses.add(entry.class);
 				}
 				processedFiles++;
-				
+
 				// Show progress for large numbers of files
 				if (totalFiles > 5) {
 					showError(`Processing files: ${processedFiles}/${totalFiles}`);
 				}
-				
+
 			} catch (fileError) {
 				console.warn(`Failed to read file ${file.name}:`, fileError);
 				// Continue processing other files instead of failing completely
@@ -177,10 +178,10 @@ async function loadLogFiles(files = null) {
 		// Show reload button after successful load
 		document.getElementById('reloadButton').style.display = 'inline-block';
 
-		const successMessage = processedFiles < totalFiles 
+		const successMessage = processedFiles < totalFiles
 			? `Successfully loaded ${processedFiles}/${totalFiles} log files (${totalFiles - processedFiles} files had errors)`
 			: `Successfully loaded ${processedFiles} log file${processedFiles > 1 ? 's' : ''}`;
-		
+
 		showError(successMessage);
 		setTimeout(clearError, 3000); // Clear success message after 3 seconds
 
@@ -348,14 +349,14 @@ function openModal(logEntry) {
 	currentModalEntry = logEntry;
 	const modalOverlay = document.getElementById('modalOverlay');
 	const modalLogContent = document.getElementById('modalLogContent');
-	
+
 	const classColorClass = getClassColorClass(logEntry.class);
-	
+
 	// Format the complete log entry for display
 	const formattedContent = `${logEntry.timestampString}\t${logEntry.class}\t${logEntry.entry}`;
-	
+
 	modalLogContent.innerHTML = `<span class="modal-timestamp">${escapeHtml(logEntry.timestampString)}</span>\t<span class="modal-class ${classColorClass}">${escapeHtml(logEntry.class)}</span>\t${escapeHtml(logEntry.entry)}`;
-	
+
 	modalOverlay.classList.add('active');
 	document.body.style.overflow = 'hidden'; // Prevent background scrolling
 }
@@ -365,7 +366,7 @@ function closeModal(event) {
 	if (event && event.target !== document.getElementById('modalOverlay')) {
 		return;
 	}
-	
+
 	const modalOverlay = document.getElementById('modalOverlay');
 	modalOverlay.classList.remove('active');
 	document.body.style.overflow = ''; // Restore scrolling
@@ -374,16 +375,16 @@ function closeModal(event) {
 
 function copyLogEntry() {
 	if (!currentModalEntry) return;
-	
+
 	const textToCopy = `${currentModalEntry.timestampString}\t${currentModalEntry.class}\t${currentModalEntry.entry}`;
-	
+
 	navigator.clipboard.writeText(textToCopy).then(() => {
 		// Provide visual feedback
 		const copyButton = document.querySelector('.modal-button.copy');
 		const originalText = copyButton.textContent;
 		copyButton.textContent = 'Copied!';
 		copyButton.style.backgroundColor = 'var(--debug-color)';
-		
+
 		setTimeout(() => {
 			copyButton.textContent = originalText;
 			copyButton.style.backgroundColor = '';
@@ -461,16 +462,44 @@ function clearDateFilter() {
 }
 
 function toggleTheme() {
-	const body = document.body;
-	const button = body.querySelector('.theme-toggle');
+    const body = document.body;
+    const button = body.querySelector('.theme-toggle');
 
-	if (body.dataset.theme === 'light') {
-		body.dataset.theme = 'dark';
-		button.textContent = 'Light ☀️';
-	} else {
-		body.dataset.theme = 'light';
-		button.textContent = 'Dark 🌙';
-	}
+    if (body.dataset.theme === 'light') {
+        body.dataset.theme = 'dark';
+        button.textContent = 'Light ☀️';
+        localStorage.setItem('theme', 'dark');
+    } else {
+        body.dataset.theme = 'light';
+        button.textContent = 'Dark 🌙';
+        localStorage.setItem('theme', 'light');
+    }
+}
+
+// Add this function to load the saved theme on page load
+function loadSavedTheme() {
+    const savedTheme = localStorage.getItem('theme') || 'light';
+    const body = document.body;
+    const button = body.querySelector('.theme-toggle');
+
+    body.dataset.theme = savedTheme;
+
+    if (savedTheme === 'dark') {
+        button.textContent = 'Light ☀️';
+    } else {
+        button.textContent = 'Dark 🌙';
+    }
+}
+
+// Add this to the end of your script, after the existing initialization:
+// Load saved theme when page loads
+document.addEventListener('DOMContentLoaded', loadSavedTheme);
+
+// If DOMContentLoaded already fired, call it immediately
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', loadSavedTheme);
+} else {
+    loadSavedTheme();
 }
 
 function escapeHtml(text) {
