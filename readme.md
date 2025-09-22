@@ -1,13 +1,13 @@
 ## Indigo Log Viewer
 
-[Screenshot](src/Screenshot.png)
-
 The ***Indigo Log Viewer*** is a simple web-based app that is intended to be a front end viewer of Indigo log files.
 While it might work for other log files as well, it is expecting log file entries to be of the form 
 `[POSIX Timestamp][Message Class][Message]`. No other log entry format is supported. For example, 
 ```text
 2025-09-10 11:52:01.833	Action Collection	Webhook Post/Form Received
 ```
+
+[Screenshot](src/Screenshot.png)
 
 ### Usage
 
@@ -42,3 +42,8 @@ especially helpful for multiline log messages which are truncated in the main vi
 in the modal for convenience.
 
 [Screenshot with Modal](src/Screenshot%20with%20Modal.png)
+
+#### Compatability
+- This web app is tested against Safari `18.6`, but it should work in other modern browsers.
+- This web app is not intended to be run on small screens, but it should theoretically work if your small screen device 
+  can read the Indigo logs folder.
