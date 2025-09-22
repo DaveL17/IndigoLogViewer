@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Indigo Log Viewer</title>
+    <link rel="stylesheet" href="log_viewer_app.css">
+</head>
+<body data-theme="light">
+    <div class="header">
+        <div class="title">Indigo Log Viewer</div>
+
+        <div class="controls">
+            <div class="control-group">
+                <div class="load-controls">
+                    <input type="file" id="folderInput" webkitdirectory style="display: none;">
+                    <button class="load-button" onclick="selectFolder()">Choose Log Folder</button>
+                    <button class="reload-button" onclick="reloadLogFiles()" id="reloadButton" style="display: none;">Reload</button>
+                </div>
+            </div>
+
+            <div class="date-filter-group">
+                <label>Date Filter</label>
+                <div style="display: flex; gap: 5px;">
+                    <input type="date" id="startDateFilter" placeholder="Start Date">
+                    <input type="date" id="endDateFilter" placeholder="End Date">
+                    <button class="clear-button" onclick="clearDateFilter()">Clear</button>
+                </div>
+            </div>
+
+            <div class="control-group">
+                <label>Class Filter</label>
+                <select id="classFilter">
+                    <option value="">All Classes</option>
+                </select>
+            </div>
+
+            <div class="control-group">
+                <label>Text Search</label>
+                <div style="display: flex; gap: 5px;">
+                    <input type="text" id="textFilter" placeholder="Search log entries...">
+                    <button class="clear-button" onclick="clearTextFilter()">Clear</button>
+                </div>
+            </div>
+
+            <div class="control-group">
+                <label style="visibility: hidden;">.</label>
+                <button class="theme-toggle" onclick="toggleTheme()">Dark 🌙</button>
+            </div>
+        </div>
+
+        <div class="error-message" id="errorMessage"></div>
+    </div>
+
+    <div class="table-container">
+        <div class="table-header">
+            <div class="header-timestamp">Timestamp</div>
+            <div class="header-class">Class</div>
+            <div class="header-entry">
+                Log Entry (Click row for full details)
+                <div class="navigation-controls">
+                    <button class="nav-button" onclick="navigateToTop()" title="Go to top">Top</button>
+                    <button class="nav-button" onclick="navigatePageUp()" title="Page up">PgUp</button>
+                    <button class="nav-button" onclick="navigatePageDown()" title="Page down">PgDn</button>
+                    <button class="nav-button" onclick="navigateToEnd()" title="Go to end">End</button>
+                </div>
+            </div>
+        </div>
+        <div class="virtual-scroll-container" id="scrollContainer">
+            <div class="virtual-scroll-spacer" id="virtualSpacer"></div>
+            <div class="virtual-scroll-content" id="virtualContent">
+                <div class="empty-state">Please load log files to view entries</div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Modal -->
+    <div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <div class="modal-header">
+                <h3 class="modal-title">Log Entry Details</h3>
+                <button class="modal-close" onclick="closeModal()" title="Close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="modal-log-content" id="modalLogContent"></div>
+            </div>
+            <div class="modal-footer">
+                <button class="modal-button copy" onclick="copyLogEntry()">Copy</button>
+                <button class="modal-button close" onclick="closeModal()">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer" id="footer">No log files loaded</div>
+	<script src="log_viewer_app.js"></script> 
+</body>
+</html>
