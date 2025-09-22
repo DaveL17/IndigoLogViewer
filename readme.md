@@ -1,5 +1,7 @@
 ## Indigo Log Viewer
 
+[Screenshot](src/Screenshot.png)
+
 The ***Indigo Log Viewer*** is a simple web-based app that is intended to be a front end viewer of Indigo log files.
 While it might work for other log files as well, it is expecting log file entries to be of the form 
 `[POSIX Timestamp][Message Class][Message]`. No other log entry format is supported. For example, 
@@ -38,3 +40,5 @@ The log messages from the selected files are displayed. Initially, it will conta
 list will update as filters are applied. You can click on a message and it will open in a modal dialog. This is
 especially helpful for multiline log messages which are truncated in the main view. There is a <kbd>Copy</kbd> button
 in the modal for convenience.
+
+[Screenshot with Modal](src/Screenshot%20with%20Modal.png)
