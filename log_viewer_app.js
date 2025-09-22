@@ -352,9 +352,6 @@ function openModal(logEntry) {
 
 	const classColorClass = getClassColorClass(logEntry.class);
 
-	// Format the complete log entry for display
-	const formattedContent = `${logEntry.timestampString}\t${logEntry.class}\t${logEntry.entry}`;
-
 	modalLogContent.innerHTML = `<span class="modal-timestamp">${escapeHtml(logEntry.timestampString)}</span>\t<span class="modal-class ${classColorClass}">${escapeHtml(logEntry.class)}</span>\t${escapeHtml(logEntry.entry)}`;
 
 	modalOverlay.classList.add('active');
@@ -517,7 +514,8 @@ function clearError() {
 }
 
 // Event listeners for real-time filtering
-document.getElementById('folderInput').addEventListener('change', () => loadLogFiles());
+ document.getElementById('folderInput').addEventListener('change', async () => await loadLogFiles());
+// document.getElementById('folderInput').addEventListener('change', () => loadLogFiles());
 document.getElementById('startDateFilter').addEventListener('change', applyFilters);
 document.getElementById('endDateFilter').addEventListener('change', applyFilters);
 document.getElementById('classFilter').addEventListener('change', applyFilters);
