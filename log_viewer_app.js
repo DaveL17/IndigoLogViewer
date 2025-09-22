@@ -13,7 +13,7 @@ let visibleEnd = 0;
 let selectedRowIndex = -1;
 
 // Toast notification system
-function showToast(message, type = 'info', duration = 3000) {
+function showToast(message, type = 'info', duration = 4000) {
 	const toastContainer = document.getElementById('toastContainer');
 	const toast = document.createElement('div');
 	toast.className = `toast ${type}`;
