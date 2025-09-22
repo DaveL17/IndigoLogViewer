@@ -15,7 +15,7 @@
                 <div class="load-controls">
                     <input type="file" id="folderInput" webkitdirectory style="display: none;">
                     <button class="load-button" onclick="selectFolder()">Choose Log Folder</button>
-                    <button class="reload-button" onclick="reloadLogFiles()" id="reloadButton" style="display: none;">Reload</button>
+                    <button class="reload-button" onclick="reloadLogFiles()" id="reloadButton" disabled>Reload</button>
                 </div>
             </div>
 
@@ -52,6 +52,9 @@
         <div class="error-message" id="errorMessage"></div>
     </div>
 
+    <!-- Toast notifications container -->
+    <div class="toast-container" id="toastContainer"></div>
+
     <div class="table-container">
         <div class="table-header">
             <div class="header-timestamp">Timestamp</div>
@@ -73,7 +76,7 @@
             </div>
         </div>
     </div>
-    
+
     <!-- Modal -->
     <div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)">
         <div class="modal-content" onclick="event.stopPropagation()">
@@ -92,6 +95,6 @@
     </div>
 
     <div class="footer" id="footer">No log files loaded</div>
-	<script src="log_viewer_app.js"></script> 
+	<script src="log_viewer_app.js"></script>
 </body>
 </html>

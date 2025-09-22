@@ -12,6 +12,29 @@ let visibleStart = 0;
 let visibleEnd = 0;
 let selectedRowIndex = -1;
 
+// Toast notification system
+function showToast(message, type = 'info', duration = 3000) {
+	const toastContainer = document.getElementById('toastContainer');
+	const toast = document.createElement('div');
+	toast.className = `toast ${type}`;
+	toast.textContent = message;
+
+	toastContainer.appendChild(toast);
+
+	// Trigger show animation
+	setTimeout(() => toast.classList.add('show'), 100);
+
+	// Hide and remove after duration
+	setTimeout(() => {
+		toast.classList.add('hide');
+		setTimeout(() => {
+			if (toast.parentNode) {
+				toast.parentNode.removeChild(toast);
+			}
+		}, 300);
+	}, duration);
+}
+
 function getClassColorClass(className) {
 	// Used to color log message class field error=red, warning=orange, debug=green
 	const lowerClass = className.toLowerCase();
@@ -94,7 +117,7 @@ function reloadLogFiles() {
 	if (selectedFolder && selectedFolder.length > 0) {
 		loadLogFiles(selectedFolder);
 	} else {
-		showError('No folder selected to reload');
+		showToast('No folder selected to reload', 'error');
 	}
 }
 
@@ -108,7 +131,7 @@ async function loadLogFiles(files = null) {
 	}
 
 	if (filesToProcess.length === 0) {
-		showError('Please select a folder containing log files');
+		showToast('Please select a folder containing log files', 'error');
 		return;
 	}
 
@@ -126,7 +149,7 @@ async function loadLogFiles(files = null) {
 		});
 
 		if (logFiles.length === 0) {
-			showError('No log files found matching pattern "YYYY-MM-DD Events.*" in selected folder');
+			showToast('No log files found matching pattern "YYYY-MM-DD Events.*" in selected folder', 'error');
 			return;
 		}
 
@@ -144,10 +167,10 @@ async function loadLogFiles(files = null) {
 				}
 				processedFiles++;
 
-				// Show progress for large numbers of files
-				if (totalFiles > 5) {
-					showError(`Processing files: ${processedFiles}/${totalFiles}`);
-				}
+				// Don't show individual file progress toasts - only show for large batches
+				// if (totalFiles > 5) {
+				//     showToast(`Processing files: ${processedFiles}/${totalFiles}`, 'info', 1000);
+				// }
 
 			} catch (fileError) {
 				console.warn(`Failed to read file ${file.name}:`, fileError);
@@ -158,7 +181,7 @@ async function loadLogFiles(files = null) {
 		}
 
 		if (processedFiles === 0) {
-			showError('No files could be processed successfully');
+			showToast('No files could be processed successfully', 'error');
 			return;
 		}
 
@@ -166,27 +189,29 @@ async function loadLogFiles(files = null) {
 		allLogEntries.sort((a, b) => b.timestamp - a.timestamp);
 
 		// Get unique dates for the date range inputs
-		availableDates = [...new Set(allLogEntries.map(entry =>
-			entry.timestamp.toISOString().split('T')[0]
-		))].sort().reverse();
+		availableDates = [...new Set(allLogEntries.map(entry => {
+			const entryYear = entry.timestamp.getFullYear();
+			const entryMonth = String(entry.timestamp.getMonth() + 1).padStart(2, '0');
+			const entryDay = String(entry.timestamp.getDate()).padStart(2, '0');
+			return `${entryYear}-${entryMonth}-${entryDay}`;
+		}))].sort().reverse();
 
 		updateFilters();
 		setDefaultDateRange();
 		applyFilters();
 		updateStats();
 
-		// Show reload button after successful load
-		document.getElementById('reloadButton').style.display = 'inline-block';
+		// Enable reload button after successful load
+		document.getElementById('reloadButton').disabled = false;
 
 		const successMessage = processedFiles < totalFiles
 			? `Successfully loaded ${processedFiles}/${totalFiles} log files (${totalFiles - processedFiles} files had errors)`
 			: `Successfully loaded ${processedFiles} log file${processedFiles > 1 ? 's' : ''}`;
 
-		showError(successMessage);
-		setTimeout(clearError, 3000); // Clear success message after 3 seconds
+		showToast(successMessage, 'success');
 
 	} catch (error) {
-		showError('Error loading log files: ' + error.message);
+		showToast('Error loading log files: ' + error.message, 'error');
 		console.error('Load error:', error);
 	}
 }
@@ -247,7 +272,12 @@ function applyFilters() {
 
 	if (startDate || endDate) {
 		filtered = filtered.filter(entry => {
-			const entryDate = entry.timestamp.toISOString().split('T')[0];
+			// Get the date in local timezone to avoid UTC conversion issues
+			const entryYear = entry.timestamp.getFullYear();
+			const entryMonth = String(entry.timestamp.getMonth() + 1).padStart(2, '0');
+			const entryDay = String(entry.timestamp.getDate()).padStart(2, '0');
+			const entryDate = `${entryYear}-${entryMonth}-${entryDay}`;
+
 			const afterStart = !startDate || entryDate >= startDate;
 			const beforeEnd = !endDate || entryDate <= endDate;
 			return afterStart && beforeEnd;
@@ -388,7 +418,7 @@ function copyLogEntry() {
 		}, 1000);
 	}).catch(err => {
 		console.error('Failed to copy text: ', err);
-		showError('Failed to copy to clipboard');
+		showToast('Failed to copy to clipboard', 'error');
 	});
 }
 

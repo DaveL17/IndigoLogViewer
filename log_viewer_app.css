@@ -152,6 +152,58 @@ button:hover {
     opacity: 0.9;
 }
 
+/* Disabled button styling */
+button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* Toast notification styles */
+.toast-container {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 2000;
+    pointer-events: none;
+}
+
+.toast {
+    background-color: var(--modal-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 12px 16px;
+    margin-bottom: 10px;
+    max-width: 300px;
+    word-wrap: break-word;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    transform: translateX(100%);
+    opacity: 0;
+    transition: all 0.3s ease-in-out;
+    pointer-events: auto;
+}
+
+.toast.show {
+    transform: translateX(0);
+    opacity: 1;
+}
+
+.toast.hide {
+    transform: translateY(-20px);
+    opacity: 0;
+}
+
+.toast.success {
+    border-left: 4px solid var(--debug-color);
+}
+
+.toast.error {
+    border-left: 4px solid var(--error-color);
+}
+
+.toast.info {
+    border-left: 4px solid var(--button-bg);
+}
+
 .theme-toggle {
     background-color: var(--text-color);
     color: var(--bg-color);
