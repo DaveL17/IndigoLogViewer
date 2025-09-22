@@ -10,6 +10,13 @@ While it might work for other log files as well, it is expecting log file entrie
 [Screenshot](src/Screenshot.png)
 
 ### Usage
+The app requires three files to run:
+1. log_viewer_app.css
+2. log_viewer_app.html
+3. log_viewer_app.js
+
+Download the files using the <kbd>Code</kbd> button above and unzip the files into a working folder. Then double-click the 
+html file or select File > Open from your preferred browser.
 
 #### Choose Log Folder
 Click the <kbd>Choose Log Folder</kbd> button and browse to the log folder of your target Indigo install. Select the 
@@ -47,3 +54,5 @@ in the modal for convenience.
 - This web app is tested against Safari `18.6`, but it should work in other modern browsers.
 - This web app is not intended to be run on small screens, but it should theoretically work if your small screen device 
   can read the Indigo logs folder.
+
+Add Suggestions and Error Reports using the Issues tab above.
