@@ -379,7 +379,6 @@ function openModal(logEntry) {
 	currentModalEntry = logEntry;
 	const modalOverlay = document.getElementById('modalOverlay');
 	const modalLogContent = document.getElementById('modalLogContent');
-
 	const classColorClass = getClassColorClass(logEntry.class);
 
 	modalLogContent.innerHTML = `<span class="modal-timestamp">${escapeHtml(logEntry.timestampString)}</span>\t<span class="modal-class ${classColorClass}">${escapeHtml(logEntry.class)}</span>\t${escapeHtml(logEntry.entry)}`;
