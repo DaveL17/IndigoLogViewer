@@ -7,8 +7,7 @@ format that is supported:
 ```text
 2025-09-10 11:52:01.833	Action Collection	Webhook Post/Form Received
 ```
-
-[Screenshot](src/Screenshot.png)
+<img src="src/Screenshot.png" alt="Screenshot" width="800" height="600">
 
 ### Usage
 The app requires three files to run:
@@ -54,7 +53,7 @@ however, the list will update as filters are applied. Click on a message and it 
 especially helpful for multiline log messages which are truncated in the main view. There is a <kbd>Copy</kbd> button
 provided in the modal which will copy the entire log entry displayed.
 
-[Screenshot with Modal](src/Screenshot%20with%20Modal.png)
+<img src="src/Screenshot with Modal.png" alt="Screenshot with Modal" width="800" height="600">
 
 #### Compatability
 - This web app is tested against Safari `18.6`, but it should work in other modern browsers (it loads in current 
