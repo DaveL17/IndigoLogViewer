@@ -12,53 +12,54 @@ format that is supported:
 
 ### Usage
 The app requires three files to run:
-1. log_viewer_app.css
-2. log_viewer_app.html
-3. log_viewer_app.js
+1. log_viewer_app.html
+2. log_viewer_app.js
+3. log_viewer_app.css
 
 Download the files using the <kbd>Code</kbd> button above and unzip the files into a working folder. Then double-click the 
 html file or select File > Open from your preferred browser.
 
 #### Choose Log Folder
-Click the <kbd>Choose Log Folder</kbd> button and browse to the log folder of your target Indigo install. Select the 
-folder to load all the log files or select a single log file to view. The app supports opening log files from a 
-network location; however, this can affect load times depending on the amount of data contained within the log files
-selected. Be patient, it may take a few beats to load. On an M4 MacBook Air, it loads 180,000 log lines in less than a
-second.
+Once the app is loaded, click the <kbd>Choose Log Folder</kbd> button and browse to the log folder of your target 
+Indigo install. Select the  folder to load all the log files or select a single log file to view. The app supports 
+opening log files from a network location; however, this can affect load times depending on the speed of your network 
+and the amount of data contained within the log files selected. Be patient, it may take a few beats to load. On an M4 
+MacBook Air, it loads180,000 log lines in less than a second.
 
 #### Reload
-The view is not updated in real time. To reload the log entry list, click the <kbd>Reload button</kbd>. If there are 
-filters set, selecting <kbd>Reload</kbd> will reset the filters as well. If no log files have been loaded, the 
-<kbd>Reload button</kbd> will be hidden.
+The view is not updated in real time. To reload the log entry list to view new log entries, click the <kbd>Reload 
+button</kbd>. If there are filters set, selecting <kbd>Reload</kbd> will reset the filters as well. If no log files 
+have been loaded, the <kbd>Reload</kbd> button will be disabled.
 
 #### Date Filter
-To limit the log entry list to a specific date or date range, use the Date Filter inputs. To clear a previous selection,
-click the <kbd>Clear</kbd> button.
+To limit the log entry list to a specific date or date range, use the Date Filter inputs. To clear a previous date range
+selection, click the <kbd>Clear</kbd> button.
 
 #### Class Filter
-The Class Filter dropdown will list all the message classes that exist in the loaded log files.
+The Class Filter dropdown will list all the message classes that exist in the loaded log files. This control is built 
+dynamically; that is, when you first load the app, there will be no classes listed in the control.
 
 #### Text Search
 Use the Text Search tool to find specific strings of text. The search entry is a literal search (it doesn't support 
 complex search patterns.)
 
 #### Themes
-The app supports a light and dark theme; the selection is transient aat this time. The app will remember your choice
-for the future; however, if you clear your browser's cache, the preference may be cleared if you delete the app's 
-local storage. This is a "universal" browser security feature.
+The app supports a light and dark theme. It will remember your choice for the future; however, if you clear your 
+browser's cache, the preference may be cleared if you delete the app's local storage. This is a "universal" browser 
+security feature.
 
 #### Viewing Area
-The log messages from the selected files are displayed. Initially, it will contain all loaded messages; however, the 
-list will update as filters are applied. Click on a message and it will open in a modal dialog. This is
+The log messages from the selected files are displayed in this area. Initially, it will contain all loaded messages; 
+however, the list will update as filters are applied. Click on a message and it will open in a modal dialog. This is
 especially helpful for multiline log messages which are truncated in the main view. There is a <kbd>Copy</kbd> button
-in the modal for convenience.
+provided in the modal which will copy the entire log entry displayed.
 
 [Screenshot with Modal](src/Screenshot%20with%20Modal.png)
 
 #### Compatability
 - This web app is tested against Safari `18.6`, but it should work in other modern browsers (it loads in current 
-  versions of FireFox and Chrome).
-- This web app is not intended to be run on small screens, but it should theoretically work if your small screen device 
-  can read the Indigo logs folder.
+  versions of FireFox and Chrome, but is not fully tested in those browsers).
+- This web app is not designed to be run on small screens, but it should theoretically work if your small screen device 
+  can access the Indigo logs folder.
 
-Add Suggestions and Error Reports using the Issues tab above.
+Add suggestions and error reports using the issues tab above.
