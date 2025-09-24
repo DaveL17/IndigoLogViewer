@@ -237,13 +237,13 @@ select {
     background-color: var(--input-bg);
     font-weight: normal;
     -webkit-appearance: none;
-    -moz-appearance: none;
     appearance: none;
     background-image: url("data:image/svg+xml;charset=US-ASCII,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 4 5'><path fill='%23666' d='M2 0L0 2h4zm0 5L0 3h4z'/></svg>");
     background-repeat: no-repeat;
     background-position: right 10px center;
     background-size: 10px;
     padding-right: 30px;
+    width: 200px;
 }
 
 [data-theme="dark"] select {
@@ -729,6 +729,58 @@ button:disabled {
 
 .modal-class.debug-class {
     color: var(--debug-color);
+}
+
+/* Resizable column styles */
+.table-header > div {
+    position: relative;
+}
+
+.resize-handle {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 6px;
+    height: 100%;
+    cursor: col-resize;
+    background: transparent;
+    z-index: 100;
+    border-right: 2px solid transparent;
+    transition: border-color 0.2s;
+}
+
+.resize-handle:hover {
+    border-right-color: var(--button-bg);
+}
+
+.resize-handle.resizing {
+    border-right-color: var(--button-bg);
+}
+
+/* Prevent text selection during resize */
+.no-select {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+/* Remove the last resize handle since there's nothing to resize after the last column */
+.header-entry .resize-handle {
+    display: none;
+}
+
+/* Update column widths to use CSS variables for dynamic resizing */
+.header-timestamp,
+.row-timestamp {
+    width: var(--timestamp-width, 180px);
+    min-width: var(--timestamp-width, 180px);
+}
+
+.header-class,
+.row-class {
+    width: var(--class-width, 150px);
+    min-width: var(--class-width, 150px);
 }
 
 @media (max-width: 768px) {

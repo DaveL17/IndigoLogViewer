@@ -699,6 +699,187 @@ document.addEventListener('keydown', (e) => {
 	}
 });
 
+// Column resizing variables
+let isResizing = false;
+let currentResizeHandle = null;
+let startX = 0;
+let startWidth = 0;
+let columnType = '';
+
+// Default column widths
+const DEFAULT_COLUMN_WIDTHS = {
+    timestamp: 180,
+    class: 150
+};
+
+// Current column widths (will be updated as user resizes)
+let columnWidths = { ...DEFAULT_COLUMN_WIDTHS };
+
+// Initialize resizable columns
+function initializeResizableColumns() {
+    // Create resize handles for each resizable column
+    const timestampHeader = document.querySelector('.header-timestamp');
+    const classHeader = document.querySelector('.header-class');
+
+    // Add resize handle to timestamp column
+    if (timestampHeader) {
+        const timestampHandle = createResizeHandle('timestamp');
+        timestampHeader.appendChild(timestampHandle);
+    }
+
+    // Add resize handle to class column
+    if (classHeader) {
+        const classHandle = createResizeHandle('class');
+        classHeader.appendChild(classHandle);
+    }
+
+    // Set initial column widths
+    updateColumnWidths();
+}
+
+// Create a resize handle element
+function createResizeHandle(columnType) {
+    const handle = document.createElement('div');
+    handle.className = 'resize-handle';
+    handle.dataset.columnType = columnType;
+
+    // Add event listeners
+    handle.addEventListener('mousedown', startResize);
+    handle.addEventListener('touchstart', startResize, { passive: false });
+
+    return handle;
+}
+
+// Start column resize
+function startResize(e) {
+    e.preventDefault();
+    e.stopPropagation();
+
+    isResizing = true;
+    currentResizeHandle = e.target;
+    columnType = e.target.dataset.columnType;
+
+    // Get starting position and width
+    startX = e.type === 'touchstart' ? e.touches[0].clientX : e.clientX;
+    startWidth = columnWidths[columnType];
+
+    // Add visual feedback
+    currentResizeHandle.classList.add('resizing');
+    document.body.classList.add('no-select');
+
+    // Add global event listeners
+    document.addEventListener('mousemove', handleResize);
+    document.addEventListener('mouseup', stopResize);
+    document.addEventListener('touchmove', handleResize, { passive: false });
+    document.addEventListener('touchend', stopResize);
+
+    // Change cursor globally
+    document.body.style.cursor = 'col-resize';
+}
+
+// Handle column resize
+function handleResize(e) {
+    if (!isResizing || !currentResizeHandle) return;
+
+    e.preventDefault();
+
+    const currentX = e.type === 'touchmove' ? e.touches[0].clientX : e.clientX;
+    const deltaX = currentX - startX;
+    const newWidth = Math.max(50, startWidth + deltaX); // Minimum width of 50px
+
+    // Update column width
+    columnWidths[columnType] = newWidth;
+    updateColumnWidths();
+}
+
+// Stop column resize
+function stopResize() {
+    if (!isResizing) return;
+
+    isResizing = false;
+
+    // Remove visual feedback
+    if (currentResizeHandle) {
+        currentResizeHandle.classList.remove('resizing');
+    }
+    document.body.classList.remove('no-select');
+    document.body.style.cursor = '';
+
+    // Remove global event listeners
+    document.removeEventListener('mousemove', handleResize);
+    document.removeEventListener('mouseup', stopResize);
+    document.removeEventListener('touchmove', handleResize);
+    document.removeEventListener('touchend', stopResize);
+
+    // Clear references
+    currentResizeHandle = null;
+    columnType = '';
+
+    // Save column widths to localStorage
+    saveColumnWidths();
+
+    // Re-render the virtual list to update row widths
+    renderVirtualList();
+}
+
+// Update column widths using CSS variables
+function updateColumnWidths() {
+    const root = document.documentElement;
+    root.style.setProperty('--timestamp-width', columnWidths.timestamp + 'px');
+    root.style.setProperty('--class-width', columnWidths.class + 'px');
+}
+
+// Save column widths to localStorage
+function saveColumnWidths() {
+    try {
+        localStorage.setItem('columnWidths', JSON.stringify(columnWidths));
+    } catch (error) {
+        console.warn('Failed to save column widths to localStorage:', error);
+    }
+}
+
+// Load column widths from localStorage
+function loadColumnWidths() {
+    try {
+        const saved = localStorage.getItem('columnWidths');
+        if (saved) {
+            const parsedWidths = JSON.parse(saved);
+            columnWidths = { ...DEFAULT_COLUMN_WIDTHS, ...parsedWidths };
+            updateColumnWidths();
+        }
+    } catch (error) {
+        console.warn('Failed to load column widths from localStorage:', error);
+        columnWidths = { ...DEFAULT_COLUMN_WIDTHS };
+        updateColumnWidths();
+    }
+}
+
+// Reset column widths to defaults
+function resetColumnWidths() {
+    columnWidths = { ...DEFAULT_COLUMN_WIDTHS };
+    updateColumnWidths();
+    saveColumnWidths();
+    renderVirtualList();
+    showToast('Column widths reset to defaults', 'info');
+}
+
+// Add this to your existing DOMContentLoaded event or initialization
+function initializeColumnResize() {
+    loadColumnWidths();
+
+    // Wait for DOM to be ready
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', () => {
+            setTimeout(initializeResizableColumns, 100);
+        });
+    } else {
+        setTimeout(initializeResizableColumns, 100);
+    }
+}
+
+// Initialize column resize functionality
+initializeColumnResize();
+
 // Virtual scrolling event listener
 document.getElementById('scrollContainer').addEventListener('scroll', () => {
 	requestAnimationFrame(renderVirtualList);
