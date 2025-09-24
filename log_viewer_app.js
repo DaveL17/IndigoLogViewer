@@ -12,6 +12,24 @@ let visibleStart = 0;
 let visibleEnd = 0;
 let selectedRowIndex = -1;
 
+// Function to open URL in new tab
+function openInNewTab(url) {
+    window.open(url, '_blank');
+}
+
+// Help function
+function openHelp() {
+    // Change this URL to your actual help documentation URL
+    const helpUrl = 'https://example.com/help';
+    openInNewTab(helpUrl);
+
+    // Show confirmation toast
+    showToast('Opening help documentation...', 'info', 2000);
+
+    // Close the hamburger menu
+    document.getElementById('hamburgerDropdown').classList.remove('show');
+}
+
 // Hamburger menu functions
 function toggleMenu() {
 	const dropdown = document.getElementById('hamburgerDropdown');
@@ -38,9 +56,9 @@ function updateMenuItems() {
 	const themeMenuItem = document.getElementById('themeMenuItem');
 	const currentTheme = document.body.dataset.theme;
 	if (currentTheme === 'dark') {
-		themeMenuItem.textContent = '☀️ Light Theme';
+		themeMenuItem.textContent = 'Light Theme';
 	} else {
-		themeMenuItem.textContent = '🌙 Dark Theme';
+		themeMenuItem.textContent = 'Dark Theme';
 	}
 }
 
@@ -159,8 +177,12 @@ function selectFolder() {
 
 function reloadLogFiles() {
 	if (selectedFolder && selectedFolder.length > 0) {
-		loadLogFiles(selectedFolder);
+		// Show reload toast first, then perform the actual reload
 		showToast('Reloading log files...', 'info', 2000);
+		// Use setTimeout to ensure toast is shown before starting reload
+		setTimeout(() => {
+			loadLogFiles(selectedFolder);
+		}, 100);
 	} else {
 		showToast('No folder selected to reload', 'error');
 	}
@@ -414,6 +436,52 @@ function selectRow(clickedRow, index) {
 	openModal(filteredEntries[index]);
 }
 
+// Arrow key navigation for selected rows
+function navigateRowUp() {
+	if (filteredEntries.length === 0) return;
+
+	if (selectedRowIndex > 0) {
+		selectedRowIndex--;
+		scrollToSelectedRow();
+		renderVirtualList();
+	}
+}
+
+function navigateRowDown() {
+	if (filteredEntries.length === 0) return;
+
+	if (selectedRowIndex < filteredEntries.length - 1) {
+		selectedRowIndex++;
+		scrollToSelectedRow();
+		renderVirtualList();
+	} else if (selectedRowIndex === -1 && filteredEntries.length > 0) {
+		// If no row is selected, select the first one
+		selectedRowIndex = 0;
+		scrollToSelectedRow();
+		renderVirtualList();
+	}
+}
+
+function scrollToSelectedRow() {
+	if (selectedRowIndex === -1) return;
+
+	const scrollContainer = document.getElementById('scrollContainer');
+	const containerHeight = scrollContainer.clientHeight;
+	const rowTop = selectedRowIndex * ROW_HEIGHT;
+	const rowBottom = rowTop + ROW_HEIGHT;
+	const scrollTop = scrollContainer.scrollTop;
+	const scrollBottom = scrollTop + containerHeight;
+
+	// Check if row is above visible area
+	if (rowTop < scrollTop) {
+		scrollContainer.scrollTop = rowTop;
+	}
+	// Check if row is below visible area
+	else if (rowBottom > scrollBottom) {
+		scrollContainer.scrollTop = rowBottom - containerHeight;
+	}
+}
+
 function openModal(logEntry) {
 	currentModalEntry = logEntry;
 	const modalOverlay = document.getElementById('modalOverlay');
@@ -447,8 +515,6 @@ function copyLogEntry() {
 		// Provide visual feedback
 		const copyButton = document.querySelector('.modal-button.copy');
 		const originalText = copyButton.textContent;
-		copyButton.textContent = 'Copied!';
-		copyButton.style.backgroundColor = 'var(--debug-color)';
 
 		setTimeout(() => {
 			copyButton.textContent = originalText;
@@ -532,11 +598,11 @@ function toggleTheme() {
 
     if (body.dataset.theme === 'light') {
         body.dataset.theme = 'dark';
-        themeMenuItem.textContent = '☀️ Light Theme';
+        themeMenuItem.textContent = 'â˜€ï¸ Light Theme';
         localStorage.setItem('theme', 'dark');
     } else {
         body.dataset.theme = 'light';
-        themeMenuItem.textContent = '🌙 Dark Theme';
+        themeMenuItem.textContent = 'ðŸŒ™ Dark Theme';
         localStorage.setItem('theme', 'light');
     }
 
@@ -600,6 +666,20 @@ document.addEventListener('keydown', (e) => {
 	if (filteredEntries.length === 0) return;
 
 	switch(e.key) {
+		case 'ArrowUp':
+			e.preventDefault();
+			navigateRowUp();
+			break;
+		case 'ArrowDown':
+			e.preventDefault();
+			navigateRowDown();
+			break;
+		case 'Enter':
+			e.preventDefault();
+			if (selectedRowIndex >= 0 && selectedRowIndex < filteredEntries.length) {
+				openModal(filteredEntries[selectedRowIndex]);
+			}
+			break;
 		case 'Home':
 			e.preventDefault();
 			navigateToTop();

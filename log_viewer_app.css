@@ -148,7 +148,7 @@ body {
 }
 
 .menu-item {
-    padding: 6px 8px;
+    padding: 12px 16px;
     cursor: pointer;
     font-size: 14px;
     display: flex;
@@ -232,7 +232,25 @@ select, input[type="text"], input[type="date"], button {
     line-height: 1;
 }
 
-select, input[type="date"] {
+/* Flat select dropdown styling */
+select {
+    background-color: var(--input-bg);
+    font-weight: normal;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    background-image: url("data:image/svg+xml;charset=US-ASCII,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 4 5'><path fill='%23666' d='M2 0L0 2h4zm0 5L0 3h4z'/></svg>");
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    background-size: 10px;
+    padding-right: 30px;
+}
+
+[data-theme="dark"] select {
+    background-image: url("data:image/svg+xml;charset=US-ASCII,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 4 5'><path fill='%23e0e0e0' d='M2 0L0 2h4zm0 5L0 3h4z'/></svg>");
+}
+
+input[type="date"] {
     background-color: var(--input-bg);
     font-weight: normal;
 }
@@ -305,12 +323,12 @@ button:disabled {
     pointer-events: none;
 }
 
-/* Toast notification styles */
+/* Toast notification styles with opaque background */
 .toast-container {
     position: fixed;
     top: 20px;
     right: 20px;
-    z-index: 2000;
+    z-index: 10000;
     pointer-events: none;
 }
 
@@ -678,7 +696,7 @@ button:disabled {
 }
 
 .modal-button.copy {
-    background-color: var(--debug-color);
+    background-color: var(--button-bg);
     color: white;
 }
 

@@ -13,24 +13,17 @@
             <div class="hamburger-menu">
                 <button class="hamburger-button" onclick="toggleMenu()" title="Menu">☰</button>
                 <div class="hamburger-dropdown" id="hamburgerDropdown">
-                    <div class="menu-item" onclick="selectFolder()">📁 Choose Log Folder</div>
-                    <div class="menu-item" onclick="reloadLogFiles()" id="reloadMenuItem">🔄 Reload</div>
+                    <div class="menu-item" onclick="selectFolder()">Choose Log Folder</div>
+                    <div class="menu-item" onclick="reloadLogFiles()" id="reloadMenuItem">Reload</div>
                     <div class="menu-divider"></div>
-                    <div class="menu-item" onclick="toggleTheme()" id="themeMenuItem">🌙 Dark Theme</div>
+                    <div class="menu-item" onclick="toggleTheme()" id="themeMenuItem">Dark Theme</div>
+                    <div class="menu-divider"></div>
+                    <div class="menu-item" onclick="openHelp()">Help</div>
                 </div>
             </div>
         </div>
 
         <div class="controls">
-            <div class="date-filter-group">
-                <label>Date Filter</label>
-                <div style="display: flex; gap: 5px;">
-                    <input type="date" id="startDateFilter" placeholder="Start Date">
-                    <input type="date" id="endDateFilter" placeholder="End Date">
-                    <button class="clear-button" onclick="clearDateFilter()">Clear</button>
-                </div>
-            </div>
-
             <div class="control-group">
                 <label>Class Filter</label>
                 <select id="classFilter">
@@ -43,6 +36,15 @@
                 <div class="text-input-container">
                     <input type="text" id="textFilter" placeholder="Search log entries...">
                     <button class="clear-input-button" onclick="clearTextFilter()" title="Clear search">&times;</button>
+                </div>
+            </div>
+
+            <div class="date-filter-group">
+                <label>Date Filter</label>
+                <div style="display: flex; gap: 5px;">
+                    <input type="date" id="startDateFilter" placeholder="Start Date">
+                    <input type="date" id="endDateFilter" placeholder="End Date">
+                    <button class="clear-button" onclick="clearDateFilter()">Clear</button>
                 </div>
             </div>
         </div>

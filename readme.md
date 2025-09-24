@@ -18,21 +18,23 @@ The app requires three files to run:
 Download the files using the <kbd>Code</kbd> button above and unzip the files into a working folder. Then double-click the 
 html file or select File > Open from your preferred browser.
 
+### Menu
 #### Choose Log Folder
-Once the app is loaded, click the <kbd>Choose Log Folder</kbd> button and browse to the log folder of your target 
-Indigo install. Select the  folder to load all the log files or select a single log file to view. The app supports 
+Once the app is loaded, click the menu button in the upper right corner and browse to the log folder of your target 
+Indigo install. Select the folder to load all the log files or select a single log file to view. The app supports 
 opening log files from a network location; however, this can affect load times depending on the speed of your network 
 and the amount of data contained within the log files selected. Be patient, it may take a few beats to load. On an M4 
 MacBook Air, it loads180,000 log lines in less than a second.
 
 #### Reload
-The view is not updated in real time. To reload the log entry list to view new log entries, click the <kbd>Reload 
-button</kbd>. If there are filters set, selecting <kbd>Reload</kbd> will reset the filters as well. If no log files 
-have been loaded, the <kbd>Reload</kbd> button will be disabled.
+The view is not updated in real time. To reload the log entry list to view new log entries, select Reload from the menu.
+If there are filters set, selecting Reload will reset the filters as well. If no log files  have been loaded, the 
+Reload menu item will be disabled.
 
-#### Date Filter
-To limit the log entry list to a specific date or date range, use the Date Filter inputs. To clear a previous date range
-selection, click the <kbd>Clear</kbd> button.
+#### Themes
+The app supports a light and dark theme. It will remember your choice for the future; however, if you clear your 
+browser's cache, the preference may be cleared if you delete the app's local storage. This is a "universal" browser 
+security feature. To toggle the theme, select Theme from the menu.
 
 #### Class Filter
 The Class Filter dropdown will list all the message classes that exist in the loaded log files. This control is built 
@@ -42,10 +44,9 @@ dynamically; that is, when you first load the app, there will be no classes list
 Use the Text Search tool to find specific strings of text. The search entry is a literal search (it doesn't support 
 complex search patterns.)
 
-#### Themes
-The app supports a light and dark theme. It will remember your choice for the future; however, if you clear your 
-browser's cache, the preference may be cleared if you delete the app's local storage. This is a "universal" browser 
-security feature.
+#### Date Filter
+To limit the log entry list to a specific date or date range, use the Date Filter inputs. To clear a previous date range
+selection, click the <kbd>Clear</kbd> button.
 
 #### Viewing Area
 The log messages from the selected files are displayed in this area. Initially, it will contain all loaded messages; 
