@@ -12,6 +12,48 @@ let visibleStart = 0;
 let visibleEnd = 0;
 let selectedRowIndex = -1;
 
+// Hamburger menu functions
+function toggleMenu() {
+	const dropdown = document.getElementById('hamburgerDropdown');
+	const isOpen = dropdown.classList.contains('show');
+
+	if (isOpen) {
+		dropdown.classList.remove('show');
+	} else {
+		dropdown.classList.add('show');
+		updateMenuItems();
+	}
+}
+
+function updateMenuItems() {
+	// Update reload menu item state
+	const reloadMenuItem = document.getElementById('reloadMenuItem');
+	if (selectedFolder && selectedFolder.length > 0) {
+		reloadMenuItem.classList.remove('disabled');
+	} else {
+		reloadMenuItem.classList.add('disabled');
+	}
+
+	// Update theme menu item text
+	const themeMenuItem = document.getElementById('themeMenuItem');
+	const currentTheme = document.body.dataset.theme;
+	if (currentTheme === 'dark') {
+		themeMenuItem.textContent = '☀️ Light Theme';
+	} else {
+		themeMenuItem.textContent = '🌙 Dark Theme';
+	}
+}
+
+// Close menu when clicking outside
+document.addEventListener('click', function(event) {
+	const hamburgerMenu = document.querySelector('.hamburger-menu');
+	const dropdown = document.getElementById('hamburgerDropdown');
+
+	if (!hamburgerMenu.contains(event.target)) {
+		dropdown.classList.remove('show');
+	}
+});
+
 // Toast notification system
 function showToast(message, type = 'info', duration = 4000) {
 	const toastContainer = document.getElementById('toastContainer');
@@ -111,14 +153,19 @@ function parseLogContent(content) {
 
 function selectFolder() {
 	document.getElementById('folderInput').click();
+	// Close the hamburger menu after selection
+	document.getElementById('hamburgerDropdown').classList.remove('show');
 }
 
 function reloadLogFiles() {
 	if (selectedFolder && selectedFolder.length > 0) {
 		loadLogFiles(selectedFolder);
+		showToast('Reloading log files...', 'info', 2000);
 	} else {
 		showToast('No folder selected to reload', 'error');
 	}
+	// Close the hamburger menu
+	document.getElementById('hamburgerDropdown').classList.remove('show');
 }
 
 async function loadLogFiles(files = null) {
@@ -167,11 +214,6 @@ async function loadLogFiles(files = null) {
 				}
 				processedFiles++;
 
-				// Don't show individual file progress toasts - only show for large batches
-				// if (totalFiles > 5) {
-				//     showToast(`Processing files: ${processedFiles}/${totalFiles}`, 'info', 1000);
-				// }
-
 			} catch (fileError) {
 				console.warn(`Failed to read file ${file.name}:`, fileError);
 				// Continue processing other files instead of failing completely
@@ -200,9 +242,6 @@ async function loadLogFiles(files = null) {
 		setDefaultDateRange();
 		applyFilters();
 		updateStats();
-
-		// Enable reload button after successful load
-		document.getElementById('reloadButton').disabled = false;
 
 		const successMessage = processedFiles < totalFiles
 			? `Successfully loaded ${processedFiles}/${totalFiles} log files (${totalFiles - processedFiles} files had errors)`
@@ -489,35 +528,33 @@ function clearDateFilter() {
 
 function toggleTheme() {
     const body = document.body;
-    const button = body.querySelector('.theme-toggle');
+    const themeMenuItem = document.getElementById('themeMenuItem');
 
     if (body.dataset.theme === 'light') {
         body.dataset.theme = 'dark';
-        button.textContent = 'Light ☀️';
+        themeMenuItem.textContent = '☀️ Light Theme';
         localStorage.setItem('theme', 'dark');
     } else {
         body.dataset.theme = 'light';
-        button.textContent = 'Dark 🌙';
+        themeMenuItem.textContent = '🌙 Dark Theme';
         localStorage.setItem('theme', 'light');
     }
+
+    // Close the hamburger menu
+    document.getElementById('hamburgerDropdown').classList.remove('show');
 }
 
 // Add this function to load the saved theme on page load
 function loadSavedTheme() {
     const savedTheme = localStorage.getItem('theme') || 'light';
     const body = document.body;
-    const button = body.querySelector('.theme-toggle');
 
     body.dataset.theme = savedTheme;
 
-    if (savedTheme === 'dark') {
-        button.textContent = 'Light ☀️';
-    } else {
-        button.textContent = 'Dark 🌙';
-    }
+    // Update the menu item text based on current theme
+    updateMenuItems();
 }
 
-// Add this to the end of your script, after the existing initialization:
 // Load saved theme when page loads
 document.addEventListener('DOMContentLoaded', loadSavedTheme);
 
@@ -555,6 +592,8 @@ document.addEventListener('keydown', (e) => {
 	// Close modal with Escape key
 	if (e.key === 'Escape') {
 		closeModal();
+		// Also close hamburger menu if it's open
+		document.getElementById('hamburgerDropdown').classList.remove('show');
 		return;
 	}
 
