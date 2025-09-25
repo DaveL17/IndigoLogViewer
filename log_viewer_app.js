@@ -4,13 +4,23 @@ let availableClasses = new Set();
 let availableDates = [];
 let currentModalEntry = null;
 let selectedFolder = null; // Keep track of the selected folder
+let visibleStart = 0;
+let visibleEnd = 0;
+let selectedRowIndex = -1;
 
 // Virtual scrolling variables
 const ROW_HEIGHT = 32; // Minimum height per row
 const BUFFER_SIZE = 10; // Extra rows to render above/below visible area
-let visibleStart = 0;
-let visibleEnd = 0;
-let selectedRowIndex = -1;
+const scrollContainer = document.getElementById('scrollContainer');
+const virtualSpacer = document.getElementById('virtualSpacer');
+const virtualContent = document.getElementById('virtualContent');
+
+// keep applyFilters() from being colled on every keystroke.
+let textFilterTimeout;
+document.getElementById('textFilter').addEventListener('input', () => {
+    clearTimeout(textFilterTimeout);
+    textFilterTimeout = setTimeout(applyFilters, 300);
+});
 
 // Sorting variables
 let currentSort = {
@@ -39,7 +49,6 @@ function sortBy(column) {
 
     // Reset selection and scroll to top after sorting
     selectedRowIndex = -1;
-    const scrollContainer = document.getElementById('scrollContainer');
     scrollContainer.scrollTop = 0;
     renderVirtualList();
 }
@@ -325,6 +334,14 @@ async function loadLogFiles(files = null) {
 		updateFilters();
 		setDefaultDateRange();
 		applyFilters();
+
+		// Select the most recent entry (first row) after loading
+		if (filteredEntries.length > 0) {
+			selectedRowIndex = 0;
+			scrollToSelectedRow();
+			renderVirtualList();
+		}
+
 		updateStats();
 		updateSortIndicators(); // Show initial sort indicators
 
@@ -432,10 +449,6 @@ function applyFilters() {
 }
 
 function renderVirtualList() {
-	const scrollContainer = document.getElementById('scrollContainer');
-	const virtualSpacer = document.getElementById('virtualSpacer');
-	const virtualContent = document.getElementById('virtualContent');
-
 	if (filteredEntries.length === 0) {
 		virtualSpacer.style.height = '0px';
 		virtualContent.innerHTML = `
@@ -529,7 +542,6 @@ function navigateRowDown() {
 function scrollToSelectedRow() {
 	if (selectedRowIndex === -1) return;
 
-	const scrollContainer = document.getElementById('scrollContainer');
 	const containerHeight = scrollContainer.clientHeight;
 	const rowTop = selectedRowIndex * ROW_HEIGHT;
 	const rowBottom = rowTop + ROW_HEIGHT;
@@ -592,21 +604,18 @@ function copyLogEntry() {
 
 // Navigation functions
 function navigateToTop() {
-	const scrollContainer = document.getElementById('scrollContainer');
 	scrollContainer.scrollTop = 0;
 	selectedRowIndex = 0;
 	requestAnimationFrame(renderVirtualList);
 }
 
 function navigateToEnd() {
-	const scrollContainer = document.getElementById('scrollContainer');
 	scrollContainer.scrollTop = scrollContainer.scrollHeight;
 	selectedRowIndex = filteredEntries.length - 1;
 	requestAnimationFrame(renderVirtualList);
 }
 
 function navigatePageUp() {
-	const scrollContainer = document.getElementById('scrollContainer');
 	const containerHeight = scrollContainer.clientHeight;
 	const pageRows = Math.floor(containerHeight / ROW_HEIGHT);
 
@@ -618,7 +627,6 @@ function navigatePageUp() {
 }
 
 function navigatePageDown() {
-	const scrollContainer = document.getElementById('scrollContainer');
 	const containerHeight = scrollContainer.clientHeight;
 	const pageRows = Math.floor(containerHeight / ROW_HEIGHT);
 
@@ -662,11 +670,11 @@ function toggleTheme() {
 
     if (body.dataset.theme === 'light') {
         body.dataset.theme = 'dark';
-        themeMenuItem.textContent = 'â˜€ï¸ Light Theme';
+        themeMenuItem.textContent = 'Light Theme';
         localStorage.setItem('theme', 'dark');
     } else {
         body.dataset.theme = 'light';
-        themeMenuItem.textContent = 'ðŸŒ™ Dark Theme';
+        themeMenuItem.textContent = 'Dark Theme';
         localStorage.setItem('theme', 'light');
     }
 
@@ -701,10 +709,10 @@ function escapeHtml(text) {
 	return div.innerHTML;
 }
 
-function showError(message) {
-	document.getElementById('errorMessage').textContent = message;
-}
-
+// function showError(message) {
+// 	document.getElementById('errorMessage').textContent = message;
+// }
+//
 function clearError() {
 	document.getElementById('errorMessage').textContent = '';
 }
@@ -715,7 +723,6 @@ function clearError() {
 document.getElementById('startDateFilter').addEventListener('change', applyFilters);
 document.getElementById('endDateFilter').addEventListener('change', applyFilters);
 document.getElementById('classFilter').addEventListener('change', applyFilters);
-document.getElementById('textFilter').addEventListener('input', applyFilters);
 
 // Keyboard navigation
 document.addEventListener('keydown', (e) => {
@@ -918,14 +925,14 @@ function loadColumnWidths() {
 }
 
 // Reset column widths to defaults
-function resetColumnWidths() {
-    columnWidths = { ...DEFAULT_COLUMN_WIDTHS };
-    updateColumnWidths();
-    saveColumnWidths();
-    renderVirtualList();
-    showToast('Column widths reset to defaults', 'info');
-}
-
+// function resetColumnWidths() {
+//     columnWidths = { ...DEFAULT_COLUMN_WIDTHS };
+//     updateColumnWidths();
+//     saveColumnWidths();
+//     renderVirtualList();
+//     showToast('Column widths reset to defaults', 'info');
+// }
+//
 // Add this to your existing DOMContentLoaded event or initialization
 function initializeColumnResize() {
     loadColumnWidths();

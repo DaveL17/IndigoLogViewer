@@ -307,8 +307,9 @@ button:disabled {
     transition: opacity 0.2s, background-color 0.2s;
 }
 
-.clear-input-button:hover {
-    opacity: 1;
+.table-header > div:hover,
+.clear-input-button:hover,
+.modal-close:hover {
     background-color: var(--border-color);
 }
 
@@ -423,13 +424,6 @@ button:disabled {
     z-index: 10;
 }
 
-/*.table-header > div {*/
-/*    padding: 6px 8px;*/
-/*    border-right: 1px solid var(--border-color);*/
-/*    display: flex;*/
-/*    align-items: center;*/
-/*}*/
-
 .table-header > div {
     padding: 6px 8px;
     border-right: 1px solid var(--border-color);
@@ -467,9 +461,12 @@ button:disabled {
     border-right: none;
 }
 
-.header-timestamp {
-    width: 180px;
-    min-width: 180px;
+.header-timestamp,
+.row-timestamp {
+    width: var(--timestamp-width, 180px);
+    min-width: var(--timestamp-width, 180px);
+    white-space: nowrap;
+    font-weight: normal;
 }
 
 .header-class {
@@ -535,13 +532,6 @@ button:disabled {
 
 .log-row > div:last-child {
     border-right: none;
-}
-
-.row-timestamp {
-    width: 180px;
-    min-width: 180px;
-    white-space: nowrap;
-    font-weight: normal;
 }
 
 .row-class {
@@ -682,10 +672,6 @@ button:disabled {
     justify-content: center;
     border-radius: 4px;
     transition: background-color 0.2s;
-}
-
-.modal-close:hover {
-    background-color: var(--border-color);
 }
 
 .modal-body {
