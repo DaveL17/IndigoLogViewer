@@ -263,6 +263,14 @@ async function loadLogFiles(files = null) {
 		updateFilters();
 		setDefaultDateRange();
 		applyFilters();
+
+		// Select the most recent entry (first row) after loading
+		if (filteredEntries.length > 0) {
+			selectedRowIndex = 0;
+			scrollToSelectedRow();
+			renderVirtualList(); // Re-render to show the selection highlighting
+		}
+
 		updateStats();
 
 		const successMessage = processedFiles < totalFiles
