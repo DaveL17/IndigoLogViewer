@@ -785,10 +785,9 @@ function handleResize(e) {
 
     const currentX = e.type === 'touchmove' ? e.touches[0].clientX : e.clientX;
     const deltaX = currentX - startX;
-    const newWidth = Math.max(50, startWidth + deltaX); // Minimum width of 50px
 
     // Update column width
-    columnWidths[columnType] = newWidth;
+    columnWidths[columnType] = Math.max(50, startWidth + deltaX); // Minimum width of 50px
     updateColumnWidths();
 }
 
