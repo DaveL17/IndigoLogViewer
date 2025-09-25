@@ -30,7 +30,6 @@
                     <option value="">All Classes</option>
                 </select>
             </div>
-
             <div class="control-group">
                 <label>Text Search</label>
                 <div class="text-input-container">
@@ -38,7 +37,6 @@
                     <button class="clear-input-button" onclick="clearTextFilter()" title="Clear search">&times;</button>
                 </div>
             </div>
-
             <div class="date-filter-group">
                 <label>Date Filter</label>
                 <div style="display: flex; gap: 5px;">
@@ -60,8 +58,14 @@
 
     <div class="table-container">
         <div class="table-header">
-            <div class="header-timestamp">Timestamp</div>
-            <div class="header-class">Class</div>
+            <div class="header-timestamp sortable" onclick="sortBy('timestamp')">
+                Timestamp
+                <span class="sort-indicator" id="sortTimestamp"></span>
+            </div>
+            <div class="header-class sortable" onclick="sortBy('class')">
+                Class
+                <span class="sort-indicator" id="sortClass"></span>
+            </div>
             <div class="header-entry">
                 Log Entry (Click row for full details)
                 <div class="navigation-controls">

@@ -12,9 +12,71 @@ let visibleStart = 0;
 let visibleEnd = 0;
 let selectedRowIndex = -1;
 
+// Sorting variables
+let currentSort = {
+    column: 'timestamp',
+    direction: 'desc' // Default sort to newest entry first
+};
+
 // Function to open URL in new tab
 function openInNewTab(url) {
     window.open(url, '_blank');
+}
+
+// Sorting functions
+function sortBy(column) {
+    // If clicking the same column, toggle direction
+    if (currentSort.column === column) {
+        currentSort.direction = currentSort.direction === 'asc' ? 'desc' : 'asc';
+    } else {
+        // New column, default to ascending (except timestamp which defaults to desc for newest first)
+        currentSort.column = column;
+        currentSort.direction = column === 'timestamp' ? 'desc' : 'asc';
+    }
+
+    applySorting();
+    updateSortIndicators();
+
+    // Reset selection and scroll to top after sorting
+    selectedRowIndex = -1;
+    const scrollContainer = document.getElementById('scrollContainer');
+    scrollContainer.scrollTop = 0;
+    renderVirtualList();
+}
+
+function applySorting() {
+    if (filteredEntries.length === 0) return;
+
+    filteredEntries.sort((a, b) => {
+        let comparison = 0;
+
+        switch (currentSort.column) {
+            case 'timestamp':
+                comparison = a.timestamp.getTime() - b.timestamp.getTime();
+                break;
+            case 'class':
+                comparison = a.class.toLowerCase().localeCompare(b.class.toLowerCase());
+                break;
+            default:
+                return 0;
+        }
+
+        return currentSort.direction === 'desc' ? -comparison : comparison;
+    });
+}
+
+function updateSortIndicators() {
+    // Clear all indicators
+    const indicators = document.querySelectorAll('.sort-indicator');
+    indicators.forEach(indicator => {
+        indicator.className = 'sort-indicator';
+    });
+
+    // Set the active indicator
+    const activeIndicator = document.getElementById(`sort${currentSort.column.charAt(0).toUpperCase() + currentSort.column.slice(1)}`);
+    if (activeIndicator) {
+        activeIndicator.className = `sort-indicator ${currentSort.direction}`;
+    }
 }
 
 // Help function
@@ -263,15 +325,8 @@ async function loadLogFiles(files = null) {
 		updateFilters();
 		setDefaultDateRange();
 		applyFilters();
-
-		// Select the most recent entry (first row) after loading
-		if (filteredEntries.length > 0) {
-			selectedRowIndex = 0;
-			scrollToSelectedRow();
-			renderVirtualList(); // Re-render to show the selection highlighting
-		}
-
 		updateStats();
+		updateSortIndicators(); // Show initial sort indicators
 
 		const successMessage = processedFiles < totalFiles
 			? `Successfully loaded ${processedFiles}/${totalFiles} log files (${totalFiles - processedFiles} files had errors)`
@@ -370,6 +425,7 @@ function applyFilters() {
 	}
 
 	filteredEntries = filtered;
+	applySorting(); // Apply current sorting after filtering
 	selectedRowIndex = -1; // Reset selection when filters change
 	renderVirtualList();
 	updateStats();
