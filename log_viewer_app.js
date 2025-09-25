@@ -15,7 +15,7 @@ const scrollContainer = document.getElementById('scrollContainer');
 const virtualSpacer = document.getElementById('virtualSpacer');
 const virtualContent = document.getElementById('virtualContent');
 
-// keep applyFilters() from being colled on every keystroke.
+// keep applyFilters() from being called on every keystroke.
 let textFilterTimeout;
 document.getElementById('textFilter').addEventListener('input', () => {
     clearTimeout(textFilterTimeout);
@@ -246,18 +246,22 @@ function selectFolder() {
 	document.getElementById('hamburgerDropdown').classList.remove('show');
 }
 
-function reloadLogFiles() {
+async function reloadLogFiles() {
 	if (selectedFolder && selectedFolder.length > 0) {
-		// Show reload toast first, then perform the actual reload
 		showToast('Reloading log files...', 'info', 2000);
-		// Use setTimeout to ensure toast is shown before starting reload
-		setTimeout(() => {
-			loadLogFiles(selectedFolder);
+		setTimeout(async () => {
+			try {
+				await loadLogFiles(selectedFolder);
+				// Optionally show success toast
+				showToast('Log files reloaded successfully', 'success');
+			} catch (error) {
+				console.error('Error reloading log files:', error);
+				showToast('Error reloading log files', 'error');
+			}
 		}, 100);
 	} else {
 		showToast('No folder selected to reload', 'error');
 	}
-	// Close the hamburger menu
 	document.getElementById('hamburgerDropdown').classList.remove('show');
 }
 
@@ -311,7 +315,6 @@ async function loadLogFiles(files = null) {
 				console.warn(`Failed to read file ${file.name}:`, fileError);
 				// Continue processing other files instead of failing completely
 				processedFiles++;
-				continue;
 			}
 		}
 
