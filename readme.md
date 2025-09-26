@@ -26,10 +26,8 @@ opening log files from a network location; however, this can affect load times d
 and the amount of data contained within the log files selected. Be patient, it may take a few beats to load. On an M4 
 MacBook Air, it loads180,000 log lines in less than a second.
 
-#### Reload
-The view is not updated in real time. To reload the log entry list to view new log entries, select Reload from the menu.
-If there are filters set, selecting Reload will reset the filters as well. If no log files  have been loaded, the 
-Reload menu item will be disabled.
+The log file view is not updated in real time. To reload the log entry list to view new log entries, it's necessary to
+re-choose the log folder (due to legitimate modern browser-imposed security features).
 
 #### Themes
 The app supports a light and dark theme. It will remember your choice for the future; however, if you clear your 

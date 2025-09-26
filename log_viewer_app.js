@@ -3,7 +3,6 @@ let filteredEntries = [];
 let availableClasses = new Set();
 let availableDates = [];
 let currentModalEntry = null;
-let selectedFolder = null; // Keep track of the selected folder
 let visibleStart = 0;
 let visibleEnd = 0;
 let selectedRowIndex = -1;
@@ -15,7 +14,7 @@ const scrollContainer = document.getElementById('scrollContainer');
 const virtualSpacer = document.getElementById('virtualSpacer');
 const virtualContent = document.getElementById('virtualContent');
 
-// keep applyFilters() from being called on every keystroke.
+// keep applyFilters() from being called on every keystroke by adding a short wait.
 let textFilterTimeout;
 document.getElementById('textFilter').addEventListener('input', () => {
     clearTimeout(textFilterTimeout);
@@ -35,6 +34,11 @@ function openInNewTab(url) {
 
 // Sorting functions
 function sortBy(column) {
+    // Don't sort if we're in the middle of a resize operation
+    if (isResizing) {
+        return;
+    }
+
     // If clicking the same column, toggle direction
     if (currentSort.column === column) {
         currentSort.direction = currentSort.direction === 'asc' ? 'desc' : 'asc';
@@ -115,14 +119,6 @@ function toggleMenu() {
 }
 
 function updateMenuItems() {
-	// Update reload menu item state
-	const reloadMenuItem = document.getElementById('reloadMenuItem');
-	if (selectedFolder && selectedFolder.length > 0) {
-		reloadMenuItem.classList.remove('disabled');
-	} else {
-		reloadMenuItem.classList.add('disabled');
-	}
-
 	// Update theme menu item text
 	const themeMenuItem = document.getElementById('themeMenuItem');
 	const currentTheme = document.body.dataset.theme;
@@ -241,38 +237,17 @@ function parseLogContent(content) {
 }
 
 function selectFolder() {
-	document.getElementById('folderInput').click();
+	const folderInput = document.getElementById('folderInput');
+	// Reset the input value to ensure change event fires even if same folder is selected
+	folderInput.value = '';
+	folderInput.click();
 	// Close the hamburger menu after selection
 	document.getElementById('hamburgerDropdown').classList.remove('show');
 }
 
-async function reloadLogFiles() {
-	if (selectedFolder && selectedFolder.length > 0) {
-		showToast('Reloading log files...', 'info', 2000);
-		setTimeout(async () => {
-			try {
-				await loadLogFiles(selectedFolder);
-				// Optionally show success toast
-				showToast('Log files reloaded successfully', 'success');
-			} catch (error) {
-				console.error('Error reloading log files:', error);
-				showToast('Error reloading log files', 'error');
-			}
-		}, 100);
-	} else {
-		showToast('No folder selected to reload', 'error');
-	}
-	document.getElementById('hamburgerDropdown').classList.remove('show');
-}
-
-async function loadLogFiles(files = null) {
+async function loadLogFiles() {
 	const folderInput = document.getElementById('folderInput');
-	const filesToProcess = files || folderInput.files;
-
-	// Store the selected folder for reloading
-	if (filesToProcess && filesToProcess.length > 0) {
-		selectedFolder = Array.from(filesToProcess);
-	}
+	const filesToProcess = folderInput.files;
 
 	if (filesToProcess.length === 0) {
 		showToast('Please select a folder containing log files', 'error');
@@ -712,10 +687,6 @@ function escapeHtml(text) {
 	return div.innerHTML;
 }
 
-// function showError(message) {
-// 	document.getElementById('errorMessage').textContent = message;
-// }
-//
 function clearError() {
 	document.getElementById('errorMessage').textContent = '';
 }
@@ -827,7 +798,7 @@ function createResizeHandle(columnType) {
 // Start column resize
 function startResize(e) {
     e.preventDefault();
-    e.stopPropagation();
+    e.stopPropagation();  // This prevents the click from bubbling up to the column header
 
     isResizing = true;
     currentResizeHandle = e.target;
@@ -856,6 +827,7 @@ function handleResize(e) {
     if (!isResizing || !currentResizeHandle) return;
 
     e.preventDefault();
+    e.stopPropagation();  // Add this line to prevent event bubbling
 
     const currentX = e.type === 'touchmove' ? e.touches[0].clientX : e.clientX;
     const deltaX = currentX - startX;
@@ -868,8 +840,6 @@ function handleResize(e) {
 // Stop column resize
 function stopResize() {
     if (!isResizing) return;
-
-    isResizing = false;
 
     // Remove visual feedback
     if (currentResizeHandle) {
@@ -893,6 +863,11 @@ function stopResize() {
 
     // Re-render the virtual list to update row widths
     renderVirtualList();
+
+    // Add a small delay before allowing sorting to prevent accidental sort triggers
+    setTimeout(() => {
+        isResizing = false;
+    }, 100);
 }
 
 // Update column widths using CSS variables
@@ -927,15 +902,6 @@ function loadColumnWidths() {
     }
 }
 
-// Reset column widths to defaults
-// function resetColumnWidths() {
-//     columnWidths = { ...DEFAULT_COLUMN_WIDTHS };
-//     updateColumnWidths();
-//     saveColumnWidths();
-//     renderVirtualList();
-//     showToast('Column widths reset to defaults', 'info');
-// }
-//
 // Add this to your existing DOMContentLoaded event or initialization
 function initializeColumnResize() {
     loadColumnWidths();

@@ -758,8 +758,8 @@ button:disabled {
 .resize-handle {
     position: absolute;
     top: 0;
-    right: 0;
-    width: 6px;
+    right: -3px;  /* Changed from 0 to -3px to expand clickable area */
+    width: 10px;  /* Changed from 6px to 10px for larger clickable area */
     height: 100%;
     cursor: col-resize;
     background: transparent;
@@ -767,7 +767,6 @@ button:disabled {
     border-right: 2px solid transparent;
     transition: border-color 0.2s;
 }
-
 .resize-handle:hover {
     border-right-color: var(--button-bg);
 }
