@@ -94,8 +94,7 @@ function updateSortIndicators() {
 
 // Help function
 function openHelp() {
-    // Change this URL to your actual help documentation URL
-    const helpUrl = 'https://example.com/help';
+    const helpUrl = 'https://github.com/DaveL17/IndigoLogViewer';
     openInNewTab(helpUrl);
 
     // Show confirmation toast
