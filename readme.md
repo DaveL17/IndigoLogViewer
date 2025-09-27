@@ -24,7 +24,7 @@ Once the app is loaded, click the menu button in the upper right corner and brow
 Indigo install. Select the folder to load all the log files or select a single log file to view. The app supports 
 opening log files from a network location; however, this can affect load times depending on the speed of your network 
 and the amount of data contained within the log files selected. Be patient, it may take a few beats to load. On an M4 
-MacBook, it loads 200,000 log lines in less than a second.
+MacBook, it loads 200,000 log lines in less than a second when run on the server machine.
 
 The log file view is not updated in real time. To reload the log entry list to view new log entries, it's necessary to
 re-choose the log folder (due to legitimate modern browser-imposed security features).
@@ -32,7 +32,7 @@ re-choose the log folder (due to legitimate modern browser-imposed security feat
 #### Themes
 The app supports a light and dark theme. It will remember your choice for the future; however, if you clear your 
 browser's cache, the preference may be cleared if you delete the app's local storage. This is a "universal" browser 
-security feature. To toggle the theme, select Theme from the menu.
+security feature. To toggle the theme, select [Light/Dark] Theme from the menu.
 
 #### Help
 Clicking help will take you to the GitHub repository and this readme file.
@@ -59,7 +59,7 @@ provided in the modal which will copy the entire log entry displayed.
 <img src="src/Screenshot with Modal.png" alt="Screenshot with Modal" width="800" height="600">
 
 #### Columns
-Both the timestamp and slass columns are sortable in place. You can click on the column heading to sort the data. You 
+Both the timestamp and class columns are sortable in place. You can click on the column heading to sort the data. You 
 can sort only one column at a time. Additionally, both columns are resizeable if needed.
 
 ### Compatability
