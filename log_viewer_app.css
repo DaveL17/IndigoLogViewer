@@ -1,44 +1,68 @@
+/* ==========================================================================
+   CSS VARIABLES (ROOT & THEMES)
+   ========================================================================== */
+
 :root {
     --bg-color: #ffffff;
-    --text-color: #333333;
     --border-color: #dddddd;
-    --header-bg: #f5f5f5;
     --button-bg: #6c757d;
     --button-text: #ffffff;
-    --input-bg: #ffffff;
-    --select-bg: #ffffff;
-    --table-stripe: #f9f9f9;
-    --error-color: #dc3545;
-    --warning-color: #ff8c00;
     --debug-color: #28a745;
-    --selected-row: #e3f2fd;
-    --scrollbar-track: #f1f1f1;
-    --scrollbar-thumb: #c1c1c1;
-    --modal-overlay: rgba(0, 0, 0, 0.5);
+    --error-color: #dc3545;
+    --header-bg: #f5f5f5;
+    --input-bg: #ffffff;
     --modal-bg: #ffffff;
+    --modal-overlay: rgba(0, 0, 0, 0.5);
+    --scrollbar-thumb: #c1c1c1;
+    --scrollbar-track: #f1f1f1;
+    --select-bg: #ffffff;
+    --selected-row: #e3f2fd;
+    --table-stripe: #f9f9f9;
+    --text-color: #333333;
+    --warning-color: #ff8c00;
 }
 
 [data-theme="dark"] {
     --bg-color: #1a1a1a;
-    --text-color: #e0e0e0;
     --border-color: #444444;
-    --header-bg: #2d2d2d;
     --button-bg: #6c757d;
     --button-text: #ffffff;
-    --input-bg: #1d1d1d;
-    --select-bg: #2d2d2d;
-    --table-stripe: #2a2a2a;
-    --error-color: #dc3545;
-    --warning-color: #ff8c00;
     --debug-color: #28a745;
-    --selected-row: #1e3a5f;
-    --scrollbar-track: #2d2d2d;
-    --scrollbar-thumb: #555555;
-    --modal-overlay: rgba(0, 0, 0, 0.7);
+    --error-color: #dc3545;
+    --header-bg: #2d2d2d;
+    --input-bg: #1d1d1d;
     --modal-bg: #2d2d2d;
+    --modal-overlay: rgba(0, 0, 0, 0.7);
+    --scrollbar-thumb: #555555;
+    --scrollbar-track: #2d2d2d;
+    --select-bg: #2d2d2d;
+    --selected-row: #1e3a5f;
+    --table-stripe: #2a2a2a;
+    --text-color: #e0e0e0;
+    --warning-color: #ff8c00;
 }
 
-/* Custom scrollbar styles */
+/* ==========================================================================
+   GLOBAL RESET & BASE STYLES
+   ========================================================================== */
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 20px 20px 60px;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+/* ==========================================================================
+   SCROLLBAR STYLES
+   ========================================================================== */
+
 ::-webkit-scrollbar {
     width: 12px;
 }
@@ -60,58 +84,80 @@
     background: #777777;
 }
 
-* {
-    box-sizing: border-box;
+/* ==========================================================================
+   UTILITY CLASSES
+   ========================================================================== */
+
+.no-select {
+    -moz-user-select: none;
+    -ms-user-select: none;
+    -webkit-user-select: none;
+    user-select: none;
 }
 
-body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 20px 20px 60px;
-    background-color: var(--bg-color);
+.empty-state {
+    align-items: center;
     color: var(--text-color);
-    transition: background-color 0.3s, color 0.3s;
+    display: flex;
+    font-size: 14px;
+    height: 200px;
+    justify-content: center;
+    opacity: 0.6;
 }
+
+.error-message {
+    color: #dc3545;
+    font-size: 14px;
+    margin-top: 10px;
+    text-align: center;
+}
+
+/* ==========================================================================
+   HEADER SECTION
+   ========================================================================== */
 
 .header {
     background-color: var(--header-bg);
-    padding: 15px;
+    border: 1px solid var(--border-color);
     border-radius: 8px;
     margin-bottom: 10px;
-    border: 1px solid var(--border-color);
-    position: relative;
     overflow: hidden; /* Prevents the transformed background from showing outside the container */
+    padding: 15px;
+    position: relative;
 }
 
 .header::before {
-    content: "";
-    position: absolute;
-    top: 60px;
-    left: -35px;
-    width: 100%;
-    height: 100%;
-    opacity: 0.25;
     background-image: url("src/headerBackground.png");
-    background-size: contain; /* or contain, depending on your needs */
     background-position: left center; /* This positions the image on the left */
     background-repeat: no-repeat;
+    background-size: contain; /* or contain, depending on your needs */
+    content: "";
+    height: 100%;
+    left: -35px;
+    mask: linear-gradient(to right, black 0%, black 50%, transparent 100%);
+    opacity: 0.25;
+    position: absolute;
+    top: 60px;
     transform: scale(2.0) rotate(-8deg);
     transform-origin: left center;
-    mask: linear-gradient(to right, black 0%, black 50%, transparent 100%);
+    width: 100%;
 }
 
 .title {
+    align-items: center;
+    display: flex;
     font-size: 24px;
     font-weight: bold;
-    margin-bottom: 15px;
-    text-align: center;
-    position: relative;
-    display: flex;
-    align-items: center;
     justify-content: center;
+    margin-bottom: 15px;
+    position: relative;
+    text-align: center;
 }
 
-/* Hamburger Menu Styles */
+/* ==========================================================================
+   HAMBURGER MENU
+   ========================================================================== */
+
 .hamburger-menu {
     position: absolute;
     right: 30px;
@@ -142,41 +188,40 @@ body {
 }
 
 .hamburger-dropdown {
-    position: absolute;
-    top: 100%;
-    right: 0;
-    margin-top: 5px;
     background-color: var(--modal-bg);
     border: 1px solid var(--border-color);
     border-radius: 6px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    margin-top: 5px;
     min-width: 220px;
-    z-index: 9999;
     opacity: 0;
-    visibility: hidden;
+    position: absolute;
+    right: 0;
+    top: 100%;
     transform: translateY(-10px);
     transition: opacity 0.3s, visibility 0.3s, transform 0.3s;
+    visibility: hidden;
+    z-index: 9999;
 }
 
 .hamburger-dropdown.show {
     opacity: 1;
-    visibility: visible;
     transform: translateY(0);
+    visibility: visible;
     z-index: 9999;
-
 }
 
 .menu-item {
-    padding: 12px 16px;
-    cursor: pointer;
-    font-size: 14px;
-    display: flex;
     align-items: center;
-    gap: 8px;
-    transition: background-color 0.2s;
-    color: var(--text-color);
     border-radius: 4px;
+    color: var(--text-color);
+    cursor: pointer;
+    display: flex;
+    font-size: 14px;
+    gap: 8px;
     margin: 4px;
+    padding: 12px 16px;
+    transition: background-color 0.2s;
 }
 
 .menu-item:hover {
@@ -188,79 +233,47 @@ body {
 }
 
 .menu-item.disabled {
-    opacity: 0.5;
     cursor: not-allowed;
+    opacity: 0.5;
     pointer-events: none;
 }
 
 .menu-divider {
-    height: 1px;
     background-color: var(--border-color);
+    height: 1px;
     margin: 8px 12px;
 }
 
-.controls {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 15px;
-    align-items: flex-end;
-    justify-content: center;
-}
+/* ==========================================================================
+   FORM ELEMENTS & CONTROLS
+   ========================================================================== */
 
-.control-group {
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
-}
-
-.control-group label {
-    font-size: 12px;
-    font-weight: normal;
-    text-transform: uppercase;
-    opacity: 0.8;
-    text-align: center;
-    min-height: 16px;
-}
-
-.date-filter-group {
-    display: flex;
-    flex-direction: column;
+select,
+input[type="text"],
+input[type="date"],
+button {
     align-items: center;
-    gap: 5px;
-}
-
-.date-filter-group label {
-    font-size: 12px;
-    text-transform: uppercase;
-    opacity: 0.8;
-    text-align: center;
-    min-height: 16px;
-}
-
-/* Consistent height and styling for all form elements */
-select, input[type="text"], input[type="date"], button {
-    height: 36px; /* Fixed height for all elements */
-    padding: 8px 12px;
+    background-color: var(--input-bg);
     border: 1px solid var(--border-color);
     border-radius: 4px;
-    font-size: 14px;
-    background-color: var(--input-bg);
     color: var(--text-color);
     display: flex;
-    align-items: center;
+    font-size: 14px;
+    height: 36px; /* Fixed height for all elements */
     line-height: 1;
+    padding: 8px 12px;
+    z-index: 10;
 }
 
 /* Flat select dropdown styling */
 select {
-    background-color: var(--input-bg);
-    font-weight: normal;
     -webkit-appearance: none;
     appearance: none;
-    /*background-image: url("data:image/svg+xml;charset=US-ASCII,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 4 5'><path fill='%23666' d='M2 0L0 2h4zm0 5L0 3h4z'/></svg>");*/
-    background-repeat: no-repeat;
+    background-color: var(--input-bg);
     background-position: right 10px center;
+    background-repeat: no-repeat;
     background-size: 10px;
+    font-weight: normal;
     padding-right: 30px;
     width: 200px;
     z-index: 10;
@@ -277,11 +290,11 @@ input[type="date"] {
 
 button {
     background-color: var(--button-bg);
+    border: none;
     color: var(--button-text);
     cursor: pointer;
-    border: none;
-    transition: opacity 0.2s;
     justify-content: center;
+    transition: opacity 0.2s;
 }
 
 button:hover {
@@ -290,15 +303,56 @@ button:hover {
 
 /* Disabled button styling */
 button:disabled {
-    opacity: 0.5;
     cursor: not-allowed;
+    opacity: 0.5;
 }
 
-/* Text input container with integrated clear button */
-.text-input-container {
-    position: relative;
+.controls {
+    align-items: flex-end;
     display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    justify-content: center;
+}
+
+.control-group {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.control-group label {
+    font-size: 12px;
+    font-weight: normal;
+    min-height: 16px;
+    opacity: 0.8;
+    text-align: center;
+    text-transform: uppercase;
+}
+
+.date-filter-group {
     align-items: center;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.date-filter-group label {
+    font-size: 12px;
+    min-height: 16px;
+    opacity: 0.8;
+    text-align: center;
+    text-transform: uppercase;
+}
+
+/* ==========================================================================
+   TEXT INPUT WITH CLEAR BUTTON
+   ========================================================================== */
+
+.text-input-container {
+    align-items: center;
+    display: flex;
+    position: relative;
 }
 
 .text-input-container input[type="text"] {
@@ -307,24 +361,24 @@ button:disabled {
 }
 
 .clear-input-button {
+    align-items: center;
+    background: none;
+    border: none;
+    border-radius: 2px;
+    color: var(--text-color);
+    cursor: pointer;
+    display: flex;
+    font-size: 16px;
+    height: 28px;
+    justify-content: center;
+    opacity: 0.6;
+    padding: 4px;
     position: absolute;
     right: 4px;
     top: 50%;
     transform: translateY(-50%);
-    background: none;
-    border: none;
-    color: var(--text-color);
-    cursor: pointer;
-    padding: 4px;
-    border-radius: 2px;
-    height: 28px;
-    width: 28px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 16px;
-    opacity: 0.6;
     transition: opacity 0.2s, background-color 0.2s;
+    width: 28px;
 }
 
 .table-header > div:hover,
@@ -344,51 +398,9 @@ button:disabled {
     pointer-events: none;
 }
 
-/* Toast notification styles with opaque background */
-.toast-container {
-    position: fixed;
-    top: 20px;
-    right: 20px;
-    z-index: 10000;
-    pointer-events: none;
-}
-
-.toast {
-    background-color: var(--modal-bg);
-    border: 1px solid var(--border-color);
-    border-radius: 4px;
-    padding: 12px 16px;
-    margin-bottom: 10px;
-    max-width: 300px;
-    word-wrap: break-word;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-    transform: translateX(100%);
-    opacity: 0;
-    transition: all 0.5s ease-in-out;
-    pointer-events: auto;
-}
-
-.toast.show {
-    transform: translateX(0);
-    opacity: 1;
-}
-
-.toast.hide {
-    transform: translateY(-20px);
-    opacity: 0;
-}
-
-.toast.success {
-    border-left: 4px solid var(--debug-color);
-}
-
-.toast.error {
-    border-left: 4px solid var(--error-color);
-}
-
-.toast.info {
-    border-left: 4px solid var(--button-bg);
-}
+/* ==========================================================================
+   NAVIGATION & ACTION BUTTONS
+   ========================================================================== */
 
 .clear-button {
     background-color: var(--button-bg);
@@ -397,21 +409,21 @@ button:disabled {
 }
 
 .navigation-controls {
+    align-items: center;
     display: flex;
     gap: 5px;
-    align-items: center;
 }
 
 .nav-button {
     background-color: var(--button-bg);
-    color: var(--button-text);
     border: none;
-    padding: 6px 10px;
     border-radius: 4px;
-    font-size: 12px;
+    color: var(--button-text);
     cursor: pointer;
-    transition: opacity 0.2s;
+    font-size: 12px;
     height: 28px;
+    padding: 6px 10px;
+    transition: opacity 0.2s;
 }
 
 .nav-button:hover {
@@ -419,37 +431,50 @@ button:disabled {
 }
 
 .nav-button:disabled {
-    opacity: 0.5;
     cursor: not-allowed;
+    opacity: 0.5;
 }
+
+.load-controls {
+    align-items: center;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+}
+
+/* ==========================================================================
+   TABLE STRUCTURE
+   ========================================================================== */
 
 .table-container {
     border: 1px solid var(--border-color);
     border-radius: 8px;
     max-height: 70vh;
-    position: relative;
     overflow: hidden;
+    position: relative;
 }
 
 .table-header {
     background-color: var(--header-bg);
     border-bottom: 2px solid var(--border-color);
     display: flex;
-    font-weight: bold;
-    text-transform: uppercase;
     font-size: 11px;
+    font-weight: bold;
     letter-spacing: 1px;
     position: sticky;
+    text-transform: uppercase;
     top: 0;
     z-index: 10;
 }
 
 .table-header > div {
-    padding: 6px 8px;
-    border-right: 1px solid var(--border-color);
-    display: flex;
     align-items: center;
+    border-right: 1px solid var(--border-color);
     cursor: pointer;
+    display: flex;
+    padding: 6px 8px;
+    position: relative;
     transition: background-color 0.2s;
     user-select: none;
 }
@@ -462,11 +487,15 @@ button:disabled {
     position: relative;
 }
 
+.table-header > div:last-child {
+    border-right: none;
+}
+
 .sort-indicator {
-    margin-left: 8px;
     font-size: 10px;
-    opacity: 0.7;
+    margin-left: 8px;
     min-width: 10px;
+    opacity: 0.7;
     text-align: center;
 }
 
@@ -477,29 +506,34 @@ button:disabled {
 .sort-indicator.desc::after {
     content: "▼";
 }
-.table-header > div:last-child {
-    border-right: none;
-}
+
+/* ==========================================================================
+   TABLE COLUMN HEADERS
+   ========================================================================== */
 
 .header-timestamp,
 .row-timestamp {
-    width: var(--timestamp-width, 180px);
+    font-weight: normal;
     min-width: var(--timestamp-width, 180px);
     white-space: nowrap;
-    font-weight: normal;
+    width: var(--timestamp-width, 180px);
 }
 
 .header-class {
-    width: 150px;
     min-width: 150px;
+    width: 150px;
 }
 
 .header-entry {
-    flex: 1;
-    display: flex;
-    justify-content: space-between;
     align-items: center;
+    display: flex;
+    flex: 1;
+    justify-content: space-between;
 }
+
+/* ==========================================================================
+   VIRTUAL SCROLLING
+   ========================================================================== */
 
 .virtual-scroll-container {
     height: calc(70vh - 40px);
@@ -508,24 +542,28 @@ button:disabled {
 }
 
 .virtual-scroll-spacer {
-    position: absolute;
-    top: 0;
     left: 0;
-    right: 0;
     pointer-events: none;
+    position: absolute;
+    right: 0;
+    top: 0;
 }
 
 .virtual-scroll-content {
     position: relative;
 }
 
+/* ==========================================================================
+   TABLE ROWS
+   ========================================================================== */
+
 .log-row {
-    display: flex;
+    align-items: stretch;
     border-bottom: 1px solid var(--border-color);
     cursor: pointer;
-    transition: background-color 0.2s;
+    display: flex;
     min-height: 32px;
-    align-items: stretch;
+    transition: background-color 0.2s;
 }
 
 .log-row:nth-child(even) {
@@ -541,13 +579,13 @@ button:disabled {
 }
 
 .log-row > div {
-    padding: 4px 8px;
+    align-items: center;
     border-right: 1px solid var(--border-color);
     display: flex;
-    align-items: center;
     font-family: 'Arial', sans-serif;
     font-size: 13px;
     line-height: 1.3;
+    padding: 4px 8px;
 }
 
 .log-row > div:last-child {
@@ -555,13 +593,13 @@ button:disabled {
 }
 
 .row-class {
-    width: 150px;
-    min-width: 150px;
-    white-space: nowrap;
-    font-weight: normal;
     color: var(--button-bg);
+    font-weight: normal;
+    min-width: 150px;
     overflow: hidden;
     text-overflow: ellipsis;
+    white-space: nowrap;
+    width: 150px;
 }
 
 .row-class.error-class {
@@ -578,66 +616,123 @@ button:disabled {
 
 .row-entry {
     flex: 1;
-    word-break: break-word;
-    white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    white-space: nowrap;
+    word-break: break-word;
 }
 
-.empty-state {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 200px;
-    color: var(--text-color);
-    opacity: 0.6;
-    font-size: 14px;
-}
+/* ==========================================================================
+   RESIZABLE COLUMNS
+   ========================================================================== */
 
-.error-message {
-    color: #dc3545;
-    font-size: 14px;
-    margin-top: 10px;
-    text-align: center;
-}
-
-.footer {
-    position: fixed;
-    bottom: 0;
-    left: 0;
+.resize-handle {
+    background: transparent;
+    border-right: 2px solid transparent;
+    cursor: col-resize;
+    height: 100%;
+    position: absolute;
     right: 0;
-    background-color: var(--header-bg);
-    border-top: 1px solid var(--border-color);
-    padding: 10px 20px;
-    text-align: center;
-    font-size: 14px;
-    opacity: 0.8;
-}
-
-.load-controls {
-    display: flex;
-    gap: 10px;
-    align-items: center;
-    flex-wrap: wrap;
-    justify-content: center;
-}
-
-/* Modal Styles */
-.modal-overlay {
-    position: fixed;
     top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: var(--modal-overlay);
-    z-index: 1000;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 20px;
+    transition: border-color 0.2s;
+    width: 6px;
+    z-index: 100;
+}
+
+.resize-handle:hover {
+    border-right-color: var(--button-bg);
+}
+
+.resize-handle.resizing {
+    border-right-color: var(--button-bg);
+}
+
+/* Remove the last resize handle since there's nothing to resize after the last column */
+.header-entry .resize-handle {
+    display: none;
+}
+
+/* Update column widths to use CSS variables for dynamic resizing */
+.header-timestamp,
+.row-timestamp {
+    min-width: var(--timestamp-width, 180px);
+    width: var(--timestamp-width, 180px);
+}
+
+.header-class,
+.row-class {
+    min-width: var(--class-width, 150px);
+    width: var(--class-width, 150px);
+}
+
+/* ==========================================================================
+   TOAST NOTIFICATIONS
+   ========================================================================== */
+
+.toast-container {
+    pointer-events: none;
+    position: fixed;
+    right: 20px;
+    top: 20px;
+    z-index: 10000;
+}
+
+.toast {
+    background-color: var(--modal-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    margin-bottom: 10px;
+    max-width: 300px;
     opacity: 0;
-    visibility: hidden;
+    padding: 12px 16px;
+    pointer-events: auto;
+    transform: translateX(100%);
+    transition: all 0.5s ease-in-out;
+    word-wrap: break-word;
+}
+
+.toast.show {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+.toast.hide {
+    opacity: 0;
+    transform: translateY(-20px);
+}
+
+.toast.success {
+    border-left: 4px solid var(--debug-color);
+}
+
+.toast.error {
+    border-left: 4px solid var(--error-color);
+}
+
+.toast.info {
+    border-left: 4px solid var(--button-bg);
+}
+
+/* ==========================================================================
+   MODAL COMPONENTS
+   ========================================================================== */
+
+.modal-overlay {
+    align-items: center;
+    background-color: var(--modal-overlay);
+    bottom: 0;
+    display: flex;
+    justify-content: center;
+    left: 0;
+    opacity: 0;
+    padding: 20px;
+    position: fixed;
+    right: 0;
+    top: 0;
     transition: opacity 0.3s, visibility 0.3s;
+    visibility: hidden;
+    z-index: 1000;
 }
 
 .modal-overlay.active {
@@ -649,13 +744,13 @@ button:disabled {
     background-color: var(--modal-bg);
     border: 1px solid var(--border-color);
     border-radius: 8px;
-    max-width: 80vw;
-    max-height: 80vh;
-    width: 100%;
     display: flex;
     flex-direction: column;
+    max-height: 80vh;
+    max-width: 80vw;
     transform: scale(0.9);
     transition: transform 0.3s;
+    width: 100%;
 }
 
 .modal-overlay.active .modal-content {
@@ -663,13 +758,13 @@ button:disabled {
 }
 
 .modal-header {
+    align-items: center;
     background-color: var(--header-bg);
-    padding: 15px 20px;
     border-bottom: 1px solid var(--border-color);
     border-radius: 8px 8px 0 0;
     display: flex;
     justify-content: space-between;
-    align-items: center;
+    padding: 15px 20px;
 }
 
 .modal-title {
@@ -679,59 +774,59 @@ button:disabled {
 }
 
 .modal-close {
+    align-items: center;
     background: none;
     border: none;
-    font-size: 24px;
-    cursor: pointer;
-    color: var(--text-color);
-    padding: 0;
-    width: 30px;
-    height: 30px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
     border-radius: 4px;
+    color: var(--text-color);
+    cursor: pointer;
+    display: flex;
+    font-size: 24px;
+    height: 30px;
+    justify-content: center;
+    padding: 0;
     transition: background-color 0.2s;
+    width: 30px;
 }
 
 .modal-body {
-    padding: 20px;
     flex: 1;
-    overflow-y: auto;
     max-height: 60vh;
+    overflow-y: auto;
+    padding: 20px;
 }
 
 .modal-log-content {
-    font-size: 13px;
-    line-height: 1.5;
-    white-space: pre;
-    word-break: break-word;
     background-color: var(--input-bg);
-    padding: 15px;
     border: 1px solid var(--border-color);
     border-radius: 4px;
     color: var(--text-color);
     font-family: Arial, sans-serif;
+    font-size: 13px;
+    line-height: 1.5;
+    padding: 15px;
+    white-space: pre;
+    word-break: break-word;
 }
 
 .modal-footer {
-    padding: 15px 20px;
+    background-color: var(--header-bg);
+    border-radius: 0 0 8px 8px;
     border-top: 1px solid var(--border-color);
     display: flex;
     gap: 10px;
     justify-content: flex-end;
-    border-radius: 0 0 8px 8px;
-    background-color: var(--header-bg);
+    padding: 15px 20px;
 }
 
 .modal-button {
-    padding: 8px 16px;
     border: none;
     border-radius: 4px;
-    font-size: 14px;
     cursor: pointer;
-    transition: opacity 0.2s;
+    font-size: 14px;
     height: 36px;
+    padding: 8px 16px;
+    transition: opacity 0.2s;
 }
 
 .modal-button.copy {
@@ -770,57 +865,26 @@ button:disabled {
     color: var(--debug-color);
 }
 
-/* Resizable column styles */
-.table-header > div {
-    position: relative;
-}
+/* ==========================================================================
+   FOOTER
+   ========================================================================== */
 
-.resize-handle {
-    position: absolute;
-    top: 0;
+.footer {
+    background-color: var(--header-bg);
+    border-top: 1px solid var(--border-color);
+    bottom: 0;
+    font-size: 14px;
+    left: 0;
+    opacity: 0.8;
+    padding: 10px 20px;
+    position: fixed;
     right: 0;
-    width: 6px;
-    height: 100%;
-    cursor: col-resize;
-    background: transparent;
-    z-index: 100;
-    border-right: 2px solid transparent;
-    transition: border-color 0.2s;
+    text-align: center;
 }
 
-.resize-handle:hover {
-    border-right-color: var(--button-bg);
-}
-
-.resize-handle.resizing {
-    border-right-color: var(--button-bg);
-}
-
-/* Prevent text selection during resize */
-.no-select {
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-}
-
-/* Remove the last resize handle since there's nothing to resize after the last column */
-.header-entry .resize-handle {
-    display: none;
-}
-
-/* Update column widths to use CSS variables for dynamic resizing */
-.header-timestamp,
-.row-timestamp {
-    width: var(--timestamp-width, 180px);
-    min-width: var(--timestamp-width, 180px);
-}
-
-.header-class,
-.row-class {
-    width: var(--class-width, 150px);
-    min-width: var(--class-width, 150px);
-}
+/* ==========================================================================
+   MEDIA QUERIES - RESPONSIVE DESIGN
+   ========================================================================== */
 
 @media (max-width: 768px) {
     .title {
@@ -828,23 +892,25 @@ button:disabled {
     }
 
     .hamburger-menu {
-        position: static;
         margin-left: auto;
         margin-top: 10px;
+        position: static;
         z-index: 9999;
-
     }
 
     .controls {
-        flex-direction: column;
         align-items: stretch;
+        flex-direction: column;
     }
 
-    .control-group, .date-filter-group {
+    .control-group,
+    .date-filter-group {
         width: 100%;
     }
 
-    select, input[type="text"], input[type="date"] {
+    select,
+    input[type="text"],
+    input[type="date"] {
         width: 100%;
     }
 
@@ -857,14 +923,16 @@ button:disabled {
         width: 100%;
     }
 
-    .header-timestamp, .row-timestamp {
-        width: 140px;
+    .header-timestamp,
+    .row-timestamp {
         min-width: 140px;
+        width: 140px;
     }
 
-    .header-class, .row-class {
-        width: 100px;
+    .header-class,
+    .row-class {
         min-width: 100px;
+        width: 100px;
     }
 
     .navigation-controls {
@@ -873,8 +941,8 @@ button:disabled {
     }
 
     .modal-content {
-        max-width: 95vw;
         max-height: 90vh;
+        max-width: 95vw;
     }
 
     .modal-body {
