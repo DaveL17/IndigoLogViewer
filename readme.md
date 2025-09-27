@@ -10,13 +10,15 @@ format that is supported:
 <img src="src/Screenshot.png" alt="Screenshot" width="800" height="600">
 
 ### Usage
+For the best experience, download the files using the <kbd>Code</kbd> button above and unzip the files into a working 
+folder. Then double-click the html file or select File > Open from your preferred browser.
+
 The app requires three files to run:
 1. log_viewer_app.html
 2. log_viewer_app.js
 3. log_viewer_app.css
 
-Download the files using the <kbd>Code</kbd> button above and unzip the files into a working folder. Then double-click the 
-html file or select File > Open from your preferred browser.
+There are other files in the zip, that the app will use if they're present (images, etc.)
 
 ### Menu
 #### Choose Log Folder
