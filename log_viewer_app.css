@@ -127,7 +127,7 @@ body {
 }
 
 .header::before {
-    background-image: url("src/headerBackground.png");
+    background-image: url("src/headerBackgroundLight.png");
     background-position: left center; /* This positions the image on the left */
     background-repeat: no-repeat;
     background-size: contain; /* or contain, depending on your needs */
@@ -141,6 +141,10 @@ body {
     transform: scale(2.0) rotate(-8deg);
     transform-origin: left center;
     width: 100%;
+}
+
+[data-theme="dark"] .header::before {
+    background-image: url("src/headerBackground.png");
 }
 
 .title {
@@ -285,7 +289,28 @@ select {
 
 input[type="date"] {
     background-color: var(--input-bg);
+    color: var(--text-color);
     font-weight: normal;
+}
+
+/* Enhanced dark theme styling for date inputs */
+[data-theme="dark"] input[type="date"] {
+    background-color: var(--input-bg);
+    border: 1px solid var(--border-color);
+    color: var(--text-color);
+    color-scheme: dark; /* This helps browsers apply dark styling to the calendar popup */
+}
+
+/* Style the date input calendar icon */
+input[type="date"]::-webkit-calendar-picker-indicator {
+    filter: invert(1);
+    opacity: 0.8;
+    cursor: pointer;
+}
+
+[data-theme="dark"] input[type="date"]::-webkit-calendar-picker-indicator {
+    filter: invert(1);
+    opacity: 0.8;
 }
 
 button {
@@ -957,3 +982,4 @@ button:disabled {
         width: 100%;
     }
 }
+
