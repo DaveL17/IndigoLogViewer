@@ -7,19 +7,19 @@
     <link rel="stylesheet" href="log_viewer_app.css">
 </head>
 <body data-theme="light">
+    <div class="hamburger-menu">
+        <button class="hamburger-button" onclick="toggleMenu()" title="Menu">☰</button>
+        <div class="hamburger-dropdown" id="hamburgerDropdown">
+            <div class="menu-item" onclick="selectFolder()">Choose Log Folder</div>
+            <div class="menu-divider"></div>
+            <div class="menu-item" onclick="toggleTheme()" id="themeMenuItem">Dark Theme</div>
+            <div class="menu-divider"></div>
+            <div class="menu-item" onclick="openHelp()">Help</div>
+        </div>
+    </div>
     <div class="header">
         <div class="title">
             Indigo Log Viewer
-            <div class="hamburger-menu">
-                <button class="hamburger-button" onclick="toggleMenu()" title="Menu">☰</button>
-                <div class="hamburger-dropdown" id="hamburgerDropdown">
-                    <div class="menu-item" onclick="selectFolder()">Choose Log Folder</div>
-                    <div class="menu-divider"></div>
-                    <div class="menu-item" onclick="toggleTheme()" id="themeMenuItem">Dark Theme</div>
-                    <div class="menu-divider"></div>
-                    <div class="menu-item" onclick="openHelp()">Help</div>
-                </div>
-            </div>
         </div>
 
         <div class="controls">
