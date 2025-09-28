@@ -70,5 +70,10 @@ can sort only one column at a time. Additionally, both columns are resizeable if
 - This web app is not designed to be run on small screens, but it should theoretically work if your small screen device 
   can access the Indigo logs folder.
 
+### Getting Creative
+You can move the app's files to Indigo's public webserver folder and serve the app from there. This will allow you to 
+add the app to the dock and make it a stand alone web personal web app (PWA). You can also serve the app from node.js. 
+There are lots of options, but you are on your own for configuring anything beyond the instructions above.
+
 ### Suggestions and Error Reports
 Add suggestions and error reports using the issues tab above.

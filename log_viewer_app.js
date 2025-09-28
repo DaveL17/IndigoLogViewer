@@ -272,24 +272,60 @@ async function loadLogFiles() {
 		}
 
 		let processedFiles = 0;
+		let skippedFiles = 0;
 		const totalFiles = logFiles.length;
+		const fileErrors = new Map(); // Track unique error types to avoid spam
 
 		for (let file of logFiles) {
 			try {
 				let content = await readFileContent(file);
+
+				// Check if content is meaningful (not just whitespace)
+				if (!content || content.trim().length === 0) {
+					console.warn(`Skipping empty file: ${file.name}`);
+					skippedFiles++;
+					continue;
+				}
+
 				const entries = parseLogContent(content);
+
+				if (entries.length === 0) {
+					console.warn(`No valid log entries found in file: ${file.name}`);
+					skippedFiles++;
+					continue;
+				}
 
 				for (let entry of entries) {
 					allLogEntries.push(entry);
 					availableClasses.add(entry.class);
 				}
+
 				processedFiles++;
+				console.log(`Successfully processed ${file.name}: ${entries.length} entries`);
 
 			} catch (fileError) {
-				console.warn(`Failed to read file ${file.name}:`, fileError);
-				// Continue processing other files instead of failing completely
-				processedFiles++;
+				// Group similar errors to avoid console spam
+				const errorKey = fileError.message.split(' - File:')[0]; // Get error type without filename
+				if (!fileErrors.has(errorKey)) {
+					fileErrors.set(errorKey, []);
+				}
+				fileErrors.get(errorKey).push(file.name);
+
+				skippedFiles++;
 			}
+		}
+
+		// Log consolidated error report
+		if (fileErrors.size > 0) {
+			console.group('File Processing Errors:');
+			fileErrors.forEach((files, errorType) => {
+				if (files.length === 1) {
+					console.error(`${errorType}: ${files[0]}`);
+				} else {
+					console.error(`${errorType} (${files.length} files):`, files);
+				}
+			});
+			console.groupEnd();
 		}
 
 		if (processedFiles === 0) {
@@ -322,9 +358,14 @@ async function loadLogFiles() {
 		updateStats();
 		updateSortIndicators(); // Show initial sort indicators
 
-		const successMessage = processedFiles < totalFiles
-			? `Successfully loaded ${processedFiles}/${totalFiles} log files (${totalFiles - processedFiles} files had errors)`
-			: `Successfully loaded ${processedFiles} log file${processedFiles > 1 ? 's' : ''}`;
+		// Create detailed success message
+		let successMessage;
+		if (skippedFiles > 0) {
+			successMessage = `Successfully loaded ${processedFiles}/${totalFiles} log files (${skippedFiles} files skipped due to errors)`;
+			console.log(`Processing summary: ${processedFiles} successful, ${skippedFiles} skipped/failed`);
+		} else {
+			successMessage = `Successfully loaded ${processedFiles} log file${processedFiles > 1 ? 's' : ''}`;
+		}
 
 		showToast(successMessage, 'success');
 
@@ -337,9 +378,64 @@ async function loadLogFiles() {
 function readFileContent(file) {
 	return new Promise((resolve, reject) => {
 		const reader = new FileReader();
-		reader.onload = e => resolve(e.target.result);
-		reader.onerror = () => reject(new Error('Failed to read file: ' + file.name));
-		reader.readAsText(file);
+
+		reader.onload = e => {
+			// Check if we actually got content
+			if (e.target.result === null || e.target.result === undefined) {
+				reject(new Error(`File is empty or unreadable: ${file.name}`));
+				return;
+			}
+			resolve(e.target.result);
+		};
+
+		reader.onerror = () => {
+			// Get more specific error information
+			let errorMsg = 'Unknown read error';
+			if (reader.error) {
+				switch (reader.error.code) {
+					case reader.error.NOT_FOUND_ERR:
+						errorMsg = 'File not found';
+						break;
+					case reader.error.NOT_READABLE_ERR:
+						errorMsg = 'File not readable';
+						break;
+					case reader.error.ABORT_ERR:
+						errorMsg = 'Read operation aborted';
+						break;
+					case reader.error.SECURITY_ERR:
+						errorMsg = 'Security error (file may be locked or have restricted access)';
+						break;
+					case reader.error.ENCODING_ERR:
+						errorMsg = 'File encoding error';
+						break;
+					default:
+						errorMsg = reader.error.message || 'FileReader error';
+						break;
+				}
+			}
+			reject(new Error(`${errorMsg} - File: ${file.name} (Size: ${file.size} bytes)`));
+		};
+
+		reader.onabort = () => {
+			reject(new Error(`File read was aborted: ${file.name}`));
+		};
+
+		// Add timeout for very large files
+		const timeout = setTimeout(() => {
+			reader.abort();
+			reject(new Error(`File read timeout (file too large or slow): ${file.name} (Size: ${file.size} bytes)`));
+		}, 30000); // 30 second timeout
+
+		reader.onloadend = () => {
+			clearTimeout(timeout);
+		};
+
+		try {
+			reader.readAsText(file);
+		} catch (error) {
+			clearTimeout(timeout);
+			reject(new Error(`Failed to start reading file: ${file.name} - ${error.message}`));
+		}
 	});
 }
 
