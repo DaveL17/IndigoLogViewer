@@ -253,12 +253,29 @@ function selectFolder() {
 	document.getElementById('hamburgerDropdown').classList.remove('show');
 }
 
+function selectFiles() {
+	const fileInput = document.getElementById('fileInput');
+	fileInput.value = '';
+	loadedFileInfo = [];
+	fileInput.click();
+	document.getElementById('hamburgerDropdown').classList.remove('show');
+}
+
 async function loadLogFiles() {
 	const folderInput = document.getElementById('folderInput');
-	const filesToProcess = folderInput.files;
+	const fileInput = document.getElementById('fileInput');
 
-	if (filesToProcess.length === 0) {
-		showToast('Please select a folder containing log files', 'error');
+	let filesToProcess;
+	let inputSource;
+
+	if (folderInput.files.length > 0) {
+		filesToProcess = folderInput.files;
+		inputSource = 'folder';
+	} else if (fileInput.files.length > 0) {
+		filesToProcess = fileInput.files;
+		inputSource = 'files';
+	} else {
+		showToast('Please select log files or a folder containing log files', 'error');
 		return;
 	}
 
@@ -385,8 +402,8 @@ async function loadLogFiles() {
 		showToast(successMessage, 'success');
 
 	} catch (error) {
-		showToast('Error loading log files: ' + error.message, 'error');
-		console.error('Load error:', error);
+		const sourceText = inputSource === 'folder' ? 'selected folder' : 'selected files';
+		showToast(`No log files found matching pattern "YYYY-MM-DD Events.*" in ${sourceText}`, 'error');
 	}
 }
 
@@ -1165,6 +1182,8 @@ document.getElementById('scrollContainer').addEventListener('scroll', () => {
 window.addEventListener('resize', () => {
 	requestAnimationFrame(renderVirtualList);
 });
+
+document.getElementById('fileInput').addEventListener('change', async () => await loadLogFiles());
 
 // Initialize display
 renderVirtualList();

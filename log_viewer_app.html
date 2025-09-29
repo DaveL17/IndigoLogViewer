@@ -12,6 +12,7 @@
         <button class="hamburger-button" onclick="toggleMenu()" title="Menu">☰</button>
         <div class="hamburger-dropdown" id="hamburgerDropdown">
             <div class="menu-item" onclick="selectFolder()">Choose Log Folder</div>
+            <div class="menu-item" onclick="selectFiles()">Choose Log Files</div>
             <div class="menu-item" onclick="openFileInfoModal()" id="fileInfoMenuItem">File Info</div>
             <div class="menu-divider"></div>
             <div class="menu-item" onclick="toggleTheme()" id="themeMenuItem">Dark Theme</div>
@@ -51,8 +52,9 @@
         <div class="error-message" id="errorMessage"></div>
     </div>
 
-    <!-- Hidden file input -->
+    <!-- Hidden file inputs -->
     <input type="file" id="folderInput" webkitdirectory style="display: none;">
+    <input type="file" id="fileInput" multiple accept=".txt,.log" style="display: none;">
 
     <!-- Toast notifications container -->
     <div class="toast-container" id="toastContainer"></div>
