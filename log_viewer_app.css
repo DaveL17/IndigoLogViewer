@@ -908,6 +908,52 @@ button:disabled {
 }
 
 /* ==========================================================================
+   FILE INFO STYLES
+   ========================================================================== */
+
+.file-info-table {
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    overflow: hidden;
+    width: 100%;
+}
+
+.file-info-row {
+    border-bottom: 1px solid var(--border-color);
+    display: grid;
+    font-size: 13px;
+    grid-template-columns: 2fr 1fr 1fr;
+    padding: 10px;
+}
+
+.file-info-row:last-child {
+    border-bottom: none;
+}
+
+.file-info-row:nth-child(even) {
+    background-color: var(--table-stripe);
+}
+
+.file-info-header {
+    background-color: var(--header-bg);
+    font-weight: bold;
+    text-transform: uppercase;
+    font-size: 11px;
+    letter-spacing: 1px;
+}
+
+.file-info-cell {
+    padding: 5px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.file-info-cell:nth-child(2),
+.file-info-cell:nth-child(3) {
+    text-align: right;
+}
+
+/* ==========================================================================
    MEDIA QUERIES - RESPONSIVE DESIGN
    ========================================================================== */
 

@@ -12,6 +12,7 @@
         <button class="hamburger-button" onclick="toggleMenu()" title="Menu">☰</button>
         <div class="hamburger-dropdown" id="hamburgerDropdown">
             <div class="menu-item" onclick="selectFolder()">Choose Log Folder</div>
+            <div class="menu-item" onclick="openFileInfoModal()" id="fileInfoMenuItem">File Info</div>
             <div class="menu-divider"></div>
             <div class="menu-item" onclick="toggleTheme()" id="themeMenuItem">Dark Theme</div>
             <div class="menu-divider"></div>
@@ -97,6 +98,22 @@
             <div class="modal-footer">
                 <button class="modal-button copy" onclick="copyLogEntry()">Copy</button>
                 <button class="modal-button close" onclick="closeModal()">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- File Info Modal -->
+    <div class="modal-overlay" id="fileInfoModalOverlay" onclick="closeFileInfoModal(event)">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <div class="modal-header">
+                <h3 class="modal-title">Loaded Log Files</h3>
+                <button class="modal-close" onclick="closeFileInfoModal()" title="Close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div id="fileListDisplay"></div>
+            </div>
+            <div class="modal-footer">
+                <button class="modal-button close" onclick="closeFileInfoModal()">Close</button>
             </div>
         </div>
     </div>
