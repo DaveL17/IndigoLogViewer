@@ -375,68 +375,133 @@ async function loadLogFiles() {
 	}
 }
 
-function readFileContent(file) {
-	return new Promise((resolve, reject) => {
-		const reader = new FileReader();
+async function readFileContent(file, retryCount = 0, maxRetries = 3) {
+    const RETRY_DELAYS = [500, 1500, 3000]; // Wait 0.5s, 1.5s, 3s between retries
 
-		reader.onload = e => {
-			// Check if we actually got content
-			if (e.target.result === null || e.target.result === undefined) {
-				reject(new Error(`File is empty or unreadable: ${file.name}`));
-				return;
-			}
-			resolve(e.target.result);
-		};
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader();
 
-		reader.onerror = () => {
-			// Get more specific error information
-			let errorMsg = 'Unknown read error';
-			if (reader.error) {
-				switch (reader.error.code) {
-					case reader.error.NOT_FOUND_ERR:
-						errorMsg = 'File not found';
-						break;
-					case reader.error.NOT_READABLE_ERR:
-						errorMsg = 'File not readable';
-						break;
-					case reader.error.ABORT_ERR:
-						errorMsg = 'Read operation aborted';
-						break;
-					case reader.error.SECURITY_ERR:
-						errorMsg = 'Security error (file may be locked or have restricted access)';
-						break;
-					case reader.error.ENCODING_ERR:
-						errorMsg = 'File encoding error';
-						break;
-					default:
-						errorMsg = reader.error.message || 'FileReader error';
-						break;
-				}
-			}
-			reject(new Error(`${errorMsg} - File: ${file.name} (Size: ${file.size} bytes)`));
-		};
+        reader.onload = e => {
+            // Check if we actually got content
+            if (e.target.result === null || e.target.result === undefined) {
+                if (retryCount < maxRetries) {
+                    console.log(`File empty or unreadable: ${file.name}, retrying in ${RETRY_DELAYS[retryCount]}ms...`);
+                    setTimeout(async () => {
+                        try {
+                            const result = await readFileContent(file, retryCount + 1, maxRetries);
+                            resolve(result);
+                        } catch (error) {
+                            reject(error);
+                        }
+                    }, RETRY_DELAYS[retryCount]);
+                } else {
+                    reject(new Error(`File is empty or unreadable after ${maxRetries} attempts: ${file.name}`));
+                }
+                return;
+            }
+            resolve(e.target.result);
+        };
 
-		reader.onabort = () => {
-			reject(new Error(`File read was aborted: ${file.name}`));
-		};
+        reader.onerror = () => {
+            // Get more specific error information
+            let errorMsg = 'Unknown read error';
+            let shouldRetry = false;
 
-		// Add timeout for very large files
-		const timeout = setTimeout(() => {
-			reader.abort();
-			reject(new Error(`File read timeout (file too large or slow): ${file.name} (Size: ${file.size} bytes)`));
-		}, 30000); // 30 second timeout
+            if (reader.error) {
+                switch (reader.error.code) {
+                    case reader.error.NOT_FOUND_ERR:
+                        errorMsg = 'File not found';
+                        shouldRetry = true; // File might appear soon
+                        break;
+                    case reader.error.NOT_READABLE_ERR:
+                        errorMsg = 'File not readable (may be locked or being written to)';
+                        shouldRetry = true; // Might become readable
+                        break;
+                    case reader.error.ABORT_ERR:
+                        errorMsg = 'Read operation aborted';
+                        shouldRetry = false; // Don't retry aborted operations
+                        break;
+                    case reader.error.SECURITY_ERR:
+                        errorMsg = 'Security error (file may be locked or have restricted access)';
+                        shouldRetry = true; // Might be temporarily locked
+                        break;
+                    case reader.error.ENCODING_ERR:
+                        errorMsg = 'File encoding error';
+                        shouldRetry = false; // Encoding errors won't fix themselves
+                        break;
+                    default:
+                        errorMsg = reader.error.message || 'FileReader error';
+                        shouldRetry = true; // Assume it might be temporary
+                        break;
+                }
+            }
 
-		reader.onloadend = () => {
-			clearTimeout(timeout);
-		};
+            // Retry if appropriate
+            if (shouldRetry && retryCount < maxRetries) {
+                console.log(`${errorMsg} for ${file.name}, retrying in ${RETRY_DELAYS[retryCount]}ms... (attempt ${retryCount + 1}/${maxRetries})`);
+                setTimeout(async () => {
+                    try {
+                        const result = await readFileContent(file, retryCount + 1, maxRetries);
+                        resolve(result);
+                    } catch (error) {
+                        reject(error);
+                    }
+                }, RETRY_DELAYS[retryCount]);
+            } else {
+                reject(new Error(`${errorMsg} - File: ${file.name} (Size: ${file.size} bytes)${retryCount > 0 ? ` after ${retryCount} retries` : ''}`));
+            }
+        };
 
-		try {
-			reader.readAsText(file);
-		} catch (error) {
-			clearTimeout(timeout);
-			reject(new Error(`Failed to start reading file: ${file.name} - ${error.message}`));
-		}
-	});
+        reader.onabort = () => {
+            // Don't retry aborted operations
+            reject(new Error(`File read was aborted: ${file.name}`));
+        };
+
+        // Extended timeout for network files and files being written to
+        const timeout = setTimeout(() => {
+            reader.abort();
+
+            // Retry on timeout if we have retries left
+            if (retryCount < maxRetries) {
+                console.log(`File read timeout for ${file.name}, retrying in ${RETRY_DELAYS[retryCount]}ms...`);
+                setTimeout(async () => {
+                    try {
+                        const result = await readFileContent(file, retryCount + 1, maxRetries);
+                        resolve(result);
+                    } catch (error) {
+                        reject(error);
+                    }
+                }, RETRY_DELAYS[retryCount]);
+            } else {
+                reject(new Error(`File read timeout after ${maxRetries} attempts: ${file.name} (Size: ${file.size} bytes)`));
+            }
+        }, 30000); // 30 second timeout per attempt
+
+        reader.onloadend = () => {
+            clearTimeout(timeout);
+        };
+
+        try {
+            reader.readAsText(file);
+        } catch (error) {
+            clearTimeout(timeout);
+
+            // Retry on exception if we have retries left
+            if (retryCount < maxRetries) {
+                console.log(`Failed to start reading ${file.name}: ${error.message}, retrying in ${RETRY_DELAYS[retryCount]}ms...`);
+                setTimeout(async () => {
+                    try {
+                        const result = await readFileContent(file, retryCount + 1, maxRetries);
+                        resolve(result);
+                    } catch (error) {
+                        reject(error);
+                    }
+                }, RETRY_DELAYS[retryCount]);
+            } else {
+                reject(new Error(`Failed to start reading file after ${maxRetries} attempts: ${file.name} - ${error.message}`));
+            }
+        }
+    });
 }
 
 function updateFilters() {
