@@ -1111,7 +1111,7 @@ function stopResize() {
 function updateColumnWidths() {
     const root = document.documentElement;
     root.style.setProperty('--timestamp-width', columnWidths.timestamp + 'px');
-    root.style.setProperty('--class-width', columnWidths.class + 'px');
+    `root.style.setProperty('--class-width', columnWidths.class + 'px');`
 }
 
 // Save column widths to localStorage
