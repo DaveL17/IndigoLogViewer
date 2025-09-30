@@ -951,6 +951,17 @@ function openFileInfoModal() {
     document.body.style.overflow = 'hidden';
 }
 
+// File Info Modal functions
+function openAboutModal() {
+    // Close hamburger menu
+    document.getElementById('hamburgerDropdown').classList.remove('show');
+
+    const aboutModalOverlay = document.getElementById('aboutModalOverlay');
+
+    aboutModalOverlay.classList.add('active');
+    document.body.style.overflow = 'hidden';
+}
+
 function closeFileInfoModal(event) {
     if (event && event.target !== document.getElementById('fileInfoModalOverlay')) {
         return;
@@ -958,6 +969,16 @@ function closeFileInfoModal(event) {
 
     const fileInfoModal = document.getElementById('fileInfoModalOverlay');
     fileInfoModal.classList.remove('active');
+    document.body.style.overflow = '';
+}
+
+function closeAboutModal(event) {
+    if (event && event.target !== document.getElementById('aboutModalOverlay')) {
+        return;
+    }
+
+    const aboutModal = document.getElementById('aboutModalOverlay');
+    aboutModal.classList.remove('active');
     document.body.style.overflow = '';
 }
 

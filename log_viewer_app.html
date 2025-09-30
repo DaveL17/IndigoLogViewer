@@ -18,7 +18,7 @@
             <div class="menu-item" onclick="toggleTheme()" id="themeMenuItem">Dark Theme</div>
             <div class="menu-divider"></div>
             <div class="menu-item" onclick="openHelp()">Help</div>
-            <div class="menu-item" id="aboutDialog" onclick="openAbout()">About</div>
+            <div class="menu-item" id="aboutDialog" onclick="openAboutModal()">About</div>
         </div>
     </div>
     <div class="header">
@@ -133,13 +133,19 @@
         </div>
     </div>
 
-    <!-- About Dialog - displayed when user selects "About" menu item. -->
-    <dialog class="aboutWindow modal-header" id="alertDialog">
-        <form method="dialog">
-            <p id="alertMessage"></p>
-            <button class="modal-close" onclick="closeFileInfoModal()" title="Close">&times;</button>
-        </form>
-    </dialog>
+    <!-- File Info Modal -->
+    <div class="modal-overlay aboutModal" id="aboutModalOverlay" onclick="closeAboutModal(event)">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <div class="modal-header">
+                <h3 class="modal-title">Indigo Log File Viewer</h3>
+                <button class="modal-close" onclick="closeAboutModal()" title="Close">&times;</button>
+            </div>
+            <div class="modal-body aboutBody">
+                <div>Written by: DaveL17</div>
+                <div>Version: Beta 2</div>
+            </div>
+        </div>
+    </div>
 
     <div class="footer" id="footer">No log files loaded</div>
 	<script src="log_viewer_app.js"></script>
