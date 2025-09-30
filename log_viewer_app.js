@@ -245,8 +245,10 @@ function parseLogContent(content) {
 
 function selectFolder() {
 	const folderInput = document.getElementById('folderInput');
-	// Reset the input value to ensure change event fires even if same folder is selected
+	const fileInput = document.getElementById('fileInput');
+	// Reset both inputs to ensure clean state
 	folderInput.value = '';
+	fileInput.value = ''; // Clear the file input
 	loadedFileInfo = []; // Reset file info when selecting new folder
 	folderInput.click();
 	// Close the hamburger menu after selection
@@ -254,7 +256,10 @@ function selectFolder() {
 }
 
 function selectFiles() {
+	const folderInput = document.getElementById('folderInput');
 	const fileInput = document.getElementById('fileInput');
+	// Reset both inputs to ensure clean state
+	folderInput.value = ''; // Clear the folder input
 	fileInput.value = '';
 	loadedFileInfo = [];
 	fileInput.click();
@@ -1184,7 +1189,6 @@ window.addEventListener('resize', () => {
 });
 
 document.getElementById('fileInput').addEventListener('change', async () => await loadLogFiles());
-
 // Initialize display
 renderVirtualList();
 updateStats();
