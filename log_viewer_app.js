@@ -183,10 +183,14 @@ document.addEventListener('click', function(event) {
     const classFilterContainer = document.querySelector('.class-filter-container');
     const dropdown = document.getElementById('classFilterDropdown');
 
-    if (classFilterContainer && !classFilterContainer.contains(event.target)) {
-        dropdown.classList.remove('show');
+    if (dropdown && dropdown.classList.contains('show')) {
+        if (!classFilterContainer.contains(event.target)) {
+            dropdown.classList.remove('show');
+            event.stopPropagation();
+            event.preventDefault();
+        }
     }
-});
+}, true); // Use capture phase
 
 // Help function
 function openHelp() {
@@ -1292,7 +1296,7 @@ function stopResize() {
 function updateColumnWidths() {
     const root = document.documentElement;
     root.style.setProperty('--timestamp-width', columnWidths.timestamp + 'px');
-    `root.style.setProperty('--class-width', columnWidths.class + 'px');`
+    // root.style.setProperty('--class-width', columnWidths.class + 'px');
 }
 
 // Save column widths to localStorage
