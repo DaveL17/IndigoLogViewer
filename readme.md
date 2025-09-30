@@ -46,10 +46,16 @@ browser security feature. To toggle the theme, select  from the menu.
 #### Help
 <kbd>Help</kbd> Select this option to view the GitHub repository and this readme file.
 
+#### About
+<kbd>About</kbd> Typical About information.
+
 ### Search Tools
 #### Class Filter
 The Class Filter dropdown will list all the message classes that exist in the loaded log files. This control is built 
-dynamically; that is, when you first load the app, there will be no classes listed in the control.
+dynamically; that is, when you first load the app, there will be no classes listed in the control. Once the control is
+populated, it will contain all the classes that are contained in the loaded data. By default, all classes are shown. To
+exclude classes uncheck their dropdown entry. You can also unselect all classes and then begin to build a list by
+re-enabling classes one by one.
 
 #### Text Search
 Use the Text Search tool to find specific strings of text. The search entry is a literal search (it doesn't support 

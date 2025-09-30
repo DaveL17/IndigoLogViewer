@@ -21,48 +21,55 @@
             <div class="menu-item" id="aboutDialog" onclick="openAboutModal()">About</div>
         </div>
     </div>
-    <div class="header">
-        <div class="title">
-            Indigo Log Viewer
-        </div>
 
-        <div class="controls">
-            <div class="control-group">
-                <label>Class Filter</label>
-                <div class="class-filter-container">
-                    <button class="class-filter-button" onclick="toggleClassFilter()" id="classFilterButton">
-                        <span>Class Filter</span><span>▼</span>
-                    </button>
-                    <div class="class-filter-dropdown" id="classFilterDropdown">
-                        <div class="class-filter-item class-filter-toggle" onclick="toggleAllClasses()">
-                            <input type="checkbox" id="selectAllClasses" checked>
-                            <label for="selectAllClasses">Select All / None</label>
-                        </div>
-                        <div class="class-filter-divider"></div>
-                        <div class="class-filter-list" id="classFilterList">
-                            <!-- Class checkboxes will be populated here -->
+    <div class="header-wrapper">
+        <div class="header-background-layer">
+            <div class="header-background-image">
+        </div>
+    </div>
+        <div class="header-content-layer">
+            <div class="title">
+                Indigo Log Viewer
+            </div>
+
+            <div class="controls">
+                <div class="control-group">
+                    <label>Class Filter</label>
+                    <div class="class-filter-container">
+                        <button class="class-filter-button" onclick="toggleClassFilter()" id="classFilterButton">
+                            <span>Class Filter</span><span>▼</span>
+                        </button>
+                        <div class="class-filter-dropdown" id="classFilterDropdown">
+                            <div class="class-filter-item class-filter-toggle" onclick="toggleAllClasses()">
+                                <input type="checkbox" id="selectAllClasses" checked>
+                                <label for="selectAllClasses">Select All / None</label>
+                            </div>
+                            <div class="class-filter-divider"></div>
+                            <div class="class-filter-list" id="classFilterList">
+                                <!-- Class checkboxes will be populated here -->
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="control-group">
-                <label>Text Search</label>
-                <div class="text-input-container">
-                    <input type="text" id="textFilter" placeholder="Search log entries...">
-                    <button class="clear-input-button" onclick="clearTextFilter()" title="Clear search">&times;</button>
+                <div class="control-group">
+                    <label>Text Search</label>
+                    <div class="text-input-container">
+                        <input type="text" id="textFilter" placeholder="Search log entries...">
+                        <button class="clear-input-button" onclick="clearTextFilter()" title="Clear search">&times;</button>
+                    </div>
+                </div>
+                <div class="date-filter-group">
+                    <label>Date Filter</label>
+                    <div style="display: flex; gap: 5px;">
+                        <input type="date" id="startDateFilter" placeholder="Start Date">
+                        <input type="date" id="endDateFilter" placeholder="End Date">
+                        <button class="clear-button" onclick="clearDateFilter()">Clear</button>
+                    </div>
                 </div>
             </div>
-            <div class="date-filter-group">
-                <label>Date Filter</label>
-                <div style="display: flex; gap: 5px;">
-                    <input type="date" id="startDateFilter" placeholder="Start Date">
-                    <input type="date" id="endDateFilter" placeholder="End Date">
-                    <button class="clear-button" onclick="clearDateFilter()">Clear</button>
-                </div>
-            </div>
-        </div>
 
-        <div class="error-message" id="errorMessage"></div>
+            <div class="error-message" id="errorMessage"></div>
+        </div>
     </div>
 
     <!-- Hidden file inputs -->

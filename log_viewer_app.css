@@ -230,36 +230,45 @@ body {
    HEADER SECTION
    ========================================================================== */
 
-.header {
-    background-color: var(--header-bg);
-    border: 1px solid var(--border-color);
-    border-radius: 8px;
+.header-wrapper {
     margin-bottom: 10px;
-    overflow: visible; /* Allow dropdowns to extend outside */
-    padding: 15px;
     position: relative;
 }
 
-.header::before {
+.header-background-image {
+    background-color: transparent;
     background-image: url("src/headerBackgroundLight.png");
-    background-position: left center;
     background-repeat: no-repeat;
     background-size: contain;
-    content: "";
     height: 100%;
-    left: -35px;
-    mask: linear-gradient(to right, black 0%, black 50%, transparent 100%);
     opacity: 0.25;
-    overflow: hidden; /* Move overflow here */
-    position: absolute;
-    top: 60px;
     transform: scale(2.0) rotate(-8deg);
     transform-origin: left center;
-    width: 100%;
 }
 
-[data-theme="dark"] .header::before {
+[data-theme="dark"] .header-background-image {
     background-image: url("src/headerBackground.png");
+}
+
+.header-background-layer {
+    background-color: var(--header-bg);
+    border-radius: 8px;
+    height: 100%;
+    left: 0;
+    overflow: hidden;
+    position: absolute;
+    right: 0;
+    top: 0;
+    z-index: 0;
+}
+
+.header-content-layer {
+    border: 1px solid var(--border-color);
+    background-color: transparent;
+    overflow: visible;
+    padding: 15px;
+    position: relative;
+    z-index: 1;
 }
 
 .title {
@@ -605,7 +614,7 @@ button:disabled {
     position: sticky;
     text-transform: uppercase;
     top: 0;
-    z-index: 10;
+    z-index: 0;
 }
 
 .table-header > div {
