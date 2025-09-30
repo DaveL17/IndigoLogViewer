@@ -7,6 +7,7 @@ let visibleStart = 0;
 let visibleEnd = 0;
 let selectedRowIndex = -1;
 let loadedFileInfo = [];
+let selectedClasses = new Set(); // Track selected classes for filtering
 
 // Virtual scrolling variables
 const ROW_HEIGHT = 32; // Minimum height per row
@@ -93,6 +94,100 @@ function updateSortIndicators() {
     }
 }
 
+// Class filter dropdown functions
+function toggleClassFilter() {
+    const dropdown = document.getElementById('classFilterDropdown');
+    const classList = document.getElementById('classFilterList');
+    const isOpen = dropdown.classList.contains('show');
+
+    if (isOpen) {
+        dropdown.classList.remove('show');
+    } else {
+        dropdown.classList.add('show');
+        // Reset scroll position to top when opening
+        if (classList) {
+            classList.scrollTop = 0;
+        }
+    }
+}
+
+function toggleAllClasses() {
+    const selectAllCheckbox = document.getElementById('selectAllClasses');
+    const classCheckboxes = document.querySelectorAll('.class-filter-list input[type="checkbox"]');
+
+    // Toggle all checkboxes to match the select all state
+    classCheckboxes.forEach(checkbox => {
+        checkbox.checked = selectAllCheckbox.checked;
+    });
+
+    updateSelectedClasses();
+    updateClassFilterButton();
+    applyFilters();
+}
+
+function toggleClassSelection(className) {
+    if (selectedClasses.has(className)) {
+        selectedClasses.delete(className);
+    } else {
+        selectedClasses.add(className);
+    }
+
+    updateSelectAllCheckbox();
+    updateClassFilterButton();
+    applyFilters();
+}
+
+function updateSelectAllCheckbox() {
+    const selectAllCheckbox = document.getElementById('selectAllClasses');
+    const classCheckboxes = document.querySelectorAll('.class-filter-list input[type="checkbox"]');
+    const checkedCount = Array.from(classCheckboxes).filter(cb => cb.checked).length;
+
+    selectAllCheckbox.checked = checkedCount === classCheckboxes.length;
+    selectAllCheckbox.indeterminate = checkedCount > 0 && checkedCount < classCheckboxes.length;
+}
+
+function updateSelectedClasses() {
+    selectedClasses.clear();
+    const classCheckboxes = document.querySelectorAll('.class-filter-list input[type="checkbox"]');
+
+    classCheckboxes.forEach(checkbox => {
+        if (checkbox.checked) {
+            selectedClasses.add(checkbox.value);
+        }
+    });
+}
+
+function updateClassFilterButton() {
+    const button = document.getElementById('classFilterButton');
+    const totalClasses = availableClasses.size;
+    const selectedCount = selectedClasses.size;
+
+    let buttonText = '';
+    if (totalClasses === 0) {
+        buttonText = 'Class Filter'; // Default when no files loaded
+    } else if (selectedCount === 0) {
+        buttonText = 'No Classes';
+    } else if (selectedCount === totalClasses) {
+        buttonText = 'All Classes';
+    } else if (selectedCount === 1) {
+        buttonText = '1 Class Selected';
+    } else {
+        buttonText = `${selectedCount} Classes Selected`;
+    }
+
+    button.innerHTML = `<span>${buttonText}</span><span>▼</span>`;
+}
+
+// Close class filter when clicking outside
+document.addEventListener('click', function(event) {
+    const classFilterContainer = document.querySelector('.class-filter-container');
+    const dropdown = document.getElementById('classFilterDropdown');
+
+    if (classFilterContainer && !classFilterContainer.contains(event.target)) {
+        dropdown.classList.remove('show');
+    }
+});
+
 // Help function
 function openHelp() {
     const helpUrl = 'https://github.com/DaveL17/IndigoLogViewer';
@@ -103,6 +198,18 @@ function openHelp() {
 
     // Close the hamburger menu
     document.getElementById('hamburgerDropdown').classList.remove('show');
+}
+
+function openAbout() {
+	const message = `<span style="font-weight: bold;">Indigo Log File Viewer</span><br> Version: Beta 2`;
+
+	const dlg = document.getElementById("alertDialog");
+	const msg = document.getElementById("alertMessage");
+
+	msg.innerHTML = message;
+	dlg.showModal();
+
+	document.getElementById('hamburgerDropdown').classList.remove('show');
 }
 
 // Hamburger menu functions
@@ -542,12 +649,40 @@ async function readFileContent(file, retryCount = 0, maxRetries = 3) {
 }
 
 function updateFilters() {
-	// Update class filter
-	const classFilter = document.getElementById('classFilter');
-	classFilter.innerHTML = '<option value="">All Classes</option>';
-   [...availableClasses].sort((a, b) => a.toLowerCase().localeCompare(b.toLowerCase())).forEach(cls => {
-        classFilter.innerHTML += `<option value="${cls}">${cls}</option>`;
+	// Update class filter list
+	const classFilterList = document.getElementById('classFilterList');
+	classFilterList.innerHTML = '';
+
+	const sortedClasses = [...availableClasses].sort((a, b) => a.toLowerCase().localeCompare(b.toLowerCase()));
+
+	// First, ensure all classes are selected if this is initial load
+	if (selectedClasses.size === 0) {
+		sortedClasses.forEach(cls => selectedClasses.add(cls));
+	}
+
+	sortedClasses.forEach(cls => {
+		const isChecked = selectedClasses.has(cls);
+		const itemDiv = document.createElement('div');
+		itemDiv.className = 'class-filter-item';
+		itemDiv.onclick = function(e) {
+			if (e.target.tagName !== 'INPUT') {
+				const checkbox = this.querySelector('input[type="checkbox"]');
+				checkbox.checked = !checkbox.checked;
+			}
+			toggleClassSelection(cls);
+		};
+
+		itemDiv.innerHTML = `
+			<input type="checkbox" id="class-${cls}" value="${cls}" ${isChecked ? 'checked' : ''} 
+				   onclick="event.stopPropagation(); toggleClassSelection('${cls}')">
+			<label for="class-${cls}" onclick="event.stopPropagation()">${escapeHtml(cls)}</label>
+		`;
+
+		classFilterList.appendChild(itemDiv);
 	});
+
+	updateSelectAllCheckbox();
+	updateClassFilterButton();
 
 	// Set date range for date pickers
 	const startDateFilter = document.getElementById('startDateFilter');
@@ -600,10 +735,9 @@ function applyFilters() {
 		});
 	}
 
-	// Apply class filter
-	const classFilter = document.getElementById('classFilter').value;
-	if (classFilter) {
-		filtered = filtered.filter(entry => entry.class === classFilter);
+	// Apply class filter - only include entries with selected classes
+	if (selectedClasses.size > 0 && selectedClasses.size < availableClasses.size) {
+		filtered = filtered.filter(entry => selectedClasses.has(entry.class));
 	}
 
 	// Apply text filter
@@ -950,7 +1084,6 @@ function clearError() {
 // document.getElementById('folderInput').addEventListener('change', () => loadLogFiles());
 document.getElementById('startDateFilter').addEventListener('change', applyFilters);
 document.getElementById('endDateFilter').addEventListener('change', applyFilters);
-document.getElementById('classFilter').addEventListener('change', applyFilters);
 
 // Keyboard navigation
 document.addEventListener('keydown', (e) => {

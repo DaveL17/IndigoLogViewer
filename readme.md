@@ -18,26 +18,33 @@ The app requires three files to run:
 2. log_viewer_app.js
 3. log_viewer_app.css
 
-There are other files in the zip, that the app will use if they're present (images, etc.)
+There are other files in the zip, which the app will use if they're present (images, etc.) but they are not required.
 
 ### Menu
-#### Choose Log Folder
-Once the app is loaded, click the menu button in the upper right corner and browse to the log folder of your target 
-Indigo install. Select the folder to load all the log files or select a single log file to view. The app supports 
-opening log files from a network location; however, this can affect load times depending on the speed of your network 
-and the amount of data contained within the log files selected. Be patient, it may take a few beats to load. On an M4 
-MacBook, it loads 200,000 log lines in less than a second when run on the server machine.
+Use the hamburger menu in the upper right-hand corner to access app features.
 
-The log file view is not updated in real time. To reload the log entry list to view new log entries, it's necessary to
-re-choose the log folder (due to legitimate modern browser-imposed security features).
+#### Choose Log Folder
+<kbd>Choose Log Folder</kbd> Select this option to load all the log files to view (you can also use this menu item to 
+select a single log file). The app supports opening log files from a network location; however, this can affect load 
+times depending on the speed of your network and the amount of data contained within the log files selected. Be 
+patient, it may take a few beats to load. On an M4 MacBook, it loads 200,000 log lines in less than a second when run 
+on the server machine.
+
+#### Choose Log Files
+<kbd>Choose Log Files</kbd> Select this option to load multiple files at once (including discontinuous files).
+
+#### File Info
+<kbd>File Info</kbd> Select this option to see useful information about the files loaded. The tool shows file name, file 
+size, and the number of entries per file. This is a handy way to see if any of your log files are outside the norm. For 
+example, if your typical log file is typically 700K, a 1MB file will stand out.  
 
 #### Themes
-The app supports a light and dark theme. It will remember your choice for the future; however, if you clear your 
-browser's cache, the preference may be cleared if you delete the app's local storage. This is a "universal" browser 
-security feature. To toggle the theme, select [Light/Dark] Theme from the menu.
+<kbd>[Light/Dark] Theme</kbd> The app supports two themes. It will remember your choice for the future; however, if you 
+clear your browser's cache, the preference may be cleared if you delete the app's local storage. This is a "universal" 
+browser security feature. To toggle the theme, select  from the menu.
 
 #### Help
-Clicking help will take you to the GitHub repository and this readme file.
+<kbd>Help</kbd> Select this option to view the GitHub repository and this readme file.
 
 ### Search Tools
 #### Class Filter
@@ -58,6 +65,9 @@ however, the list will update as filters are applied. Click on a message and it 
 especially helpful for multiline log messages which are truncated in the main view. There is a <kbd>Copy</kbd> button
 provided in the modal which will copy the entire log entry displayed.
 
+The log file view is not updated in real time. To reload the log entry list to view new log entries, it's necessary to
+re-choose the log folder (due to legitimate modern browser-imposed security features).
+
 <img src="src/Screenshot with Modal.png" alt="Screenshot with Modal" width="800" height="600">
 
 #### Columns
@@ -72,7 +82,7 @@ can sort only one column at a time. Additionally, both columns are resizeable if
 
 ### Getting Creative
 You can move the app's files to Indigo's public webserver folder and serve the app from there. This will allow you to 
-add the app to the dock and make it a stand alone web personal web app (PWA). You can also serve the app from node.js. 
+add the app to the dock and make it a stand-alone web personal web app (PWA). You can also serve the app from node.js. 
 There are lots of options, but you are on your own for configuring anything beyond the instructions above.
 
 ### Suggestions and Error Reports

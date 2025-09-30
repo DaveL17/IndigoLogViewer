@@ -18,6 +18,7 @@
             <div class="menu-item" onclick="toggleTheme()" id="themeMenuItem">Dark Theme</div>
             <div class="menu-divider"></div>
             <div class="menu-item" onclick="openHelp()">Help</div>
+            <div class="menu-item" id="aboutDialog" onclick="openAbout()">About</div>
         </div>
     </div>
     <div class="header">
@@ -28,9 +29,21 @@
         <div class="controls">
             <div class="control-group">
                 <label>Class Filter</label>
-                <select id="classFilter">
-                    <option value="">All Classes</option>
-                </select>
+                <div class="class-filter-container">
+                    <button class="class-filter-button" onclick="toggleClassFilter()" id="classFilterButton">
+                        <span>Class Filter</span><span>▼</span>
+                    </button>
+                    <div class="class-filter-dropdown" id="classFilterDropdown">
+                        <div class="class-filter-item class-filter-toggle" onclick="toggleAllClasses()">
+                            <input type="checkbox" id="selectAllClasses" checked>
+                            <label for="selectAllClasses">Select All / None</label>
+                        </div>
+                        <div class="class-filter-divider"></div>
+                        <div class="class-filter-list" id="classFilterList">
+                            <!-- Class checkboxes will be populated here -->
+                        </div>
+                    </div>
+                </div>
             </div>
             <div class="control-group">
                 <label>Text Search</label>
@@ -119,6 +132,14 @@
             </div>
         </div>
     </div>
+
+    <!-- About Dialog - displayed when user selects "About" menu item. -->
+    <dialog class="aboutWindow modal-header" id="alertDialog">
+        <form method="dialog">
+            <p id="alertMessage"></p>
+            <button class="modal-close" onclick="closeFileInfoModal()" title="Close">&times;</button>
+        </form>
+    </dialog>
 
     <div class="footer" id="footer">No log files loaded</div>
 	<script src="log_viewer_app.js"></script>
