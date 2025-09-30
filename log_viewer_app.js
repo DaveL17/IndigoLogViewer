@@ -735,10 +735,15 @@ function applyFilters() {
 		});
 	}
 
-	// Apply class filter - only include entries with selected classes
-	if (selectedClasses.size > 0 && selectedClasses.size < availableClasses.size) {
+// Apply class filter - only include entries with selected classes
+	if (selectedClasses.size === 0) {
+		// No classes selected - show nothing
+		filtered = [];
+	} else if (selectedClasses.size < availableClasses.size) {
+		// Some but not all classes selected - filter to selected classes
 		filtered = filtered.filter(entry => selectedClasses.has(entry.class));
 	}
+	// If all classes selected (size === availableClasses.size), show all (no filtering)
 
 	// Apply text filter
 	const textFilter = document.getElementById('textFilter').value.toLowerCase();
