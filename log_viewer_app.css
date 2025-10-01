@@ -5,10 +5,12 @@
 :root {
     --bg-color: #ffffff;
     --border-color: #dddddd;
+    --border-radius: 4px;
     --button-bg: #6c757d;
     --button-text: #ffffff;
     --debug-color: #28a745;
     --error-color: #dc3545;
+    --gap-size: 5px;
     --header-bg: #f5f5f5;
     --input-bg: #ffffff;
     --modal-bg: #ffffff;
@@ -50,13 +52,14 @@
 
 * {
     box-sizing: border-box;
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+    margin: 0;
+    color: var(--text-color);
 }
 
 body {
     background-color: var(--bg-color);
-    color: var(--text-color);
-    font-family: Arial, sans-serif;
-    margin: 0;
     padding: 20px 20px 60px;
     transition: background-color 0.3s, color 0.3s;
 }
@@ -75,7 +78,7 @@ body {
 
 ::-webkit-scrollbar-thumb {
     background: var(--scrollbar-thumb);
-    border-radius: 6px;
+    border-radius: var(--border-radius);
 }
 
 ::-webkit-scrollbar-thumb:hover {
@@ -99,9 +102,7 @@ body {
 
 .empty-state {
     align-items: center;
-    color: var(--text-color);
     display: flex;
-    font-size: 14px;
     height: 200px;
     justify-content: center;
     opacity: 0.6;
@@ -109,7 +110,6 @@ body {
 
 .error-message {
     color: #dc3545;
-    font-size: 14px;
     margin-top: 10px;
     text-align: center;
 }
@@ -127,11 +127,9 @@ body {
     align-items: center;
     background-color: var(--input-bg);
     border: 1px solid var(--border-color);
-    border-radius: 4px;
-    color: var(--text-color);
+    border-radius: var(--border-radius);
     cursor: pointer;
     display: flex;
-    font-size: 14px;
     height: 36px;
     justify-content: space-between;
     padding: 8px 12px;
@@ -148,7 +146,7 @@ body {
 .class-filter-dropdown {
     background-color: var(--modal-bg);
     border: 1px solid var(--border-color);
-    border-radius: 6px;
+    border-radius: var(--border-radius);
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
     margin-top: 5px;
     max-height: 400px;
@@ -178,8 +176,8 @@ body {
 .class-filter-item {
     cursor: pointer;
     display: flex;
-    font-size: 13px;
-    gap: 8px;
+    font-size: 12px;
+    gap: var(--gap-size);
     margin: 2px 4px;
     padding: 6px 12px;
     transition: background-color 0.2s;
@@ -188,23 +186,20 @@ body {
 
 .class-filter-item:hover {
     background-color: var(--header-bg);
-    border-radius: 4px;
+    border-radius: var(--border-radius);
 }
 
 .class-filter-item input[type="checkbox"] {
     cursor: pointer;
     flex-shrink: 0;
     height: 16px;
-    margin: 0;
     width: 16px;
 }
 
 .class-filter-item label {
     cursor: pointer;
     flex: 1;
-    font-size: 13px;
     font-weight: normal;
-    margin: 0;
     min-height: unset;
     opacity: 1;
     overflow: hidden;
@@ -252,7 +247,7 @@ body {
 
 .header-background-layer {
     background-color: var(--header-bg);
-    border-radius: 8px;
+    border-radius: var(--border-radius);
     height: 100%;
     left: 0;
     overflow: hidden;
@@ -298,8 +293,7 @@ body {
     align-items: center;
     background: none;
     border: 1px solid var(--border-color);
-    border-radius: 4px;
-    color: var(--text-color);
+    border-radius: var(--border-radius);
     cursor: pointer;
     display: flex;
     font-size: 18px;
@@ -318,7 +312,7 @@ body {
 .hamburger-dropdown {
     background-color: var(--modal-bg);
     border: 1px solid var(--border-color);
-    border-radius: 6px;
+    border-radius: var(--border-radius);
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
     margin-top: 5px;
     min-width: 220px;
@@ -341,12 +335,10 @@ body {
 
 .menu-item {
     align-items: center;
-    border-radius: 4px;
-    color: var(--text-color);
+    border-radius: var(--border-radius);
     cursor: pointer;
     display: flex;
-    font-size: 14px;
-    gap: 8px;
+    gap: var(--gap-size);
     margin: 4px;
     padding: 12px 16px;
     transition: background-color 0.2s;
@@ -383,17 +375,14 @@ button {
     align-items: center;
     background-color: var(--input-bg);
     border: 1px solid var(--border-color);
-    border-radius: 4px;
-    color: var(--text-color);
+    border-radius: var(--border-radius);
     display: flex;
-    font-size: 14px;
-    height: 36px; /* Fixed height for all elements */
+    height: 36px;
     line-height: 1;
     padding: 8px 12px;
     z-index: 10;
 }
 
-/* Flat select dropdown styling */
 select {
     -webkit-appearance: none;
     appearance: none;
@@ -413,19 +402,15 @@ select {
 
 input[type="date"] {
     background-color: var(--input-bg);
-    color: var(--text-color);
     font-weight: normal;
 }
 
-/* Enhanced dark theme styling for date inputs */
 [data-theme="dark"] input[type="date"] {
     background-color: var(--input-bg);
     border: 1px solid var(--border-color);
-    color: var(--text-color);
     color-scheme: dark; /* This helps browsers apply dark styling to the calendar popup */
 }
 
-/* Style the date input calendar icon */
 input[type="date"]::-webkit-calendar-picker-indicator {
     filter: invert(1);
     opacity: 0.8;
@@ -450,7 +435,6 @@ button:hover {
     opacity: 0.9;
 }
 
-/* Disabled button styling */
 button:disabled {
     cursor: not-allowed;
     opacity: 0.5;
@@ -467,7 +451,7 @@ button:disabled {
 .control-group {
     display: flex;
     flex-direction: column;
-    gap: 5px;
+    gap: var(--gap-size);
 }
 
 .control-group label {
@@ -483,7 +467,7 @@ button:disabled {
     align-items: center;
     display: flex;
     flex-direction: column;
-    gap: 5px;
+    gap: var(--gap-size);
 }
 
 .date-filter-group label {
@@ -513,8 +497,7 @@ button:disabled {
     align-items: center;
     background: none;
     border: none;
-    border-radius: 2px;
-    color: var(--text-color);
+    border-radius: var(--border-radius);
     cursor: pointer;
     display: flex;
     font-size: 16px;
@@ -560,13 +543,13 @@ button:disabled {
 .navigation-controls {
     align-items: center;
     display: flex;
-    gap: 5px;
+    gap: var(--gap-size);
 }
 
 .nav-button {
     background-color: var(--button-bg);
     border: none;
-    border-radius: 4px;
+    border-radius: var(--border-radius);
     color: var(--button-text);
     cursor: pointer;
     font-size: 12px;
@@ -584,21 +567,13 @@ button:disabled {
     opacity: 0.5;
 }
 
-.load-controls {
-    align-items: center;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    justify-content: center;
-}
-
 /* ==========================================================================
    TABLE STRUCTURE
    ========================================================================== */
 
 .table-container {
     border: 1px solid var(--border-color);
-    border-radius: 8px;
+    border-radius: var(--border-radius);
     max-height: 70vh;
     overflow: hidden;
     position: relative;
@@ -731,8 +706,7 @@ button:disabled {
     align-items: center;
     border-right: 1px solid var(--border-color);
     display: flex;
-    font-family: 'Arial', sans-serif;
-    font-size: 13px;
+    font-size: 12px;
     line-height: 1.3;
     padding: 4px 8px;
 }
@@ -829,7 +803,7 @@ button:disabled {
 .toast {
     background-color: var(--modal-bg);
     border: 1px solid var(--border-color);
-    border-radius: 4px;
+    border-radius: var(--border-radius);
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
     margin-bottom: 10px;
     max-width: 300px;
@@ -869,9 +843,7 @@ button:disabled {
 .aboutModal {
     background-color: var(--bg-color);
     border: none;
-    border-radius: 8px;
-    color: var(--text-color);
-    font-size: 14px;
+    border-radius: var(--border-radius);
     padding: 50px;
 }
 
@@ -909,7 +881,7 @@ button:disabled {
 .modal-content {
     background-color: var(--modal-bg);
     border: 1px solid var(--border-color);
-    border-radius: 8px;
+    border-radius: var(--border-radius);
     display: flex;
     flex-direction: column;
     max-height: 80vh;
@@ -927,7 +899,7 @@ button:disabled {
     align-items: center;
     background-color: var(--header-bg);
     border-bottom: 1px solid var(--border-color);
-    border-radius: 8px 8px 0 0;
+    border-radius: 4px 4px 0 0;
     display: flex;
     justify-content: space-between;
     padding: 15px 20px;
@@ -936,15 +908,13 @@ button:disabled {
 .modal-title {
     font-size: 18px;
     font-weight: bold;
-    margin: 0;
 }
 
 .modal-close {
     align-items: center;
     background: none;
     border: none;
-    border-radius: 4px;
-    color: var(--text-color);
+    border-radius: var(--border-radius);
     cursor: pointer;
     display: flex;
     font-size: 24px;
@@ -965,10 +935,8 @@ button:disabled {
 .modal-log-content {
     background-color: var(--input-bg);
     border: 1px solid var(--border-color);
-    border-radius: 4px;
-    color: var(--text-color);
-    font-family: Arial, sans-serif;
-    font-size: 13px;
+    border-radius: var(--border-radius);
+    font-size: 12px;
     line-height: 1.5;
     padding: 15px;
     white-space: pre;
@@ -977,7 +945,7 @@ button:disabled {
 
 .modal-footer {
     background-color: var(--header-bg);
-    border-radius: 0 0 8px 8px;
+    border-radius: 0 0 4px 4px;
     border-top: 1px solid var(--border-color);
     display: flex;
     gap: 10px;
@@ -987,9 +955,8 @@ button:disabled {
 
 .modal-button {
     border: none;
-    border-radius: 4px;
+    border-radius: var(--border-radius);
     cursor: pointer;
-    font-size: 14px;
     height: 36px;
     padding: 8px 16px;
     transition: opacity 0.2s;
@@ -1039,7 +1006,6 @@ button:disabled {
     background-color: var(--header-bg);
     border-top: 1px solid var(--border-color);
     bottom: 0;
-    font-size: 14px;
     left: 0;
     opacity: 0.8;
     padding: 10px 20px;
@@ -1054,7 +1020,7 @@ button:disabled {
 
 .file-info-table {
     border: 1px solid var(--border-color);
-    border-radius: 4px;
+    border-radius: var(--border-radius);
     overflow: hidden;
     width: 100%;
 }
@@ -1062,7 +1028,7 @@ button:disabled {
 .file-info-row {
     border-bottom: 1px solid var(--border-color);
     display: grid;
-    font-size: 13px;
+    font-size: 12px;
     grid-template-columns: 2fr 1fr 1fr;
     padding: 10px;
 }
@@ -1127,11 +1093,6 @@ button:disabled {
     }
 
     .text-input-container input[type="text"] {
-        width: 100%;
-    }
-
-    .load-controls {
-        flex-direction: column;
         width: 100%;
     }
 

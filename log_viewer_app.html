@@ -21,18 +21,17 @@
             <div class="menu-item" id="aboutDialog" onclick="openAboutModal()">About</div>
         </div>
     </div>
-
     <div class="header-wrapper">
         <div class="header-background-layer">
-            <div class="header-background-image">
+            <div class="header-background-image"></div>
         </div>
-    </div>
+        <!-- Header Layer -->
         <div class="header-content-layer">
             <div class="title">
                 Indigo Log Viewer
             </div>
-
             <div class="controls">
+                <!-- Class Filter Dropdown -->
                 <div class="control-group">
                     <label>Class Filter</label>
                     <div class="class-filter-container">
@@ -46,11 +45,12 @@
                             </div>
                             <div class="class-filter-divider"></div>
                             <div class="class-filter-list" id="classFilterList">
-                                <!-- Class checkboxes will be populated here -->
+                                <!-- Class checkboxes are populated here -->
                             </div>
                         </div>
                     </div>
                 </div>
+                <!-- Text Filter Control -->
                 <div class="control-group">
                     <label>Text Search</label>
                     <div class="text-input-container">
@@ -58,6 +58,7 @@
                         <button class="clear-input-button" onclick="clearTextFilter()" title="Clear search">&times;</button>
                     </div>
                 </div>
+                <!-- Date Filter Controls-->
                 <div class="date-filter-group">
                     <label>Date Filter</label>
                     <div style="display: flex; gap: 5px;">
@@ -67,7 +68,6 @@
                     </div>
                 </div>
             </div>
-
             <div class="error-message" id="errorMessage"></div>
         </div>
     </div>
@@ -79,6 +79,7 @@
     <!-- Toast notifications container -->
     <div class="toast-container" id="toastContainer"></div>
 
+    <!-- Log Entry Table -->
     <div class="table-container">
         <div class="table-header">
             <div class="header-timestamp sortable" onclick="sortBy('timestamp')">
@@ -107,7 +108,7 @@
         </div>
     </div>
 
-    <!-- Modal -->
+    <!-- Log Line Modal -->
     <div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)">
         <div class="modal-content" onclick="event.stopPropagation()">
             <div class="modal-header">
@@ -140,7 +141,7 @@
         </div>
     </div>
 
-    <!-- File Info Modal -->
+    <!-- About Modal -->
     <div class="modal-overlay aboutModal" id="aboutModalOverlay" onclick="closeAboutModal(event)">
         <div class="modal-content" onclick="event.stopPropagation()">
             <div class="modal-header">
@@ -154,6 +155,7 @@
         </div>
     </div>
 
+    <!-- Footer -->
     <div class="footer" id="footer">No log files loaded</div>
 	<script src="log_viewer_app.js"></script>
 </body>
