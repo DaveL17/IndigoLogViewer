@@ -10,15 +10,12 @@ format that is supported:
 <img src="assets/images/Screenshot.png" alt="Screenshot" width="800" height="600">
 
 ### Usage
+> [!NOTE] 
+> The structure of the project has changed from the initial release. While it's still possible to manually copy the
+project files individually, downloading the zip is now the easiest and safest approach.
+
 For the best experience, download the files using the <kbd>Code</kbd> button above and unzip the files into a working 
 folder. Then double-click the html file or select File > Open from your preferred browser.
-
-The app requires three files to run:
-1. log_viewer_app.html
-2. log_viewer_app.js
-3. log_viewer_app.css
-
-There are other files in the zip, which the app will use if they're present (images, etc.) but they are not required.
 
 ### Menu
 Use the hamburger menu in the upper right-hand corner to access app features.
