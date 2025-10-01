@@ -7,7 +7,7 @@ format that is supported:
 ```text
 2025-09-10 11:52:01.833	Action Collection	Webhook Post/Form Received
 ```
-<img src="src/Screenshot.png" alt="Screenshot" width="800" height="600">
+<img src="assets/images/Screenshot.png" alt="Screenshot" width="800" height="600">
 
 ### Usage
 For the best experience, download the files using the <kbd>Code</kbd> button above and unzip the files into a working 
@@ -74,7 +74,7 @@ provided in the modal which will copy the entire log entry displayed.
 The log file view is not updated in real time. To reload the log entry list to view new log entries, it's necessary to
 re-choose the log folder (due to legitimate modern browser-imposed security features).
 
-<img src="src/Screenshot with Modal.png" alt="Screenshot with Modal" width="800" height="600">
+<img src="assets/images/Screenshot with Modal.png" alt="Screenshot with Modal" width="800" height="600">
 
 #### Columns
 Both the timestamp and class columns are sortable in place. You can click on the column heading to sort the data. You 

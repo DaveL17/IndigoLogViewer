@@ -232,7 +232,7 @@ body {
 
 .header-background-image {
     background-color: transparent;
-    background-image: url("src/headerBackgroundLight.png");
+    background-image: url("assets/images/headerBackgroundLight.png");
     background-repeat: no-repeat;
     background-size: contain;
     height: 100%;
@@ -242,7 +242,7 @@ body {
 }
 
 [data-theme="dark"] .header-background-image {
-    background-image: url("src/headerBackground.png");
+    background-image: url("assets/images/headerBackground.png");
 }
 
 .header-background-layer {
