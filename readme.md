@@ -12,10 +12,11 @@ format that is supported:
 ### Usage
 > [!NOTE] 
 > The structure of the project has changed from the initial release. While it's still possible to manually copy the
-project files individually, downloading the zip is now the easiest and safest approach.
+project files individually, downloading the "official" release is now the best and safest approach.
 
-For the best experience, download the files using the <kbd>Code</kbd> button above and unzip the files into a working 
-folder. Then double-click the html file or select File > Open from your preferred browser.
+For the best experience, get the latest official release. Select releases on the right and choose the release to 
+download. Unzip the files into a working folder and double-click the html file (or select File > Open from your 
+preferred browser).
 
 ### Menu
 Use the hamburger menu in the upper right-hand corner to access app features.

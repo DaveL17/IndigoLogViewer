@@ -25,13 +25,7 @@ document.getElementById('textFilter').addEventListener('input', () => {
     textFilterTimeout = setTimeout(applyFilters, 300);
 });
 
-// Sorting variables
-let currentSort = {
-    column: 'timestamp',
-    direction: 'desc' // Default sort to newest entry first
-};
-
-// Inject common config values into DOM
+// Inject common config values into DOM once it's loaded
 document.addEventListener('DOMContentLoaded', () => {
 	// TODO - if this list gets long, consider wrapping in a for each loop
   	document.getElementById('tabTitle').textContent = APP_NAME;
@@ -41,10 +35,11 @@ document.addEventListener('DOMContentLoaded', () => {
   	document.getElementById('aboutVersion').textContent = APP_VERSION;
 });
 
-// Function to open URL in new tab
-function openInNewTab(url) {
-    window.open(url, '_blank');
-}
+// Sorting variables
+let currentSort = {
+    column: 'timestamp',
+    direction: 'desc' // Default sort to newest entry first
+};
 
 // Sorting functions
 function sortBy(column) {
@@ -138,11 +133,7 @@ function toggleAllClasses() {
 }
 
 function toggleClassSelection(className) {
-    if (selectedClasses.has(className)) {
-        selectedClasses.delete(className);
-    } else {
-        selectedClasses.add(className);
-    }
+	selectedClasses.has(className) ? selectedClasses.delete(className) : selectedClasses.add(className);
 
     updateSelectAllCheckbox();
     updateClassFilterButton();
@@ -174,7 +165,7 @@ function updateClassFilterButton() {
     const totalClasses = availableClasses.size;
     const selectedCount = selectedClasses.size;
 
-    let buttonText = '';
+    let buttonText;
     if (totalClasses === 0) {
         buttonText = 'Class Filter'; // Default when no files loaded
     } else if (selectedCount === 0) {
@@ -204,31 +195,20 @@ document.addEventListener('click', function(event) {
     }
 }, true); // Use capture phase
 
-// Help function
+//=============================================================================
+// Help Menu item
+//=============================================================================
 function openHelp() {
     const helpUrl = 'https://github.com/DaveL17/IndigoLogViewer';
-    openInNewTab(helpUrl);
-
-    // Show confirmation toast
-    showToast('Opening help documentation...', 'info', 2000);
+	window.open(helpUrl, '_blank');
 
     // Close the hamburger menu
     document.getElementById('hamburgerDropdown').classList.remove('show');
 }
 
-function openAbout() {
-	const message = `<span style="font-weight: bold;">Indigo Log File Viewer</span><br> Version: Beta 2`;
-
-	const dlg = document.getElementById("alertDialog");
-	const msg = document.getElementById("alertMessage");
-
-	msg.innerHTML = message;
-	dlg.showModal();
-
-	document.getElementById('hamburgerDropdown').classList.remove('show');
-}
-
+//=============================================================================
 // Hamburger menu functions
+//=============================================================================
 function toggleMenu() {
 	const dropdown = document.getElementById('hamburgerDropdown');
 	const isOpen = dropdown.classList.contains('show');
@@ -245,18 +225,11 @@ function updateMenuItems() {
 	// Update theme menu item text
 	const themeMenuItem = document.getElementById('themeMenuItem');
 	const currentTheme = document.body.dataset.theme;
-	if (currentTheme === 'dark') {
-		themeMenuItem.textContent = 'Light Theme';
-	} else {
-		themeMenuItem.textContent = 'Dark Theme';
-	}
-	// Update file info menu item state
+	themeMenuItem.textContent = currentTheme === 'dark' ? 'Light Theme' : 'Dark Theme';
+
+	// Update file info menu item state. Disabled when no files have been loaded.
 	const fileInfoMenuItem = document.getElementById('fileInfoMenuItem');
-	if (loadedFileInfo.length === 0) {
-		fileInfoMenuItem.classList.add('disabled');
-	} else {
-		fileInfoMenuItem.classList.remove('disabled');
-	}
+	loadedFileInfo.length === 0 ? fileInfoMenuItem.classList.add('disabled') : fileInfoMenuItem.classList.remove('disabled');
 }
 
 // Close menu when clicking outside
@@ -751,7 +724,7 @@ function applyFilters() {
 		});
 	}
 
-// Apply class filter - only include entries with selected classes
+	// Apply class filter - only include entries with selected classes
 	if (selectedClasses.size === 0) {
 		// No classes selected - show nothing
 		filtered = [];
@@ -843,7 +816,9 @@ function selectRow(clickedRow, index) {
 	openModal(filteredEntries[index]);
 }
 
+//=============================================================================
 // Arrow key navigation for selected rows
+//=============================================================================
 function navigateRowUp() {
 	if (filteredEntries.length === 0) return;
 
@@ -912,6 +887,9 @@ function closeModal(event) {
 	currentModalEntry = null;
 }
 
+//=============================================================================
+// Copy log entry text
+//=============================================================================
 function copyLogEntry() {
 	if (!currentModalEntry) return;
 
@@ -932,7 +910,9 @@ function copyLogEntry() {
 	});
 }
 
+// ============================================================================
 // File Info Modal functions
+// ============================================================================
 function openFileInfoModal() {
     // Close hamburger menu
     document.getElementById('hamburgerDropdown').classList.remove('show');
@@ -972,17 +952,6 @@ function openFileInfoModal() {
     document.body.style.overflow = 'hidden';
 }
 
-// File Info Modal functions
-function openAboutModal() {
-    // Close hamburger menu
-    document.getElementById('hamburgerDropdown').classList.remove('show');
-
-    const aboutModalOverlay = document.getElementById('aboutModalOverlay');
-
-    aboutModalOverlay.classList.add('active');
-    document.body.style.overflow = 'hidden';
-}
-
 function closeFileInfoModal(event) {
     if (event && event.target !== document.getElementById('fileInfoModalOverlay')) {
         return;
@@ -991,6 +960,26 @@ function closeFileInfoModal(event) {
     const fileInfoModal = document.getElementById('fileInfoModalOverlay');
     fileInfoModal.classList.remove('active');
     document.body.style.overflow = '';
+}
+
+function formatFileSize(bytes) {
+    if (bytes === 0) return '0 Bytes';
+    const k = 1024;
+    const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+    const i = Math.floor(Math.log(bytes) / Math.log(k));
+    return Math.round((bytes / Math.pow(k, i)) * 100) / 100 + ' ' + sizes[i];
+}
+// ============================================================================
+// About Modal functions
+// ============================================================================
+function openAboutModal() {
+    // Close hamburger menu
+    document.getElementById('hamburgerDropdown').classList.remove('show');
+
+    const aboutModalOverlay = document.getElementById('aboutModalOverlay');
+
+    aboutModalOverlay.classList.add('active');
+    document.body.style.overflow = 'hidden';
 }
 
 function closeAboutModal(event) {
@@ -1003,14 +992,9 @@ function closeAboutModal(event) {
     document.body.style.overflow = '';
 }
 
-function formatFileSize(bytes) {
-    if (bytes === 0) return '0 Bytes';
-    const k = 1024;
-    const sizes = ['Bytes', 'KB', 'MB', 'GB'];
-    const i = Math.floor(Math.log(bytes) / Math.log(k));
-    return Math.round((bytes / Math.pow(k, i)) * 100) / 100 + ' ' + sizes[i];
-}
+// ============================================================================
 // Navigation functions
+// ============================================================================
 function navigateToTop() {
 	scrollContainer.scrollTop = 0;
 	selectedRowIndex = 0;
@@ -1072,6 +1056,9 @@ function clearDateFilter() {
 	applyFilters();
 }
 
+//=============================================================================
+// Toggle App Theme
+//=============================================================================
 function toggleTheme() {
     const body = document.body;
     const themeMenuItem = document.getElementById('themeMenuItem');
@@ -1090,7 +1077,6 @@ function toggleTheme() {
     document.getElementById('hamburgerDropdown').classList.remove('show');
 }
 
-// Add this function to load the saved theme on page load
 function loadSavedTheme() {
     const savedTheme = localStorage.getItem('theme') || 'light';
     const body = document.body;
@@ -1105,11 +1091,7 @@ function loadSavedTheme() {
 document.addEventListener('DOMContentLoaded', loadSavedTheme);
 
 // If DOMContentLoaded already fired, call it immediately
-if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', loadSavedTheme);
-} else {
-    loadSavedTheme();
-}
+document.readyState === 'loading' ? document.addEventListener('DOMContentLoaded', loadSavedTheme) : loadSavedTheme();
 
 function escapeHtml(text) {
 	const div = document.createElement('div');
@@ -1122,8 +1104,7 @@ function clearError() {
 }
 
 // Event listeners for real-time filtering
- document.getElementById('folderInput').addEventListener('change', async () => await loadLogFiles());
-// document.getElementById('folderInput').addEventListener('change', () => loadLogFiles());
+document.getElementById('folderInput').addEventListener('change', async () => await loadLogFiles());
 document.getElementById('startDateFilter').addEventListener('change', applyFilters);
 document.getElementById('endDateFilter').addEventListener('change', applyFilters);
 
@@ -1177,6 +1158,10 @@ document.addEventListener('keydown', (e) => {
 			break;
 	}
 });
+
+// ============================================================================
+// Column Resizing functions
+// ============================================================================
 
 // Column resizing variables
 let isResizing = false;
@@ -1261,7 +1246,7 @@ function handleResize(e) {
     if (!isResizing || !currentResizeHandle) return;
 
     e.preventDefault();
-    e.stopPropagation();  // Add this line to prevent event bubbling
+    e.stopPropagation();
 
     const currentX = e.type === 'touchmove' ? e.touches[0].clientX : e.clientX;
     const deltaX = currentX - startX;
@@ -1336,7 +1321,6 @@ function loadColumnWidths() {
     }
 }
 
-// Add this to your existing DOMContentLoaded event or initialization
 function initializeColumnResize() {
     loadColumnWidths();
 
