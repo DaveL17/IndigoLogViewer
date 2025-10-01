@@ -644,8 +644,8 @@ button:disabled {
 }
 
 .header-class {
-    min-width: 150px;
-    width: 150px;
+    min-width: var(--class-width, 150px);
+    width: var(--class-width, 150px);
 }
 
 .header-entry {
