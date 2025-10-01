@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Indigo Log Viewer</title>
-    <link rel="stylesheet" href="log_viewer_app.css">
+    <title id="tabTitle"></title>  <!-- injected -->
+    <link rel="stylesheet" href="css/log_viewer_app.css">
     <link rel="icon" href="assets/images/favicon.ico">
 </head>
 <body data-theme="light">
@@ -27,9 +27,7 @@
         </div>
         <!-- Header Layer -->
         <div class="header-content-layer">
-            <div class="title">
-                Indigo Log Viewer
-            </div>
+            <div class="title" id="appTitle"></div>  <!-- injected -->
             <div class="controls">
                 <!-- Class Filter Dropdown -->
                 <div class="control-group">
@@ -142,21 +140,22 @@
     </div>
 
     <!-- About Modal -->
-    <div class="modal-overlay aboutModal" id="aboutModalOverlay" onclick="closeAboutModal(event)">
+    <div class="modal-overlay about-modal" id="aboutModalOverlay" onclick="closeAboutModal(event)">
         <div class="modal-content" onclick="event.stopPropagation()">
             <div class="modal-header">
-                <h3 class="modal-title">Indigo Log File Viewer</h3>
+                <h3 class="modal-title" id="aboutTitle"></h3>  <!-- injected -->
                 <button class="modal-close" onclick="closeAboutModal()" title="Close">&times;</button>
             </div>
             <div class="modal-body about-body">
-                <div>Written by: DaveL17</div>
-                <div>Version: Beta 3</div>
+                <div>Written by: <span id="aboutAuthor"></span></div>  <!-- injected -->
+                <div>Version: <span id="aboutVersion"></span></div>  <!-- injected -->
             </div>
         </div>
     </div>
 
     <!-- Footer -->
     <div class="footer" id="footer">No log files loaded</div>
-	<script src="log_viewer_app.js"></script>
+	<script src="confg.js"></script>
+	<script src="js/log_viewer_app.js"></script>
 </body>
 </html>

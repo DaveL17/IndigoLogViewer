@@ -1,3 +1,5 @@
+console.log(APP_VERSION);
+
 let allLogEntries = [];
 let filteredEntries = [];
 let availableClasses = new Set();
@@ -28,6 +30,16 @@ let currentSort = {
     column: 'timestamp',
     direction: 'desc' // Default sort to newest entry first
 };
+
+// Inject common config values into DOM
+document.addEventListener('DOMContentLoaded', () => {
+	// TODO - if this list gets long, consider wrapping in a for each loop
+  	document.getElementById('tabTitle').textContent = APP_NAME;
+  	document.getElementById('appTitle').textContent = APP_NAME;
+  	document.getElementById('aboutTitle').textContent = APP_NAME;
+  	document.getElementById('aboutAuthor').textContent = AUTHOR;
+  	document.getElementById('aboutVersion').textContent = APP_VERSION;
+});
 
 // Function to open URL in new tab
 function openInNewTab(url) {
