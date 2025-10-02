@@ -1,7 +1,6 @@
 /* ==========================================================================
    CSS VARIABLES (ROOT & THEMES)
    ========================================================================== */
-
 :root {
     --bg-color: #ffffff;
     --border-color: #dddddd;
@@ -49,13 +48,12 @@
 /* ==========================================================================
    GLOBAL RESET & BASE STYLES
    ========================================================================== */
-
 * {
     box-sizing: border-box;
+    color: var(--text-color);
     font-family: Arial, sans-serif;
     font-size: 14px;
     margin: 0;
-    color: var(--text-color);
 }
 
 body {
@@ -67,7 +65,6 @@ body {
 /* ==========================================================================
    SCROLLBAR STYLES
    ========================================================================== */
-
 ::-webkit-scrollbar {
     width: 12px;
 }
@@ -92,7 +89,6 @@ body {
 /* ==========================================================================
    UTILITY CLASSES
    ========================================================================== */
-
 .no-select {
     -moz-user-select: none;
     -ms-user-select: none;
@@ -109,7 +105,7 @@ body {
 }
 
 .error-message {
-    color: #dc3545;
+    color: var(--error-color);
     margin-top: 10px;
     text-align: center;
 }
@@ -117,7 +113,6 @@ body {
 /* ==========================================================================
    CLASS FILTER DROPDOWN
    ========================================================================== */
-
 .class-filter-container {
     position: relative;
     width: 200px;
@@ -224,7 +219,6 @@ body {
 /* ==========================================================================
    HEADER SECTION
    ========================================================================== */
-
 .header-wrapper {
     margin-bottom: 10px;
     position: relative;
@@ -280,7 +274,6 @@ body {
 /* ==========================================================================
    HAMBURGER MENU
    ========================================================================== */
-
 .hamburger-menu {
     position: absolute;
     right: 30px;
@@ -368,6 +361,9 @@ body {
 /* ==========================================================================
    FORM ELEMENTS & CONTROLS
    ========================================================================== */
+.hidden-input {
+    display: none;
+}
 
 select,
 input[type="text"],
@@ -406,6 +402,11 @@ input[type="date"] {
     font-weight: normal;
 }
 
+.date-control-group {
+    display: flex;
+    gap: 5px;
+}
+
 [data-theme="dark"] input[type="date"] {
     background-color: var(--input-bg);
     border: 1px solid var(--border-color);
@@ -413,9 +414,9 @@ input[type="date"] {
 }
 
 input[type="date"]::-webkit-calendar-picker-indicator {
+    cursor: pointer;
     filter: invert(1);
     opacity: 0.8;
-    cursor: pointer;
 }
 
 [data-theme="dark"] input[type="date"]::-webkit-calendar-picker-indicator {
@@ -482,7 +483,6 @@ button:disabled {
 /* ==========================================================================
    TEXT INPUT WITH CLEAR BUTTON
    ========================================================================== */
-
 .text-input-container {
     align-items: center;
     display: flex;
@@ -534,7 +534,6 @@ button:disabled {
 /* ==========================================================================
    NAVIGATION & ACTION BUTTONS
    ========================================================================== */
-
 .clear-button {
     background-color: var(--button-bg);
     font-size: 12px;
@@ -571,7 +570,6 @@ button:disabled {
 /* ==========================================================================
    TABLE STRUCTURE
    ========================================================================== */
-
 .table-container {
     border: 1px solid var(--border-color);
     border-radius: var(--border-radius);
@@ -635,7 +633,6 @@ button:disabled {
 /* ==========================================================================
    TABLE COLUMN HEADERS
    ========================================================================== */
-
 .header-timestamp,
 .row-timestamp {
     font-weight: normal;
@@ -659,7 +656,6 @@ button:disabled {
 /* ==========================================================================
    VIRTUAL SCROLLING
    ========================================================================== */
-
 .virtual-scroll-container {
     height: calc(70vh - 40px);
     overflow-y: auto;
@@ -681,7 +677,6 @@ button:disabled {
 /* ==========================================================================
    TABLE ROWS
    ========================================================================== */
-
 .log-row {
     align-items: stretch;
     border-bottom: 1px solid var(--border-color);
@@ -749,7 +744,6 @@ button:disabled {
 /* ==========================================================================
    RESIZABLE COLUMNS
    ========================================================================== */
-
 .resize-handle {
     background: transparent;
     border-right: 2px solid transparent;
@@ -792,7 +786,6 @@ button:disabled {
 /* ==========================================================================
    TOAST NOTIFICATIONS
    ========================================================================== */
-
 .toast-container {
     pointer-events: none;
     position: fixed;
@@ -830,6 +823,10 @@ button:disabled {
     border-left: 4px solid var(--debug-color);
 }
 
+.toast.warning {
+    border-left: 4px solid var(--warning-color);
+}
+
 .toast.error {
     border-left: 4px solid var(--error-color);
 }
@@ -856,7 +853,6 @@ button:disabled {
 /* ==========================================================================
    MODAL COMPONENTS
    ========================================================================== */
-
 .modal-overlay {
     align-items: center;
     background-color: var(--modal-overlay);
@@ -1002,7 +998,6 @@ button:disabled {
 /* ==========================================================================
    FOOTER
    ========================================================================== */
-
 .footer {
     background-color: var(--header-bg);
     border-top: 1px solid var(--border-color);
@@ -1018,7 +1013,6 @@ button:disabled {
 /* ==========================================================================
    FILE INFO STYLES
    ========================================================================== */
-
 .file-info-table {
     border: 1px solid var(--border-color);
     border-radius: var(--border-radius);
@@ -1045,9 +1039,9 @@ button:disabled {
 .file-info-header {
     background-color: var(--header-bg);
     font-weight: bold;
-    text-transform: uppercase;
     font-size: 11px;
     letter-spacing: 1px;
+    text-transform: uppercase;
 }
 
 .file-info-cell {
@@ -1064,7 +1058,6 @@ button:disabled {
 /* ==========================================================================
    MEDIA QUERIES - RESPONSIVE DESIGN
    ========================================================================== */
-
 @media (max-width: 768px) {
     .title {
         font-size: 20px;
@@ -1131,4 +1124,3 @@ button:disabled {
         width: 100%;
     }
 }
-
