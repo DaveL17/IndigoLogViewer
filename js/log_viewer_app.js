@@ -1,22 +1,22 @@
 console.log(APP_VERSION);
 
 let allLogEntries = [];
-let filteredEntries = [];
 let availableClasses = new Set();
 let availableDates = [];
 let currentModalEntry = null;
+let filteredEntries = [];
+let loadedFileInfo = [];
+let selectedClasses = new Set();
+let selectedRowIndex = -1;
 let visibleStart = 0;
 let visibleEnd = 0;
-let selectedRowIndex = -1;
-let loadedFileInfo = [];
-let selectedClasses = new Set(); // Track selected classes for filtering
 
 // Virtual scrolling variables
-const ROW_HEIGHT = 32; // Minimum height per row
 const BUFFER_SIZE = 10; // Extra rows to render above/below visible area
+const ROW_HEIGHT = 32; // Minimum height per row
 const scrollContainer = document.getElementById('scrollContainer');
-const virtualSpacer = document.getElementById('virtualSpacer');
 const virtualContent = document.getElementById('virtualContent');
+const virtualSpacer = document.getElementById('virtualSpacer');
 
 // keep applyFilters() from being called on every keystroke by adding a short wait.
 let textFilterTimeout;
@@ -241,29 +241,6 @@ document.addEventListener('click', function(event) {
 		dropdown.classList.remove('show');
 	}
 });
-
-// Toast notification system
-function showToast(message, type = 'info', duration = 4000) {
-	const toastContainer = document.getElementById('toastContainer');
-	const toast = document.createElement('div');
-	toast.className = `toast ${type}`;
-	toast.textContent = message;
-
-	toastContainer.appendChild(toast);
-
-	// Trigger show animation
-	setTimeout(() => toast.classList.add('show'), 100);
-
-	// Hide and remove after duration
-	setTimeout(() => {
-		toast.classList.add('hide');
-		setTimeout(() => {
-			if (toast.parentNode) {
-				toast.parentNode.removeChild(toast);
-			}
-		}, 300);
-	}, duration);
-}
 
 function getClassColorClass(className) {
 	// Used to color log message class field error=red, warning=orange, debug=green
@@ -540,35 +517,37 @@ async function readFileContent(file, retryCount = 0, maxRetries = 3) {
             let errorMsg = 'Unknown read error';
             let shouldRetry = false;
 
-            if (reader.error) {
-                switch (reader.error.code) {
-                    case reader.error.NOT_FOUND_ERR:
-                        errorMsg = 'File not found';
-                        shouldRetry = true; // File might appear soon
-                        break;
-                    case reader.error.NOT_READABLE_ERR:
-                        errorMsg = 'File not readable (may be locked or being written to)';
-                        shouldRetry = true; // Might become readable
-                        break;
-                    case reader.error.ABORT_ERR:
-                        errorMsg = 'Read operation aborted';
-                        shouldRetry = false; // Don't retry aborted operations
-                        break;
-                    case reader.error.SECURITY_ERR:
-                        errorMsg = 'Security error (file may be locked or have restricted access)';
-                        shouldRetry = true; // Might be temporarily locked
-                        break;
-                    case reader.error.ENCODING_ERR:
-                        errorMsg = 'File encoding error';
-                        shouldRetry = false; // Encoding errors won't fix themselves
-                        break;
-                    default:
-                        errorMsg = reader.error.message || 'FileReader error';
-                        shouldRetry = true; // Assume it might be temporary
-                        break;
-                }
-            }
+		if (reader.error) {
+			const errorName = reader.error.name;
 
+			switch (errorName) {
+				case 'NotFoundError':
+					errorMsg = 'File not found';
+					shouldRetry = true;
+					break;
+				case 'NotReadableError':
+					errorMsg = 'File not readable (may be locked or being written to)';
+					shouldRetry = true;
+					break;
+				case 'AbortError':
+					errorMsg = 'Read operation aborted';
+					shouldRetry = false;
+					break;
+				case 'SecurityError':
+					errorMsg = 'Security error (file may be locked or have restricted access)';
+					shouldRetry = true;
+					break;
+				case 'EncodingError':
+					errorMsg = 'File encoding error';
+					shouldRetry = false;
+					break;
+				default:
+					errorMsg = reader.error.message || 'FileReader error';
+					shouldRetry = true;
+					break;
+			}
+		}
+		
             // Retry if appropriate
             if (shouldRetry && retryCount < maxRetries) {
                 console.log(`${errorMsg} for ${file.name}, retrying in ${RETRY_DELAYS[retryCount]}ms... (attempt ${retryCount + 1}/${maxRetries})`);
@@ -861,135 +840,6 @@ function scrollToSelectedRow() {
 	else if (rowBottom > scrollBottom) {
 		scrollContainer.scrollTop = rowBottom - containerHeight;
 	}
-}
-
-function openModal(logEntry) {
-	currentModalEntry = logEntry;
-	const modalOverlay = document.getElementById('modalOverlay');
-	const modalLogContent = document.getElementById('modalLogContent');
-	const classColorClass = getClassColorClass(logEntry.class);
-
-	modalLogContent.innerHTML = `<span class="modal-timestamp">${escapeHtml(logEntry.timestampString)}</span>\t<span class="modal-class ${classColorClass}">${escapeHtml(logEntry.class)}</span>\t${escapeHtml(logEntry.entry)}`;
-
-	modalOverlay.classList.add('active');
-	document.body.style.overflow = 'hidden'; // Prevent background scrolling
-}
-
-function closeModal(event) {
-	// If event is provided and the target is not the overlay itself, don't close
-	if (event && event.target !== document.getElementById('modalOverlay')) {
-		return;
-	}
-
-	const modalOverlay = document.getElementById('modalOverlay');
-	modalOverlay.classList.remove('active');
-	document.body.style.overflow = ''; // Restore scrolling
-	currentModalEntry = null;
-}
-
-//=============================================================================
-// Copy log entry text
-//=============================================================================
-function copyLogEntry() {
-	if (!currentModalEntry) return;
-
-	const textToCopy = `${currentModalEntry.timestampString}\t${currentModalEntry.class}\t${currentModalEntry.entry}`;
-
-	navigator.clipboard.writeText(textToCopy).then(() => {
-		// Provide visual feedback
-		const copyButton = document.querySelector('.modal-button.copy');
-		const originalText = copyButton.textContent;
-
-		setTimeout(() => {
-			copyButton.textContent = originalText;
-			copyButton.style.backgroundColor = '';
-		}, 1000);
-	}).catch(err => {
-		console.error('Failed to copy text: ', err);
-		showToast('Failed to copy to clipboard', 'error');
-	});
-}
-
-// ============================================================================
-// File Info Modal functions
-// ============================================================================
-function openFileInfoModal() {
-    // Close hamburger menu
-    document.getElementById('hamburgerDropdown').classList.remove('show');
-
-    if (loadedFileInfo.length === 0) {
-        return; // Should not happen due to disabled state, but safe check
-    }
-
-    const fileInfoModal = document.getElementById('fileInfoModalOverlay');
-    const fileListDisplay = document.getElementById('fileListDisplay');
-
-    // Build file list table
-    let tableHtml = '<div class="file-info-table">';
-    tableHtml += '<div class="file-info-row file-info-header">';
-    tableHtml += '<div class="file-info-cell">File Name</div>';
-    tableHtml += '<div class="file-info-cell">Size</div>';
-    tableHtml += '<div class="file-info-cell">Entries</div>';
-    tableHtml += '</div>';
-
-    // Sort files by name
-    const sortedFiles = [...loadedFileInfo].sort((a, b) =>
-        a.name.localeCompare(b.name)
-    );
-
-    sortedFiles.forEach(file => {
-        tableHtml += '<div class="file-info-row">';
-        tableHtml += `<div class="file-info-cell" title="${escapeHtml(file.name)}">${escapeHtml(file.name)}</div>`;
-        tableHtml += `<div class="file-info-cell">${formatFileSize(file.size)}</div>`;
-        tableHtml += `<div class="file-info-cell">${file.entryCount.toLocaleString()}</div>`;
-        tableHtml += '</div>';
-    });
-
-    tableHtml += '</div>';
-    fileListDisplay.innerHTML = tableHtml;
-
-    fileInfoModal.classList.add('active');
-    document.body.style.overflow = 'hidden';
-}
-
-function closeFileInfoModal(event) {
-    if (event && event.target !== document.getElementById('fileInfoModalOverlay')) {
-        return;
-    }
-
-    const fileInfoModal = document.getElementById('fileInfoModalOverlay');
-    fileInfoModal.classList.remove('active');
-    document.body.style.overflow = '';
-}
-
-function formatFileSize(bytes) {
-    if (bytes === 0) return '0 Bytes';
-    const k = 1024;
-    const sizes = ['Bytes', 'KB', 'MB', 'GB'];
-    const i = Math.floor(Math.log(bytes) / Math.log(k));
-    return Math.round((bytes / Math.pow(k, i)) * 100) / 100 + ' ' + sizes[i];
-}
-// ============================================================================
-// About Modal functions
-// ============================================================================
-function openAboutModal() {
-    // Close hamburger menu
-    document.getElementById('hamburgerDropdown').classList.remove('show');
-
-    const aboutModalOverlay = document.getElementById('aboutModalOverlay');
-
-    aboutModalOverlay.classList.add('active');
-    document.body.style.overflow = 'hidden';
-}
-
-function closeAboutModal(event) {
-    if (event && event.target !== document.getElementById('aboutModalOverlay')) {
-        return;
-    }
-
-    const aboutModal = document.getElementById('aboutModalOverlay');
-    aboutModal.classList.remove('active');
-    document.body.style.overflow = '';
 }
 
 // ============================================================================

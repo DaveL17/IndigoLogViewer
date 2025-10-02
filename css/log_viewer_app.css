@@ -109,7 +109,7 @@ body {
 }
 
 .error-message {
-    color: #dc3545;
+    color: var(--error-color);
     margin-top: 10px;
     text-align: center;
 }
@@ -828,6 +828,10 @@ button:disabled {
 
 .toast.success {
     border-left: 4px solid var(--debug-color);
+}
+
+.toast.warning {
+    border-left: 4px solid var(--warning-color);
 }
 
 .toast.error {
