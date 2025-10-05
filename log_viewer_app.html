@@ -6,6 +6,7 @@
     <title id="tabTitle"></title>  <!-- injected -->
     <link rel="stylesheet" href="css/log_viewer_app.css">
     <link rel="icon" href="assets/images/favicon.ico">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body data-theme="light">
     <div class="hamburger-menu">
@@ -13,9 +14,9 @@
         <div class="hamburger-dropdown" id="hamburgerDropdown">
             <div class="menu-item" onclick="selectFolder()">Choose Log Folder</div>
             <div class="menu-item" onclick="selectFiles()">Choose Log Files</div>
-            <div class="menu-item" onclick="openFileInfoModal()" id="fileInfoMenuItem">File Info</div>
+            <div class="menu-item" id="fileInfoMenuItem" onclick="openFileInfoModal()">File Info</div>
             <div class="menu-divider"></div>
-            <div class="menu-item" onclick="toggleTheme()" id="themeMenuItem">Dark Theme</div>
+            <div class="menu-item" id="themeMenuItem" onclick="toggleTheme()">Dark Theme</div>
             <div class="menu-divider"></div>
             <div class="menu-item" onclick="openHelp()">Help</div>
             <div class="menu-item" id="aboutDialog" onclick="openAboutModal()">About</div>
@@ -132,6 +133,9 @@
             </div>
             <div class="modal-body">
                 <div id="fileListDisplay"></div>
+                <div class="chart-container" style="position: relative; height: 400px; width: 100%;">
+                    <canvas id="logChart"></canvas>
+                </div>
             </div>
             <div class="modal-footer">
                 <button class="modal-button close" onclick="closeFileInfoModal()">Close</button>

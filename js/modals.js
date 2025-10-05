@@ -1,3 +1,5 @@
+let logChart = null;
+
 //=============================================================================
 // Open the modal
 //=============================================================================
@@ -91,6 +93,120 @@ function openFileInfoModal() {
 
     fileInfoModal.classList.add('active');
     document.body.style.overflow = 'hidden';
+
+// =====================================================================================================================
+// Chart configuration and initialization
+class LogChartViewer {
+  constructor(canvasId) {
+    this.canvasId = canvasId;
+    this.chart = null;
+  }
+  // Initialize or update the chart with your data
+  renderChart(data, options = {}) {
+    const ctx = document.getElementById(this.canvasId).getContext('2d');
+
+    // Destroy existing chart if it exists
+    if (this.chart) {
+      this.chart.destroy();
+    }
+
+    // Default configuration
+    const defaultConfig = {
+      type: options.type || 'bar', // 'bar', 'line', 'pie', 'doughnut'
+      data: data,
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: {
+            display: options.showLegend !== false,
+            position: 'top',
+          },
+          title: {
+            display: options.title !== undefined,
+            text: options.title || 'Log Statistics'
+          },
+          tooltip: {
+            mode: 'index',
+            intersect: false,
+          }
+        },
+        scales: this.getScalesConfig(options.type || 'bar')
+      }
+    };
+
+    // Create the chart
+    this.chart = new Chart(ctx, defaultConfig);
+  }
+
+  // Helper to configure scales based on chart type
+  getScalesConfig(chartType) {
+    if (chartType === 'pie' || chartType === 'doughnut') {
+      return {}; // Pie and doughnut charts don't use scales
+    }
+
+	const currentTheme = document.body.dataset.theme;
+    const gridColor = (currentTheme === 'dark') ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)';
+    const textColor = (currentTheme === 'dark') ? 'rgba(255, 255, 255, 0.7)' : 'rgba(0, 0, 0, 0.7)';
+
+    return {
+      x: {
+        grid: {
+          color: gridColor
+        },
+        ticks: {
+          color: textColor
+        }
+      },
+      y: {
+        beginAtZero: true,
+        grid: {
+          color: gridColor
+        },
+        ticks: {
+          precision: 0,
+          color: textColor
+        }
+      }
+    };
+  }
+
+  // Destroy chart instance
+  destroy() {
+    if (this.chart) {
+      this.chart.destroy();
+      this.chart = null;
+    }
+  }
+}
+
+function createLogChart() {
+  const chartViewer = new LogChartViewer('logChart');
+
+  const barChartData = {
+    labels: sortedFiles.map(file => file.name.split(' ')[0]),  // just the date part of the filename
+    datasets: [{
+      label: 'Lines',
+      data: sortedFiles.map(file => file.entryCount),
+      backgroundColor: 'rgba(54, 162, 235, 0.6)',
+      borderColor: 'rgba(54, 162, 235, 1)',
+      borderWidth: 1
+    }]
+  };
+
+  chartViewer.renderChart(barChartData, {
+    type: 'line',
+    title: 'Log Lines per File',
+    showLegend: false
+  });
+
+  return chartViewer;
+}
+
+// Initialize chart when modal opens
+logChart = createLogChart();
+
+// =====================================================================================================================
 }
 
 //=============================================================================
@@ -104,7 +220,13 @@ function closeFileInfoModal(event) {
     const fileInfoModal = document.getElementById('fileInfoModalOverlay');
     fileInfoModal.classList.remove('active');
     document.body.style.overflow = '';
-}
+
+    // Add this to clean up the chart
+      if (logChart) {
+        logChart.destroy();
+        logChart = null;
+      }
+    }
 
 //=============================================================================
 // Format file size
