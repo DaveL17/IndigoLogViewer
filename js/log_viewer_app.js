@@ -945,6 +945,9 @@ function toggleTheme() {
         localStorage.setItem('theme', 'light');
     }
 
+	// Update chart if it exists
+    updateChartTheme();
+
     // Close the hamburger menu
     document.getElementById('hamburgerDropdown').classList.remove('show');
 }

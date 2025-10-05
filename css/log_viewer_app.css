@@ -1055,6 +1055,35 @@ button:disabled {
     text-align: right;
 }
 
+.file-list-button-group {
+    display: flex;
+    gap: 10px;
+    justify-content: end;
+}
+
+.chart-container {
+    height: 400px;
+    position: relative;
+    width: 100%;
+}
+
+/* Toggle view classes */
+.file-list-view {
+    display: block;
+}
+
+.chart-view {
+    display: none;
+}
+
+.file-list-view.hidden {
+    display: none;
+}
+
+.chart-view.visible {
+    display: block;
+}
+
 /* ==========================================================================
    MEDIA QUERIES - RESPONSIVE DESIGN
    ========================================================================== */

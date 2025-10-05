@@ -101,9 +101,11 @@ class LogChartViewer {
     this.canvasId = canvasId;
     this.chart = null;
   }
-  // Initialize or update the chart with your data
-  renderChart(data, options = {}) {
-    const ctx = document.getElementById(this.canvasId).getContext('2d');
+
+// Initialize or update the chart
+renderChart(data, options = {}) {
+    const canvas = document.getElementById(this.canvasId);
+    const ctx = canvas.getContext('2d');
 
     // Destroy existing chart if it exists
     if (this.chart) {
@@ -137,8 +139,10 @@ class LogChartViewer {
 
     // Create the chart
     this.chart = new Chart(ctx, defaultConfig);
-  }
 
+    // Store reference on canvas element for external access
+    canvas.chart = this.chart;
+  }
   // Helper to configure scales based on chart type
   getScalesConfig(chartType) {
     if (chartType === 'pie' || chartType === 'doughnut') {
@@ -206,7 +210,66 @@ function createLogChart() {
 // Initialize chart when modal opens
 logChart = createLogChart();
 
-// =====================================================================================================================
+}
+
+// Update chart if theme changes
+function updateChartTheme() {
+    const chartCanvas = document.getElementById('logChart');
+
+    if (chartCanvas && chartCanvas.chart) {
+        const chart = chartCanvas.chart;
+
+        const currentTheme = document.body.dataset.theme;
+        const gridColor = (currentTheme === 'dark') ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)';
+        const textColor = (currentTheme === 'dark') ? 'rgba(255, 255, 255, 0.7)' : 'rgba(0, 0, 0, 0.7)';
+        const lineColor = (currentTheme === 'dark') ? 'rgba(54, 162, 235, 0.6)' : 'rgba(54, 162, 235, 0.8)';
+        const lineBorderColor = (currentTheme === 'dark') ? 'rgba(54, 162, 235, 1)' : 'rgba(54, 162, 235, 1)';
+
+        // Update dataset colors
+        chart.data.datasets.forEach(dataset => {
+            dataset.backgroundColor = lineColor;
+            dataset.borderColor = lineBorderColor;
+        });
+
+        // Update scales (axis labels and grid lines)
+        if (chart.options.scales.x) {
+            chart.options.scales.x.ticks.color = textColor;
+            chart.options.scales.x.grid.color = gridColor;
+        }
+
+        if (chart.options.scales.y) {
+            chart.options.scales.y.ticks.color = textColor;
+            chart.options.scales.y.grid.color = gridColor;
+        }
+
+        // Update title and legend colors
+        if (chart.options.plugins.title) {
+            chart.options.plugins.title.color = textColor;
+        }
+
+        if (chart.options.plugins.legend) {
+            chart.options.plugins.legend.labels.color = textColor;
+        }
+
+        // Update chart
+        chart.update();
+    }
+}
+
+function toggleFileView() {
+    const fileList = document.getElementById('fileListDisplay');
+    const chartContainer = document.querySelector('.chart-container');
+    const toggleButton = document.getElementById('toggleViewButton');
+
+    fileList.classList.toggle('hidden');
+    chartContainer.classList.toggle('visible');
+
+    // Update button text
+    if (chartContainer.classList.contains('visible')) {
+        toggleButton.textContent = 'Show List';
+    } else {
+        toggleButton.textContent = 'Show Chart';
+    }
 }
 
 //=============================================================================
@@ -264,3 +327,11 @@ function closeAboutModal(event) {
     aboutModal.classList.remove('active');
     document.body.style.overflow = '';
 }
+
+// ============================================================================
+// Event listeners
+// ============================================================================
+document.getElementById("toggleViewButton").addEventListener("click", function() {
+  const target = document.getElementById("logChart");
+  target.scrollIntoView({ behavior: "smooth", block: "start" });
+});

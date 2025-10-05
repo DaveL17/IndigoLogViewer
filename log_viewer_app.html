@@ -6,7 +6,8 @@
     <title id="tabTitle"></title>  <!-- injected -->
     <link rel="stylesheet" href="css/log_viewer_app.css">
     <link rel="icon" href="assets/images/favicon.ico">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.0/dist/chart.umd.min.js"></script>
+
 </head>
 <body data-theme="light">
     <div class="hamburger-menu">
@@ -132,13 +133,16 @@
                 <button class="modal-close" onclick="closeFileInfoModal()" title="Close">&times;</button>
             </div>
             <div class="modal-body">
-                <div id="fileListDisplay"></div>
-                <div class="chart-container" style="position: relative; height: 400px; width: 100%;">
+                <div id="fileListDisplay" class="file-list-view"></div>
+                <div class="chart-container chart-view">
                     <canvas id="logChart"></canvas>
                 </div>
             </div>
             <div class="modal-footer">
-                <button class="modal-button close" onclick="closeFileInfoModal()">Close</button>
+                <div class="file-list-button-group">
+                    <button class="modal-button" id="toggleViewButton" onclick="toggleFileView()">Show Chart</button>
+                    <button class="modal-button close" id="fileListCloseButton" onclick="closeFileInfoModal()">Close</button>
+                </div>
             </div>
         </div>
     </div>
