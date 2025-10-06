@@ -41,7 +41,9 @@ let currentSort = {
     direction: 'desc' // Default sort to newest entry first
 };
 
+// ============================================================================
 // Sorting functions
+// ============================================================================
 function sortBy(column) {
     // Don't sort if we're in the middle of a resize operation
     if (isResizing) {
@@ -66,6 +68,9 @@ function sortBy(column) {
     renderVirtualList();
 }
 
+//=============================================================================
+// Apply the sort
+//=============================================================================
 function applySorting() {
     if (filteredEntries.length === 0) return;
 
@@ -87,6 +92,9 @@ function applySorting() {
     });
 }
 
+//=============================================================================
+// Update column sort indicators
+//=============================================================================
 function updateSortIndicators() {
     // Clear all indicators
     const indicators = document.querySelectorAll('.sort-indicator');
@@ -101,7 +109,9 @@ function updateSortIndicators() {
     }
 }
 
+// ============================================================================
 // Class filter dropdown functions
+// ============================================================================
 function toggleClassFilter() {
     const dropdown = document.getElementById('classFilterDropdown');
     const classList = document.getElementById('classFilterList');
@@ -118,6 +128,9 @@ function toggleClassFilter() {
     }
 }
 
+//=============================================================================
+// Toggle all classes (hide/show)
+//=============================================================================
 function toggleAllClasses() {
     const selectAllCheckbox = document.getElementById('selectAllClasses');
     const classCheckboxes = document.querySelectorAll('.class-filter-list input[type="checkbox"]');
@@ -132,6 +145,9 @@ function toggleAllClasses() {
     applyFilters();
 }
 
+//=============================================================================
+// Toggle class selection
+//=============================================================================
 function toggleClassSelection(className) {
 	selectedClasses.has(className) ? selectedClasses.delete(className) : selectedClasses.add(className);
 
@@ -140,6 +156,9 @@ function toggleClassSelection(className) {
     applyFilters();
 }
 
+//=============================================================================
+// Update select check box
+//=============================================================================
 function updateSelectAllCheckbox() {
     const selectAllCheckbox = document.getElementById('selectAllClasses');
     const classCheckboxes = document.querySelectorAll('.class-filter-list input[type="checkbox"]');
@@ -149,6 +168,9 @@ function updateSelectAllCheckbox() {
     selectAllCheckbox.indeterminate = checkedCount > 0 && checkedCount < classCheckboxes.length;
 }
 
+//=============================================================================
+// Update selected classes
+//=============================================================================
 function updateSelectedClasses() {
     selectedClasses.clear();
     const classCheckboxes = document.querySelectorAll('.class-filter-list input[type="checkbox"]');
@@ -160,6 +182,9 @@ function updateSelectedClasses() {
     });
 }
 
+//=============================================================================
+// Update class filter button
+//=============================================================================
 function updateClassFilterButton() {
     const button = document.getElementById('classFilterButton');
     const totalClasses = availableClasses.size;
@@ -221,6 +246,9 @@ function toggleMenu() {
 	}
 }
 
+//=============================================================================
+// Update menu items
+//=============================================================================
 function updateMenuItems() {
 	// Update theme menu item text
 	const themeMenuItem = document.getElementById('themeMenuItem');
@@ -232,7 +260,9 @@ function updateMenuItems() {
 	loadedFileInfo.length === 0 ? fileInfoMenuItem.classList.add('disabled') : fileInfoMenuItem.classList.remove('disabled');
 }
 
+//=============================================================================
 // Close menu when clicking outside
+//=============================================================================
 document.addEventListener('click', function(event) {
 	const hamburgerMenu = document.querySelector('.hamburger-menu');
 	const dropdown = document.getElementById('hamburgerDropdown');
@@ -242,7 +272,9 @@ document.addEventListener('click', function(event) {
 	}
 });
 
+//=============================================================================
 // Toast notification system
+//=============================================================================
 function showToast(message, type = 'info', duration = 4000) {
 	const toastContainer = document.getElementById('toastContainer');
 	const toast = document.createElement('div');
@@ -265,8 +297,10 @@ function showToast(message, type = 'info', duration = 4000) {
 	}, duration);
 }
 
+//=============================================================================
+// Color log message class field entries error=red, warning=orange, debug=green
+//=============================================================================
 function getClassColorClass(className) {
-	// Used to color log message class field error=red, warning=orange, debug=green
 	const lowerClass = className.toLowerCase();
 	if (lowerClass.includes('error')) {
 		return 'error-class';
@@ -278,6 +312,9 @@ function getClassColorClass(className) {
 	return '';
 }
 
+//=============================================================================
+// Parse log entry
+//=============================================================================
 function parseLogEntry(entryText) {
 	// Parse format: YYYY-MM-DD HH:MM:SS.fff\tClass\tLog Entry (potentially multi-line)
 	const firstTab = entryText.indexOf('\t');
@@ -300,6 +337,9 @@ function parseLogEntry(entryText) {
 	};
 }
 
+//=============================================================================
+// Parse log content
+//=============================================================================
 function parseLogContent(content) {
 	content = content.replace(/^\uFEFF/, '');  // Remove BOM if present
 
@@ -339,6 +379,9 @@ function parseLogContent(content) {
 	return logEntries;
 }
 
+//=============================================================================
+// Select log folder
+//=============================================================================
 function selectFolder() {
 	const folderInput = document.getElementById('folderInput');
 	const fileInput = document.getElementById('fileInput');
@@ -351,6 +394,9 @@ function selectFolder() {
 	document.getElementById('hamburgerDropdown').classList.remove('show');
 }
 
+//=============================================================================
+// Select log files
+//=============================================================================
 function selectFiles() {
 	const folderInput = document.getElementById('folderInput');
 	const fileInput = document.getElementById('fileInput');
@@ -362,6 +408,9 @@ function selectFiles() {
 	document.getElementById('hamburgerDropdown').classList.remove('show');
 }
 
+//=============================================================================
+// Load selected log files
+//=============================================================================
 async function loadLogFiles() {
 	const folderInput = document.getElementById('folderInput');
 	const fileInput = document.getElementById('fileInput');
@@ -508,6 +557,9 @@ async function loadLogFiles() {
 	}
 }
 
+//=============================================================================
+// Read file content
+//=============================================================================
 async function readFileContent(file, retryCount = 0, maxRetries = 3) {
     const RETRY_DELAYS = [500, 1500, 3000]; // Wait 0.5s, 1.5s, 3s between retries
 
@@ -638,8 +690,10 @@ async function readFileContent(file, retryCount = 0, maxRetries = 3) {
     });
 }
 
+//=============================================================================
+// Update class filter list
+//=============================================================================
 function updateFilters() {
-	// Update class filter list
 	const classFilterList = document.getElementById('classFilterList');
 	classFilterList.innerHTML = '';
 
@@ -689,6 +743,9 @@ function updateFilters() {
 	}
 }
 
+//=============================================================================
+// Set default date range
+//=============================================================================
 function setDefaultDateRange() {
 	if (availableDates.length > 0) {
 		const startDateFilter = document.getElementById('startDateFilter');
@@ -704,6 +761,9 @@ function setDefaultDateRange() {
 	}
 }
 
+//=============================================================================
+// Apply filters
+//=============================================================================
 function applyFilters() {
 	let filtered = [...allLogEntries];
 
@@ -752,6 +812,9 @@ function applyFilters() {
 	updateStats();
 }
 
+//=============================================================================
+// Render virtual list
+//=============================================================================
 function renderVirtualList() {
 	if (filteredEntries.length === 0) {
 		virtualSpacer.style.height = '0px';
@@ -805,6 +868,9 @@ function renderVirtualList() {
 	virtualContent.innerHTML = rowsHtml.join('');
 }
 
+//=============================================================================
+// Select log row entry
+//=============================================================================
 function selectRow(clickedRow, index) {
 	selectedRowIndex = index;
 
@@ -820,6 +886,10 @@ function selectRow(clickedRow, index) {
 //=============================================================================
 // Arrow key navigation for selected rows
 //=============================================================================
+
+//=============================================================================
+// Row up
+//=============================================================================
 function navigateRowUp() {
 	if (filteredEntries.length === 0) return;
 
@@ -830,6 +900,9 @@ function navigateRowUp() {
 	}
 }
 
+//=============================================================================
+// Row down
+//=============================================================================
 function navigateRowDown() {
 	if (filteredEntries.length === 0) return;
 
@@ -845,6 +918,9 @@ function navigateRowDown() {
 	}
 }
 
+//=============================================================================
+// Scroll to selected row
+//=============================================================================
 function scrollToSelectedRow() {
 	if (selectedRowIndex === -1) return;
 
@@ -867,18 +943,28 @@ function scrollToSelectedRow() {
 // ============================================================================
 // Navigation functions
 // ============================================================================
+
+//=============================================================================
+// Navigate to top of entry list
+//=============================================================================
 function navigateToTop() {
 	scrollContainer.scrollTop = 0;
 	selectedRowIndex = 0;
 	requestAnimationFrame(renderVirtualList);
 }
 
+//=============================================================================
+// Navigate to end of entry list
+//=============================================================================
 function navigateToEnd() {
 	scrollContainer.scrollTop = scrollContainer.scrollHeight;
 	selectedRowIndex = filteredEntries.length - 1;
 	requestAnimationFrame(renderVirtualList);
 }
 
+//=============================================================================
+// Page up from current view
+//=============================================================================
 function navigatePageUp() {
 	const containerHeight = scrollContainer.clientHeight;
 	const pageRows = Math.floor(containerHeight / ROW_HEIGHT);
@@ -890,6 +976,9 @@ function navigatePageUp() {
 	requestAnimationFrame(renderVirtualList);
 }
 
+//=============================================================================
+// Page down from current view
+//=============================================================================
 function navigatePageDown() {
 	const containerHeight = scrollContainer.clientHeight;
 	const pageRows = Math.floor(containerHeight / ROW_HEIGHT);
@@ -904,6 +993,9 @@ function navigatePageDown() {
 	requestAnimationFrame(renderVirtualList);
 }
 
+//=============================================================================
+// Update stats shown in footer
+//=============================================================================
 function updateStats() {
 	const footer = document.getElementById('footer');
 	if (allLogEntries.length === 0) {
@@ -917,11 +1009,17 @@ function updateStats() {
 	}
 }
 
+//=============================================================================
+// Clear text filter contents
+//=============================================================================
 function clearTextFilter() {
 	document.getElementById('textFilter').value = '';
 	applyFilters();
 }
 
+//=============================================================================
+// Clear date filter contents
+//=============================================================================
 function clearDateFilter() {
 	document.getElementById('startDateFilter').value = '';
 	document.getElementById('endDateFilter').value = '';
@@ -952,6 +1050,9 @@ function toggleTheme() {
     document.getElementById('hamburgerDropdown').classList.remove('show');
 }
 
+//=============================================================================
+// Load saved theme
+//=============================================================================
 function loadSavedTheme() {
     const savedTheme = localStorage.getItem('theme') || 'light';
     const body = document.body;
@@ -962,28 +1063,42 @@ function loadSavedTheme() {
     updateMenuItems();
 }
 
+//=============================================================================
 // Load saved theme when page loads
+//=============================================================================
 document.addEventListener('DOMContentLoaded', loadSavedTheme);
 
+//=============================================================================
 // If DOMContentLoaded already fired, call it immediately
+//=============================================================================
 document.readyState === 'loading' ? document.addEventListener('DOMContentLoaded', loadSavedTheme) : loadSavedTheme();
 
+//=============================================================================
+//Escape html
+//=============================================================================
 function escapeHtml(text) {
 	const div = document.createElement('div');
 	div.textContent = text;
 	return div.innerHTML;
 }
 
+//=============================================================================
+// Clear error
+//=============================================================================
 function clearError() {
 	document.getElementById('errorMessage').textContent = '';
 }
 
+//=============================================================================
 // Event listeners for real-time filtering
+//=============================================================================
 document.getElementById('folderInput').addEventListener('change', async () => await loadLogFiles());
 document.getElementById('startDateFilter').addEventListener('change', applyFilters);
 document.getElementById('endDateFilter').addEventListener('change', applyFilters);
 
+//=============================================================================
 // Keyboard navigation
+//=============================================================================
 document.addEventListener('keydown', (e) => {
 	// Close modal with Escape key
 	if (e.key === 'Escape') {
@@ -1038,23 +1153,31 @@ document.addEventListener('keydown', (e) => {
 // Column Resizing functions
 // ============================================================================
 
+//=============================================================================
 // Column resizing variables
+//=============================================================================
 let isResizing = false;
 let currentResizeHandle = null;
 let startX = 0;
 let startWidth = 0;
 let columnType = '';
 
+//=============================================================================
 // Default column widths
+//=============================================================================
 const DEFAULT_COLUMN_WIDTHS = {
     timestamp: 180,
     class: 150
 };
 
+//=============================================================================
 // Current column widths (will be updated as user resizes)
+//=============================================================================
 let columnWidths = { ...DEFAULT_COLUMN_WIDTHS };
 
+//=============================================================================
 // Initialize resizable columns
+//=============================================================================
 function initializeResizableColumns() {
     // Create resize handles for each resizable column
     const timestampHeader = document.querySelector('.header-timestamp');
@@ -1076,7 +1199,9 @@ function initializeResizableColumns() {
     updateColumnWidths();
 }
 
+//=============================================================================
 // Create a resize handle element
+//=============================================================================
 function createResizeHandle(columnType) {
     const handle = document.createElement('div');
     handle.className = 'resize-handle';
@@ -1089,7 +1214,9 @@ function createResizeHandle(columnType) {
     return handle;
 }
 
+//=============================================================================
 // Start column resize
+//=============================================================================
 function startResize(e) {
     e.preventDefault();
     e.stopPropagation();  // This prevents the click from bubbling up to the column header
@@ -1116,7 +1243,9 @@ function startResize(e) {
     document.body.style.cursor = 'col-resize';
 }
 
+//=============================================================================
 // Handle column resize
+//=============================================================================
 function handleResize(e) {
     if (!isResizing || !currentResizeHandle) return;
 
@@ -1131,7 +1260,9 @@ function handleResize(e) {
     updateColumnWidths();
 }
 
+//=============================================================================
 // Stop column resize
+//=============================================================================
 function stopResize() {
     if (!isResizing) return;
 
@@ -1164,14 +1295,18 @@ function stopResize() {
     }, 100);
 }
 
+//=============================================================================
 // Update column widths using CSS variables
+//=============================================================================
 function updateColumnWidths() {
     const root = document.documentElement;
     root.style.setProperty('--timestamp-width', columnWidths.timestamp + 'px');
     root.style.setProperty('--class-width', columnWidths.class + 'px');
 }
 
+//=============================================================================
 // Save column widths to localStorage
+//=============================================================================
 function saveColumnWidths() {
     try {
         localStorage.setItem('columnWidths', JSON.stringify(columnWidths));
@@ -1180,7 +1315,9 @@ function saveColumnWidths() {
     }
 }
 
+//=============================================================================
 // Load column widths from localStorage
+//=============================================================================
 function loadColumnWidths() {
     try {
         const saved = localStorage.getItem('columnWidths');
@@ -1196,6 +1333,9 @@ function loadColumnWidths() {
     }
 }
 
+//=============================================================================
+// Initialize column resize data
+//=============================================================================
 function initializeColumnResize() {
     loadColumnWidths();
 
@@ -1209,20 +1349,32 @@ function initializeColumnResize() {
     }
 }
 
+//=============================================================================
 // Initialize column resize functionality
+//=============================================================================
 initializeColumnResize();
 
+//=============================================================================
 // Virtual scrolling event listener
+//=============================================================================
 document.getElementById('scrollContainer').addEventListener('scroll', () => {
 	requestAnimationFrame(renderVirtualList);
 });
 
+//=============================================================================
 // Handle window resize for virtual scrolling
+//=============================================================================
 window.addEventListener('resize', () => {
 	requestAnimationFrame(renderVirtualList);
 });
 
+//=============================================================================
+// Load files listener
+//=============================================================================
 document.getElementById('fileInput').addEventListener('change', async () => await loadLogFiles());
+
+//=============================================================================
 // Initialize display
+//=============================================================================
 renderVirtualList();
 updateStats();

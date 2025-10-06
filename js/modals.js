@@ -1,7 +1,7 @@
 let logChart = null;
 
 //=============================================================================
-// Open the modal
+// Open modal
 //=============================================================================
 function openModal(logEntry) {
 	currentModalEntry = logEntry;
@@ -16,7 +16,7 @@ function openModal(logEntry) {
 }
 
 //=============================================================================
-// close the modal
+// close modal
 //=============================================================================
 function closeModal(event) {
 	// If event is provided and the target is not the overlay itself, don't close
@@ -54,7 +54,7 @@ function copyLogEntry() {
 }
 
 // ============================================================================
-// File Info Modal functions
+// File Info Modal
 // ============================================================================
 function openFileInfoModal() {
     // Close hamburger menu
@@ -94,15 +94,18 @@ function openFileInfoModal() {
     fileInfoModal.classList.add('active');
     document.body.style.overflow = 'hidden';
 
-// =====================================================================================================================
+// ============================================================================
 // Chart configuration and initialization
+// ============================================================================
 class LogChartViewer {
   constructor(canvasId) {
     this.canvasId = canvasId;
     this.chart = null;
   }
 
+// ============================================================================
 // Initialize or update the chart
+// ============================================================================
 renderChart(data, options = {}) {
     const canvas = document.getElementById(this.canvasId);
     const ctx = canvas.getContext('2d');
@@ -143,6 +146,7 @@ renderChart(data, options = {}) {
     // Store reference on canvas element for external access
     canvas.chart = this.chart;
   }
+
   // Helper to configure scales based on chart type
   getScalesConfig(chartType) {
     if (chartType === 'pie' || chartType === 'doughnut') {
@@ -184,6 +188,9 @@ renderChart(data, options = {}) {
   }
 }
 
+// ============================================================================
+// Create the chart
+// ============================================================================
 function createLogChart() {
   const chartViewer = new LogChartViewer('logChart');
 
@@ -212,7 +219,9 @@ logChart = createLogChart();
 
 }
 
+// ============================================================================
 // Update chart if theme changes
+// ============================================================================
 function updateChartTheme() {
     const chartCanvas = document.getElementById('logChart');
 
@@ -256,6 +265,9 @@ function updateChartTheme() {
     }
 }
 
+// ============================================================================
+// Toggle between file list and chart views
+// ============================================================================
 function toggleFileView() {
     const fileList = document.getElementById('fileListDisplay');
     const chartContainer = document.querySelector('.chart-container');
