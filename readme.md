@@ -34,7 +34,14 @@ on the server machine.
 #### File Info
 <kbd>File Info</kbd> Select this option to see useful information about the files loaded. The tool shows file name, file 
 size, and the number of entries per file. This is a handy way to see if any of your log files are outside the norm. For 
-example, if your typical log file is typically 700K, a 1MB file will stand out.  
+example, if your typical log file is typically 700K, a 1MB file will stand out. There are two views for this dialog--list 
+view and chart view. Use the button at the bottom of the dialog to toggle between the two views.
+
+#### File Info List View
+<img src="assets/images/fileInfoListView.png" alt="File Info List View" width="800" height="600">
+
+#### File Info Chart View
+<img src="assets/images/fileInfoChartView.png" alt="File Info Chart View" width="800" height="600">
 
 #### Themes
 <kbd>[Light/Dark] Theme</kbd> The app supports two themes. It will remember your choice for the future; however, if you 
