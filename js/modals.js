@@ -134,6 +134,33 @@ renderChart(data, options = {}) {
           tooltip: {
             mode: 'index',
             intersect: false,
+            callbacks: {
+              label: function(context) {
+                let label = context.dataset.label || '';
+                let value = context.parsed.y;
+
+                if (label) {
+                  label += ': ';
+                }
+
+                // Only format if this dataset uses the y1 axis
+                if (context.dataset.yAxisID === 'y1') {
+                  if (value > 999) {
+                    value = value / 1000;
+                    label += value.toFixed(2) + ' MB';
+                  } else if (value > 9999) {
+                    label += value.toFixed(2) + ' GB';
+                  } else {
+                    label += value.toFixed(2) + ' KB';
+                  }
+                } else {
+                  // For y axis, just use the plain value with locale formatting
+                  label += value.toLocaleString();
+                }
+
+                return label;
+              }
+            }
           }
         },
         scales: this.getScalesConfig(options.type || 'bar')
@@ -171,9 +198,31 @@ renderChart(data, options = {}) {
         grid: {
           color: gridColor
         },
+        position: 'left',
         ticks: {
           precision: 0,
           color: textColor
+        }
+      },
+      y1: {
+        beginAtZero: true,
+        grid: {
+          color: gridColor
+        },
+        position: 'right',
+        ticks: {
+          precision: 0,
+          color: textColor,
+          callback: function(value, index, ticks) {
+              if (value > 999) {
+                  value = value / 1000;
+                  return value.toLocaleString() + ' MB';
+              } else if (value > 9999) {
+                  return value.toLocaleString() + ' GB';
+              } else {
+                return value.toLocaleString() + ' KB';
+              }
+          }
         }
       }
     };
@@ -201,14 +250,23 @@ function createLogChart() {
       data: sortedFiles.map(file => file.entryCount),
       backgroundColor: 'rgba(54, 162, 235, 0.6)',
       borderColor: 'rgba(54, 162, 235, 1)',
-      borderWidth: 1
+      borderWidth: 1,
+      yAxisID: 'y',
+    },
+    {
+      label: 'Size',
+      data: sortedFiles.map(file => file.size / 1000),
+      backgroundColor: 'rgba(235, 162, 54, 0.6)',
+      borderColor: 'rgba(235, 162, 54, 1)',
+      borderWidth: 1,
+      yAxisID: 'y1',
     }]
   };
 
   chartViewer.renderChart(barChartData, {
     type: 'line',
-    title: 'Log Lines per File',
-    showLegend: false
+    // title: 'Log Lines per File',
+    showLegend: true,
   });
 
   return chartViewer;
@@ -343,7 +401,17 @@ function closeAboutModal(event) {
 // ============================================================================
 // Event listeners
 // ============================================================================
-document.getElementById("toggleViewButton").addEventListener("click", function() {
-  const target = document.getElementById("logChart");
-  target.scrollIntoView({ behavior: "smooth", block: "start" });
-});
+// We wrap the event listener code so that node unit tests will run successfully.
+if (typeof document !== 'undefined') {
+    document.getElementById("toggleViewButton").addEventListener("click", function() {
+        const target = document.getElementById("logChart");
+        target.scrollIntoView({ behavior: "smooth", block: "start" });
+    });
+}
+
+// ============================================================================
+// Unit test exports
+// ============================================================================
+if (typeof module !== 'undefined' && module.exports) {
+  module.exports = { formatFileSize };
+}

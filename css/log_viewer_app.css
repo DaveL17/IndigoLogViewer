@@ -466,7 +466,7 @@ button:disabled {
 }
 
 .date-filter-group {
-    align-items: center;
+    align-items: left;
     display: flex;
     flex-direction: column;
     gap: var(--gap-size);
@@ -474,9 +474,10 @@ button:disabled {
 
 .date-filter-group label {
     font-size: 12px;
+    font-weight: normal;
     min-height: 16px;
     opacity: 0.8;
-    text-align: center;
+    text-align: left;
     text-transform: uppercase;
 }
 

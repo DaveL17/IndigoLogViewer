@@ -76,5 +76,5 @@ pids
 *.pid.lock
 /.venv/
 /package.json
-/log_viewer_app.test.js
+/__tests__/log_viewer_app.test.js
 /jest.config.js
