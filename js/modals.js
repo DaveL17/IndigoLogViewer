@@ -115,6 +115,38 @@ renderChart(data, options = {}) {
       this.chart.destroy();
     }
 
+    // Helper function to calculate a nice max value
+    const getNiceMax = (maxValue) => {
+      if (maxValue === null || maxValue === 0) return null;
+
+      // Calculate the order of magnitude
+      const magnitude = Math.pow(10, Math.floor(Math.log10(maxValue)));
+
+      // Common nice numbers are 1, 2, 2.5, 5, 10 (times the magnitude)
+      const niceNumbers = [1, 2, 2.5, 5, 10].map(n => n * magnitude);
+
+      // Find the first nice number that's greater than maxValue
+      for (let nice of niceNumbers) {
+        if (nice > maxValue) {
+          return nice;
+        }
+      }
+
+      // If none found, use 10 times the magnitude
+      return 10 * magnitude;
+    };
+
+    const yValues = data.datasets
+      .filter(d => !d.yAxisID || d.yAxisID === 'y')
+      .flatMap(d => d.data.filter(v => v !== null && v !== undefined));
+
+    const y1Values = data.datasets
+      .filter(d => d.yAxisID === 'y1')
+      .flatMap(d => d.data.filter(v => v !== null && v !== undefined));
+
+    const yMax = yValues.length > 0 ? getNiceMax(Math.max(...yValues)) : null;
+    const y1Max = y1Values.length > 0 ? getNiceMax(Math.max(...y1Values)) : null;
+
     // Default configuration
     const defaultConfig = {
       type: options.type || 'bar', // 'bar', 'line', 'pie', 'doughnut'
@@ -163,7 +195,7 @@ renderChart(data, options = {}) {
             }
           }
         },
-        scales: this.getScalesConfig(options.type || 'bar')
+        scales: this.getScalesConfig(options.type || 'bar', 0, yMax, 0, y1Max)
       }
     };
 
@@ -174,60 +206,69 @@ renderChart(data, options = {}) {
     canvas.chart = this.chart;
   }
 
-  // Helper to configure scales based on chart type
-  getScalesConfig(chartType) {
-    if (chartType === 'pie' || chartType === 'doughnut') {
-      return {}; // Pie and doughnut charts don't use scales
-    }
-
-	const currentTheme = document.body.dataset.theme;
-    const gridColor = (currentTheme === 'dark') ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)';
-    const textColor = (currentTheme === 'dark') ? 'rgba(255, 255, 255, 0.7)' : 'rgba(0, 0, 0, 0.7)';
-
-    return {
-      x: {
-        grid: {
-          color: gridColor
-        },
-        ticks: {
-          color: textColor
-        }
-      },
-      y: {
-        beginAtZero: true,
-        grid: {
-          color: gridColor
-        },
-        position: 'left',
-        ticks: {
-          precision: 0,
-          color: textColor
-        }
-      },
-      y1: {
-        beginAtZero: true,
-        grid: {
-          color: gridColor
-        },
-        position: 'right',
-        ticks: {
-          precision: 0,
-          color: textColor,
-          callback: function(value, index, ticks) {
-              if (value > 999) {
-                  value = value / 1000;
-                  return value.toLocaleString() + ' MB';
-              } else if (value > 9999) {
-                  return value.toLocaleString() + ' GB';
-              } else {
-                return value.toLocaleString() + ' KB';
-              }
-          }
-        }
-      }
-    };
+// Helper to configure scales based on chart type
+getScalesConfig(chartType, yMin = null, yMax = null, y1Min = null, y1Max = null) {
+  if (chartType === 'pie' || chartType === 'doughnut') {
+    return {}; // Pie and doughnut charts don't use scales
   }
 
+  const currentTheme = document.body.dataset.theme;
+  const gridColor = (currentTheme === 'dark') ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)';
+  const textColor = (currentTheme === 'dark') ? 'rgba(255, 255, 255, 0.7)' : 'rgba(0, 0, 0, 0.7)';
+
+  const yConfig = {
+    beginAtZero: true,
+    grid: {
+      color: gridColor
+    },
+    position: 'left',
+    ticks: {
+      precision: 0,
+      color: textColor
+    }
+  };
+
+  const y1Config = {
+    beginAtZero: true,
+    grid: {
+      color: gridColor
+    },
+    position: 'right',
+    ticks: {
+      precision: 0,
+      color: textColor,
+      callback: function(value, index, ticks) {
+        if (value > 999) {
+          value = value / 1000;
+          return value.toLocaleString() + ' MB';
+        } else if (value > 9999) {
+          return value.toLocaleString() + ' GB';
+        } else {
+          return value.toLocaleString() + ' KB';
+        }
+      }
+    }
+  };
+
+  // Set fixed min/max if provided
+  if (yMin !== null) yConfig.min = yMin;
+  if (yMax !== null) yConfig.max = yMax;
+  if (y1Min !== null) y1Config.min = y1Min;
+  if (y1Max !== null) y1Config.max = y1Max;
+
+  return {
+    x: {
+      grid: {
+        color: gridColor
+      },
+      ticks: {
+        color: textColor
+      }
+    },
+    y: yConfig,
+    y1: y1Config
+  };
+}
   // Destroy chart instance
   destroy() {
     if (this.chart) {

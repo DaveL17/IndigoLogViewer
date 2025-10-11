@@ -466,7 +466,7 @@ button:disabled {
 }
 
 .date-filter-group {
-    align-items: left;
+    align-items: start;
     display: flex;
     flex-direction: column;
     gap: var(--gap-size);
@@ -1066,6 +1066,10 @@ button:disabled {
     height: 400px;
     position: relative;
     width: 100%;
+}
+
+canvas {
+    min-height: 500px;
 }
 
 /* Toggle view classes */
