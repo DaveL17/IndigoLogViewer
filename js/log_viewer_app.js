@@ -392,6 +392,7 @@ function selectFolder() {
 	folderInput.click();
 	// Close the hamburger menu after selection
 	document.getElementById('hamburgerDropdown').classList.remove('show');
+	footer.textContent = `Loading log files...`;
 }
 
 //=============================================================================
@@ -406,12 +407,14 @@ function selectFiles() {
 	loadedFileInfo = [];
 	fileInput.click();
 	document.getElementById('hamburgerDropdown').classList.remove('show');
+	footer.textContent = `Loading log files...`;
 }
 
 //=============================================================================
 // Load selected log files
 //=============================================================================
 async function loadLogFiles() {
+
 	const folderInput = document.getElementById('folderInput');
 	const fileInput = document.getElementById('fileInput');
 
@@ -433,6 +436,18 @@ async function loadLogFiles() {
 	availableClasses.clear();
 	clearError();
 
+	// Show progress indicator immediately
+	const progressContainer = document.getElementById('loadingProgress');
+	const progressBar = document.getElementById('progressBar');
+	const progressCounter = document.getElementById('progressCounter');
+
+	progressContainer.style.display = 'block';
+	progressCounter.textContent = 'Filtering files...';
+	progressBar.style.width = '0%';
+
+	// Force a reflow to ensure the progress bar renders immediately
+	progressContainer.offsetHeight;
+
 	try {
 		// Filter files to match the pattern YYY-MM-DD Events.*
 		const logFiles = Array.from(filesToProcess).filter(file => {
@@ -443,9 +458,13 @@ async function loadLogFiles() {
 		});
 
 		if (logFiles.length === 0) {
+			progressContainer.style.display = 'none';
 			showToast('No log files found matching pattern "YYYY-MM-DD Events.*" in selected folder', 'error');
 			return;
 		}
+
+		// Update counter with actual file count
+		progressCounter.textContent = `0/${logFiles.length}`;
 
 		let processedFiles = 0;
 		let skippedFiles = 0;
@@ -496,7 +515,17 @@ async function loadLogFiles() {
 
 				skippedFiles++;
 			}
+
+			// Update progress
+			const filesCompleted = processedFiles + skippedFiles;
+			const progressPercent = (filesCompleted / totalFiles) * 100;
+			progressBar.style.width = `${progressPercent}%`;
+			progressCounter.textContent = `${filesCompleted}/${totalFiles}`;
 		}
+
+		// Hide progress bar
+		progressContainer.style.display = 'none';
+
 		// Log consolidated error report
 		if (fileErrors.size > 0) {
 			console.group('File Processing Errors:');
@@ -552,6 +581,8 @@ async function loadLogFiles() {
 		showToast(successMessage, 'success');
 
 	} catch (error) {
+		// Hide progress bar on error
+		progressContainer.style.display = 'none';
 		const sourceText = inputSource === 'folder' ? 'selected folder' : 'selected files';
 		showToast(`No log files found matching pattern "YYYY-MM-DD Events.*" in ${sourceText}`, 'error');
 	}

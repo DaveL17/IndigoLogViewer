@@ -1,15 +1,21 @@
 ## Indigo Log Viewer
 
+---
+
 The ***Indigo Log Viewer*** is a simple web-based app that is intended to be a front end viewer of Indigo log files.
+
+<img src="assets/images/Screenshot.png" alt="Screenshot" width="800" height="600">
+
 While it might work for other log files as well, it is expecting log file entries to be of the form 
-`[POSIX Timestamp][Message Class][Message]`. No other log entry format is supported. For example, this is the only 
-format that is supported:
+`[POSIX Timestamp][Message Class][Message]`.
 ```text
 2025-09-10 11:52:01.833	Action Collection	Webhook Post/Form Received
 ```
-<img src="assets/images/Screenshot.png" alt="Screenshot" width="800" height="600">
+ This is the only format that is supported.
 
 ### Usage
+
+---
 > [!NOTE] 
 > The structure of the project has changed from the initial release. While it's still possible to manually copy the
 project files individually, downloading the "official" release is now the best and safest approach.
@@ -19,6 +25,8 @@ download. Unzip the files into a working folder and double-click the html file (
 preferred browser).
 
 ### Menu
+
+---
 Use the hamburger menu in the upper right-hand corner to access app features.
 
 #### Choose Log Folder
@@ -36,6 +44,8 @@ on the server machine.
 size, and the number of entries per file. This is a handy way to see if any of your log files are outside the norm. For 
 example, if your typical log file is typically 700K, a 1MB file will stand out. There are two views for this dialog--list 
 view and chart view. Use the button at the bottom of the dialog to toggle between the two views.
+
+While in chart view, you can hide individual series by clicking on it within the legend.
 
 #### File Info List View
 <img src="assets/images/fileInfoListView.png" alt="File Info List View" width="800" height="600">
@@ -55,6 +65,8 @@ browser security feature. To toggle the theme, select  from the menu.
 <kbd>About</kbd> Typical About information.
 
 ### Search Tools
+
+---
 #### Class Filter
 The Class Filter dropdown will list all the message classes that exist in the loaded log files. This control is built 
 dynamically; that is, when you first load the app, there will be no classes listed in the control. Once the control is
@@ -71,6 +83,8 @@ To limit the log entry list to a specific date or date range, use the Date Filte
 selection, click the <kbd>Clear</kbd> button.
 
 ### Viewing Area
+
+---
 The log messages from the selected files are displayed in this area. Initially, it will contain all loaded messages; 
 however, the list will update as filters are applied. Click on a message and it will open in a modal dialog. This is
 especially helpful for multiline log messages which are truncated in the main view. There is a <kbd>Copy</kbd> button
@@ -86,15 +100,21 @@ Both the timestamp and class columns are sortable in place. You can click on the
 can sort only one column at a time. Additionally, both columns are resizeable if needed.
 
 ### Compatability
+
+---
 - This web app is tested against Safari `18.6`, but it should work in other modern browsers (it loads in current 
   versions of FireFox and Chrome, but is not fully tested in those browsers).
 - This web app is not designed to be run on small screens, but it should theoretically work if your small screen device 
   can access the Indigo logs folder.
 
 ### Getting Creative
+
+---
 You can move the app's files to Indigo's public webserver folder and serve the app from there. This will allow you to 
 add the app to the dock and make it a stand-alone web personal web app (PWA). You can also serve the app from node.js. 
 There are lots of options, but you are on your own for configuring anything beyond the instructions above.
 
 ### Suggestions and Error Reports
+
+---
 Add suggestions and error reports using the issues tab above.
