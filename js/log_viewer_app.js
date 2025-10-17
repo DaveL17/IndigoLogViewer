@@ -387,12 +387,10 @@ function selectFolder() {
 	const fileInput = document.getElementById('fileInput');
 	// Reset both inputs to ensure clean state
 	folderInput.value = '';
-	fileInput.value = ''; // Clear the file input
-	loadedFileInfo = []; // Reset file info when selecting new folder
+	fileInput.value = '';
+	loadedFileInfo = [];
 	folderInput.click();
-	// Close the hamburger menu after selection
 	document.getElementById('hamburgerDropdown').classList.remove('show');
-	footer.textContent = `Loading log files...`;
 }
 
 //=============================================================================
@@ -407,7 +405,6 @@ function selectFiles() {
 	loadedFileInfo = [];
 	fileInput.click();
 	document.getElementById('hamburgerDropdown').classList.remove('show');
-	footer.textContent = `Loading log files...`;
 }
 
 //=============================================================================
@@ -415,6 +412,7 @@ function selectFiles() {
 //=============================================================================
 async function loadLogFiles() {
 
+	footer.textContent = `Loading log files...`;
 	const folderInput = document.getElementById('folderInput');
 	const fileInput = document.getElementById('fileInput');
 

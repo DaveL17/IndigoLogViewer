@@ -118,3 +118,24 @@ There are lots of options, but you are on your own for configuring anything beyo
 
 ---
 Add suggestions and error reports using the issues tab above.
+
+### Serving the App from Indigo
+
+---
+One suggested place store the Indigo Log Viewer files is in the Indigo Web Assets tree. Copy the entire contents of the 
+ZIP you downloaded to Indigo's public Web Assets folder:
+```bash
+/Library/Application Support/Perceptive Automation/Indigo XXXX.X/Web Assets/public/
+```
+Then the URL to the application would be something like:
+```bash
+https://localhost:8176/public/log_viewer_app.html
+```
+This is only one possible approach and you may need to adjust the above depending on your installation.  You 
+can then put a link on a control page and launch the app from there, launch it from a bookmark, whatever. 
+
+> [!WARNING] 
+> Indigo's public web assets folder is served up without authentication so anyone that has access to your server's IP or 
+> has your reflector name can access the contents of this folder. You can also place the app's files in the static Web 
+> Assets folder which requires authentication. Regardless, no one will have access to your Indigo log files unless they 
+> are able to point to that folder (and have access to read its contents.)
