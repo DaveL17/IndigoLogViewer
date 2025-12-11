@@ -447,17 +447,25 @@ async function loadLogFiles() {
 	progressContainer.offsetHeight;
 
 	try {
-		// Filter files to match the pattern YYY-MM-DD Events.*
-		const logFiles = Array.from(filesToProcess).filter(file => {
-			const fileName = file.name;
-			// Match pattern like "2025-09-02 Events.txt" or "2025-09-02 Events.log"
-			const datePattern = /^\d{4}-\d{2}-\d{2}\s+Events\./i;
-			return datePattern.test(fileName);
-		});
+        // Filter files to match the patterns:
+        // 1. YYYY-MM-DD Events.*
+        // 2. plugin.log
+        // 3. plugin.log.YYYY-MM-DD
+        const logFiles = Array.from(filesToProcess).filter(file => {
+            const fileName = file.name;
+
+            // Match pattern like "2025-09-02 Events.txt" or "2025-09-02 Events.log"
+            const dateEventsPattern = /^\d{4}-\d{2}-\d{2}\s+Events\./i;
+
+            // Match "plugin.log" exactly or "plugin.log.YYYY-MM-DD"
+            const pluginLogPattern = /^plugin\.log(?:\.\d{4}-\d{2}-\d{2})?$/i;
+
+            return dateEventsPattern.test(fileName) || pluginLogPattern.test(fileName);
+        });
 
 		if (logFiles.length === 0) {
 			progressContainer.style.display = 'none';
-			showToast('No log files found matching pattern "YYYY-MM-DD Events.*" in selected folder', 'error');
+			showToast('No log files found matching Indigo log patterns in selected folder', 'error');
 			return;
 		}
 

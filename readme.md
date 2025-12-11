@@ -131,7 +131,7 @@ Then the URL to the application would be something like:
 ```bash
 https://localhost:8176/public/log_viewer_app.html
 ```
-This is only one possible approach and you may need to adjust the above depending on your installation.  You 
+This is only one possible approach, and you may need to adjust the above depending on your installation.  You 
 can then put a link on a control page and launch the app from there, launch it from a bookmark, whatever. 
 
 > [!WARNING] 

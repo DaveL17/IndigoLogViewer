@@ -226,7 +226,7 @@ body {
 
 .header-background-image {
     background-color: transparent;
-    background-image: url("../assets/images/headerBackgroundLight.png");
+    background-image: url("/assets/images/headerBackgroundLight.png");
     background-repeat: no-repeat;
     background-size: contain;
     height: 100%;
@@ -236,7 +236,7 @@ body {
 }
 
 [data-theme="dark"] .header-background-image {
-    background-image: url("../assets/images/headerBackground.png");
+    background-image: url("/assets/images/headerBackground.png");
 }
 
 .header-background-layer {
@@ -939,6 +939,9 @@ button:disabled {
     padding: 15px;
     white-space: pre;
     word-break: break-word;
+    overflow-x: auto;
+    overflow-y: auto;
+    max-height: 70vh; /* or whatever height you want */
 }
 
 .modal-footer {
