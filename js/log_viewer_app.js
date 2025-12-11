@@ -400,7 +400,7 @@ function selectFiles() {
 	const folderInput = document.getElementById('folderInput');
 	const fileInput = document.getElementById('fileInput');
 	// Reset both inputs to ensure clean state
-	folderInput.value = ''; // Clear the folder input
+	folderInput.value = '';
 	fileInput.value = '';
 	loadedFileInfo = [];
 	fileInput.click();
@@ -1130,6 +1130,7 @@ function clearError() {
 // Event listeners for real-time filtering
 //=============================================================================
 document.getElementById('folderInput').addEventListener('change', async () => await loadLogFiles());
+document.getElementById('fileInput').addEventListener('change', async () => await loadLogFiles());
 document.getElementById('startDateFilter').addEventListener('change', applyFilters);
 document.getElementById('endDateFilter').addEventListener('change', applyFilters);
 
@@ -1404,11 +1405,6 @@ document.getElementById('scrollContainer').addEventListener('scroll', () => {
 window.addEventListener('resize', () => {
 	requestAnimationFrame(renderVirtualList);
 });
-
-//=============================================================================
-// Load files listener
-//=============================================================================
-document.getElementById('fileInput').addEventListener('change', async () => await loadLogFiles());
 
 //=============================================================================
 // Initialize display
