@@ -302,7 +302,7 @@ function showToast(message, type = 'info', duration = 4000) {
 //=============================================================================
 function getClassColorClass(className) {
 	const lowerClass = className.toLowerCase();
-	if (lowerClass.includes('error')) {
+	if (lowerClass.includes('error') || lowerClass.includes('failure')) {
 		return 'error-class';
 	} else if (lowerClass.includes('warning')) {
 		return 'warning-class';
