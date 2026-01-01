@@ -23,6 +23,10 @@
     --warning-color: #ff8c00;
     --timestamp-width: 180px;
     --class-width: 150px;
+    --row-even-bg: #ffffff;
+    --row-odd-bg: #f9f9f9;
+    --row-hover-bg: #e3f2fd;
+    --row-selected-bg: #bbdefb;
 }
 
 [data-theme="dark"] {
@@ -43,6 +47,10 @@
     --table-stripe: #2a2a2a;
     --text-color: #e0e0e0;
     --warning-color: #ff8c00;
+    --row-even-bg: #1e1e1e;
+    --row-odd-bg: #2a2a2a;
+    --row-hover-bg: #3a3a3a;
+    --row-selected-bg: #1565c0;
 }
 
 /* ==========================================================================
@@ -410,7 +418,7 @@ input[type="date"] {
 [data-theme="dark"] input[type="date"] {
     background-color: var(--input-bg);
     border: 1px solid var(--border-color);
-    color-scheme: dark; /* This helps browsers apply dark styling to the calendar popup */
+    color-scheme: dark;
 }
 
 input[type="date"]::-webkit-calendar-picker-indicator {
@@ -491,7 +499,7 @@ button:disabled {
 }
 
 .text-input-container input[type="text"] {
-    padding-right: 30px; /* Make room for the clear button */
+    padding-right: 30px;
     width: 200px;
 }
 
@@ -526,7 +534,6 @@ button:disabled {
     color: var(--button-text);
 }
 
-/* Hide clear button when input is empty */
 .text-input-container input[type="text"]:placeholder-shown + .clear-input-button {
     opacity: 0;
     pointer-events: none;
@@ -687,16 +694,20 @@ button:disabled {
     transition: background-color 0.2s;
 }
 
-.log-row:nth-child(even) {
-    background-color: var(--table-stripe);
+.log-row.row-even {
+    background-color: var(--row-even-bg);
+}
+
+.log-row.row-odd {
+    background-color: var(--row-odd-bg);
 }
 
 .log-row:hover {
-    opacity: 0.8;
+    background-color: var(--row-hover-bg) !important;
 }
 
 .log-row.selected {
-    background-color: var(--selected-row) !important;
+    background-color: var(--row-selected-bg) !important;
 }
 
 .log-row > div {
@@ -766,12 +777,10 @@ button:disabled {
     border-right-color: var(--button-bg);
 }
 
-/* Remove the last resize handle since there's nothing to resize after the last column */
 .header-entry .resize-handle {
     display: none;
 }
 
-/* Update column widths to use CSS variables for dynamic resizing */
 .header-timestamp,
 .row-timestamp {
     min-width: var(--timestamp-width, 180px);
@@ -941,7 +950,7 @@ button:disabled {
     word-break: break-word;
     overflow-x: auto;
     overflow-y: auto;
-    max-height: 70vh; /* or whatever height you want */
+    max-height: 70vh;
 }
 
 .modal-footer {
@@ -1077,8 +1086,6 @@ canvas {
 
 .loading-progress {
     background: var(--bg-color);
-    /*border: 1px solid var(--border-color);*/
-    /*border-radius: 8px;*/
     margin: 10px auto;
     padding: 15px;
     position: relative;
@@ -1107,7 +1114,6 @@ canvas {
     width: 0;
 }
 
-/* Toggle view classes */
 .file-list-view {
     display: block;
 }

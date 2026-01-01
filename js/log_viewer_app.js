@@ -852,6 +852,9 @@ function applyFilters() {
 //=============================================================================
 // Render virtual list
 //=============================================================================
+// Replace the row generation part in renderVirtualList() function
+// Find this section (around line 645-660) and replace it:
+
 function renderVirtualList() {
 	if (filteredEntries.length === 0) {
 		virtualSpacer.style.height = '0px';
@@ -887,12 +890,14 @@ function renderVirtualList() {
 		const entry = filteredEntries[i];
 		const colorClass = getClassColorClass(entry.class);
 		const isSelected = i === selectedRowIndex;
+		// Add odd/even class based on actual row index, not DOM position
+		const rowParity = i % 2 === 0 ? 'row-even' : 'row-odd';
 
 		// Truncate entry text for display in the table
 		const truncatedEntry = entry.entry.length > 100 ? entry.entry.substring(0, 100) + '...' : entry.entry;
 
 		rowsHtml.push(`
-			<div class="log-row ${isSelected ? 'selected' : ''}"
+			<div class="log-row ${rowParity} ${isSelected ? 'selected' : ''}"
 				 style="transform: translateY(${i * ROW_HEIGHT}px); position: absolute; width: 100%;"
 				 data-index="${i}" onclick="selectRow(this, ${i})">
 				<div class="row-timestamp">${entry.timestampString}</div>
