@@ -430,9 +430,16 @@ async function loadLogFiles() {
 		return;
 	}
 
-	allLogEntries = [];
-	availableClasses.clear();
-	clearError();
+    allLogEntries = [];
+    availableClasses.clear();
+    selectedClasses.clear(); // Reset selected classes
+    clearError();
+
+    // Reset virtual scrolling state
+    visibleStart = 0;
+    visibleEnd = 0;
+    selectedRowIndex = -1;
+    scrollContainer.scrollTop = 0; // Reset scroll position
 
 	// Show progress indicator immediately
 	const progressContainer = document.getElementById('loadingProgress');
@@ -579,12 +586,17 @@ async function loadLogFiles() {
 		setDefaultDateRange();
 		applyFilters();
 
-		// Select the most recent entry (first row) after loading
-		if (filteredEntries.length > 0) {
-			selectedRowIndex = 0;
-			scrollToSelectedRow();
-			renderVirtualList();
-		}
+        // Select the most recent entry (first row) after loading
+        if (filteredEntries.length > 0) {
+            selectedRowIndex = 0;
+            scrollToSelectedRow();
+            // Force a reflow and render
+            scrollContainer.scrollTop = 0;
+            virtualSpacer.offsetHeight; // Force reflow
+            requestAnimationFrame(() => {
+                renderVirtualList();
+            });
+        }
 
 		updateStats();
 		updateSortIndicators(); // Show initial sort indicators
@@ -804,14 +816,11 @@ function setDefaultDateRange() {
 		const oldestDate = availableDates[availableDates.length - 1];
 		const newestDate = availableDates[0]; // Most recent date
 
-		// Use setTimeout to ensure the value is set after the DOM update
-		setTimeout(() => {
-			startDateFilter.value = oldestDate;
-			endDateFilter.value = newestDate; // Set end date to most recent
-		}, 0);
+		// Set values directly without setTimeout
+		startDateFilter.value = oldestDate;
+		endDateFilter.value = newestDate;
 	}
 }
-
 //=============================================================================
 // Apply filters
 //=============================================================================
