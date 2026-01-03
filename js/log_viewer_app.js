@@ -454,6 +454,20 @@ async function loadLogFiles() {
         const logFiles = Array.from(filesToProcess).filter(file => {
             const fileName = file.name;
 
+            // Get the file path to determine if it's in a subfolder
+            const filePath = file.webkitRelativePath || file.name;
+
+            // If this is from folder selection, only include files directly in the selected folder
+            // (no additional path separators beyond the folder name itself)
+            if (inputSource === 'folder' && file.webkitRelativePath) {
+                const pathParts = filePath.split('/');
+                // File should only have 2 parts: [foldername, filename]
+                // More parts means it's in a subfolder
+                if (pathParts.length > 2) {
+                    return false;
+                }
+            }
+
             // Match pattern like "2025-09-02 Events.txt" or "2025-09-02 Events.log"
             const dateEventsPattern = /^\d{4}-\d{2}-\d{2}\s+Events\./i;
 
