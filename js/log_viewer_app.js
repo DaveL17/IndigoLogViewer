@@ -412,7 +412,7 @@ function selectFiles() {
 //=============================================================================
 async function loadLogFiles() {
 
-	footer.textContent = `Loading log files...`;
+	document.getElementById('footer').textContent = `Loading log files...`;
 	const folderInput = document.getElementById('folderInput');
 	const fileInput = document.getElementById('fileInput');
 
