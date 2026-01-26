@@ -3,6 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Security-Policy"
+          content="default-src 'self'; script-src 'self' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline';">
     <title id="tabTitle"></title>  <!-- injected -->
     <link rel="stylesheet" href="css/log_viewer_app.css">
     <link rel="icon" href="assets/images/favicon.ico">
@@ -12,16 +14,16 @@
 </head>
 <body data-theme="light">
     <div class="hamburger-menu">
-        <button class="hamburger-button" onclick="toggleMenu()" title="Menu">☰</button>
+        <button class="hamburger-button" id="hamburgerButton" title="Menu">☰</button>
         <div class="hamburger-dropdown" id="hamburgerDropdown">
-            <div class="menu-item" onclick="selectFolder()">Choose Log Folder</div>
-            <div class="menu-item" onclick="selectFiles()">Choose Log Files</div>
-            <div class="menu-item" id="fileInfoMenuItem" onclick="openFileInfoModal()">File Info</div>
+            <div class="menu-item" id="selectFolderMenuItem">Choose Log Folder</div>
+            <div class="menu-item" id="selectFilesMenuItem">Choose Log Files</div>
+            <div class="menu-item" id="fileInfoMenuItem">File Info</div>
             <div class="menu-divider"></div>
-            <div class="menu-item" id="themeMenuItem" onclick="toggleTheme()">Dark Theme</div>
+            <div class="menu-item" id="themeMenuItem">Dark Theme</div>
             <div class="menu-divider"></div>
-            <div class="menu-item" onclick="openHelp()">Help</div>
-            <div class="menu-item" id="aboutDialog" onclick="openAboutModal()">About</div>
+            <div class="menu-item" id="helpMenuItem">Help</div>
+            <div class="menu-item" id="aboutDialog">About</div>
         </div>
     </div>
     <div class="header-wrapper">
@@ -36,11 +38,11 @@
                 <div class="control-group">
                     <label>Class Filter</label>
                     <div class="class-filter-container">
-                        <button class="class-filter-button" onclick="toggleClassFilter()" id="classFilterButton">
+                        <button class="class-filter-button" id="classFilterButton">
                             <span>Class Filter</span><span>▼</span>
                         </button>
                         <div class="class-filter-dropdown" id="classFilterDropdown">
-                            <div class="class-filter-item class-filter-toggle" onclick="toggleAllClasses()">
+                            <div class="class-filter-item class-filter-toggle" id="classFilterToggle">
                                 <input type="checkbox" id="selectAllClasses" checked>
                                 <label for="selectAllClasses">Select All / None</label>
                             </div>
@@ -56,7 +58,7 @@
                     <label>Text Search</label>
                     <div class="text-input-container">
                         <input type="text" id="textFilter" placeholder="Search log entries...">
-                        <button class="clear-input-button" onclick="clearTextFilter()" title="Clear search">&times;</button>
+                        <button class="clear-input-button" id="clearTextButton" title="Clear search">&times;</button>
                     </div>
                 </div>
                 <!-- Date Filter Controls-->
@@ -65,7 +67,7 @@
                     <div class="date-control-group">
                         <input type="date" id="startDateFilter" placeholder="Start Date">
                         <input type="date" id="endDateFilter" placeholder="End Date">
-                        <button class="clear-button" onclick="clearDateFilter()">Clear</button>
+                        <button class="clear-button" id="clearDateButton">Clear</button>
                     </div>
                 </div>
             </div>
@@ -83,21 +85,21 @@
     <!-- Log Entry Table -->
     <div class="table-container">
         <div class="table-header">
-            <div class="header-timestamp sortable" onclick="sortBy('timestamp')">
+            <div class="header-timestamp sortable" id="headerTimestamp">
                 Timestamp
                 <span class="sort-indicator" id="sortTimestamp"></span>
             </div>
-            <div class="header-class sortable" onclick="sortBy('class')">
+            <div class="header-class sortable" id="headerClass">
                 Class
                 <span class="sort-indicator" id="sortClass"></span>
             </div>
             <div class="header-entry">
                 Log Entry (Click row for full details)
                 <div class="navigation-controls">
-                    <button class="nav-button" onclick="navigateToTop()" title="Go to top">Top</button>
-                    <button class="nav-button" onclick="navigatePageUp()" title="Page up">PgUp</button>
-                    <button class="nav-button" onclick="navigatePageDown()" title="Page down">PgDn</button>
-                    <button class="nav-button" onclick="navigateToEnd()" title="Go to end">End</button>
+                    <button class="nav-button" id="navTopButton" title="Go to top">Top</button>
+                    <button class="nav-button" id="navPageUpButton" title="Page up">PgUp</button>
+                    <button class="nav-button" id="navPageDownButton" title="Page down">PgDn</button>
+                    <button class="nav-button" id="navEndButton" title="Go to end">End</button>
                 </div>
             </div>
         </div>
@@ -110,28 +112,28 @@
     </div>
 
     <!-- Log Line Modal -->
-    <div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)">
-        <div class="modal-content" onclick="event.stopPropagation()">
+    <div class="modal-overlay" id="modalOverlay">
+        <div class="modal-content">
             <div class="modal-header">
                 <h3 class="modal-title">Log Entry Details</h3>
-                <button class="modal-close" onclick="closeModal()" title="Close">&times;</button>
+                <button class="modal-close" id="modalCloseX" title="Close">&times;</button>
             </div>
             <div class="modal-body">
                 <div class="modal-log-content" id="modalLogContent"></div>
             </div>
             <div class="modal-footer">
-                <button class="modal-button copy" onclick="copyLogEntry()">Copy</button>
-                <button class="modal-button close" onclick="closeModal()">Close</button>
+                <button class="modal-button copy" id="modalCopyButton">Copy</button>
+                <button class="modal-button close" id="modalCloseButton">Close</button>
             </div>
         </div>
     </div>
 
     <!-- File Info Modal -->
-    <div class="modal-overlay" id="fileInfoModalOverlay" onclick="closeFileInfoModal(event)">
-        <div class="modal-content" onclick="event.stopPropagation()">
+    <div class="modal-overlay" id="fileInfoModalOverlay">
+        <div class="modal-content">
             <div class="modal-header">
                 <h3 class="modal-title">Loaded Log Files</h3>
-                <button class="modal-close" onclick="closeFileInfoModal()" title="Close">&times;</button>
+                <button class="modal-close" id="fileInfoCloseX" title="Close">&times;</button>
             </div>
             <div class="modal-body">
                 <div id="fileListDisplay" class="file-list-view"></div>
@@ -141,19 +143,19 @@
             </div>
             <div class="modal-footer">
                 <div class="file-list-button-group">
-                    <button class="modal-button" id="toggleViewButton" onclick="toggleFileView()">Show Chart</button>
-                    <button class="modal-button close" id="fileListCloseButton" onclick="closeFileInfoModal()">Close</button>
+                    <button class="modal-button" id="toggleViewButton">Show Chart</button>
+                    <button class="modal-button close" id="fileListCloseButton">Close</button>
                 </div>
             </div>
         </div>
     </div>
 
     <!-- About Modal -->
-    <div class="modal-overlay about-modal" id="aboutModalOverlay" onclick="closeAboutModal(event)">
-        <div class="modal-content" onclick="event.stopPropagation()">
+    <div class="modal-overlay about-modal" id="aboutModalOverlay">
+        <div class="modal-content">
             <div class="modal-header">
                 <h3 class="modal-title" id="aboutTitle"></h3>  <!-- injected -->
-                <button class="modal-close" onclick="closeAboutModal()" title="Close">&times;</button>
+                <button class="modal-close" id="aboutCloseX" title="Close">&times;</button>
             </div>
             <div class="modal-body about-body">
                 <div>Written by: <span id="aboutAuthor"></span></div>  <!-- injected -->

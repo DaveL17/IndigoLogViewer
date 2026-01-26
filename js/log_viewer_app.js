@@ -767,24 +767,35 @@ function updateFilters() {
 		sortedClasses.forEach(cls => selectedClasses.add(cls));
 	}
 
-	sortedClasses.forEach(cls => {
+	sortedClasses.forEach((cls, index) => {
 		const isChecked = selectedClasses.has(cls);
 		const itemDiv = document.createElement('div');
 		itemDiv.className = 'class-filter-item';
-		itemDiv.onclick = function(e) {
+		itemDiv.addEventListener('click', function(e) {
 			if (e.target.tagName !== 'INPUT') {
 				const checkbox = this.querySelector('input[type="checkbox"]');
 				checkbox.checked = !checkbox.checked;
 			}
 			toggleClassSelection(cls);
-		};
+		});
 
-		itemDiv.innerHTML = `
-			<input type="checkbox" id="class-${cls}" value="${cls}" ${isChecked ? 'checked' : ''} 
-				   onclick="event.stopPropagation(); toggleClassSelection('${cls}')">
-			<label for="class-${cls}" onclick="event.stopPropagation()">${escapeHtml(cls)}</label>
-		`;
+		const checkbox = document.createElement('input');
+		checkbox.type = 'checkbox';
+		checkbox.id = `class-filter-${index}`;
+		checkbox.value = cls;
+		checkbox.checked = isChecked;
+		checkbox.addEventListener('click', (e) => {
+			e.stopPropagation();
+			toggleClassSelection(cls);
+		});
 
+		const label = document.createElement('label');
+		label.htmlFor = checkbox.id;
+		label.textContent = cls;
+		label.addEventListener('click', (e) => e.stopPropagation());
+
+		itemDiv.appendChild(checkbox);
+		itemDiv.appendChild(label);
 		classFilterList.appendChild(itemDiv);
 	});
 
@@ -922,7 +933,7 @@ function renderVirtualList() {
 		rowsHtml.push(`
 			<div class="log-row ${rowParity} ${isSelected ? 'selected' : ''}"
 				 style="transform: translateY(${i * ROW_HEIGHT}px); position: absolute; width: 100%;"
-				 data-index="${i}" onclick="selectRow(this, ${i})">
+				 data-index="${i}">
 				<div class="row-timestamp">${entry.timestampString}</div>
 				<div class="row-class ${colorClass}" title="${escapeHtml(entry.class)}">${escapeHtml(entry.class)}</div>
 				<div class="row-entry" title="Click to view full details">${escapeHtml(truncatedEntry)}</div>
@@ -1433,6 +1444,60 @@ document.getElementById('scrollContainer').addEventListener('scroll', () => {
 window.addEventListener('resize', () => {
 	requestAnimationFrame(renderVirtualList);
 });
+
+// ============================================================================
+// Event delegation for virtual scroll rows (replaces inline onclick)
+// ============================================================================
+virtualContent.addEventListener('click', (e) => {
+	const row = e.target.closest('.log-row');
+	if (row) {
+		const index = parseInt(row.dataset.index, 10);
+		selectRow(row, index);
+	}
+});
+
+// ============================================================================
+// UI event listeners (replaces inline onclick handlers in HTML)
+// ============================================================================
+document.getElementById('hamburgerButton').addEventListener('click', toggleMenu);
+document.getElementById('selectFolderMenuItem').addEventListener('click', selectFolder);
+document.getElementById('selectFilesMenuItem').addEventListener('click', selectFiles);
+document.getElementById('fileInfoMenuItem').addEventListener('click', openFileInfoModal);
+document.getElementById('themeMenuItem').addEventListener('click', toggleTheme);
+document.getElementById('helpMenuItem').addEventListener('click', openHelp);
+document.getElementById('aboutDialog').addEventListener('click', openAboutModal);
+document.getElementById('classFilterButton').addEventListener('click', toggleClassFilter);
+document.getElementById('classFilterToggle').addEventListener('click', toggleAllClasses);
+document.getElementById('clearTextButton').addEventListener('click', clearTextFilter);
+document.getElementById('clearDateButton').addEventListener('click', clearDateFilter);
+document.getElementById('headerTimestamp').addEventListener('click', () => sortBy('timestamp'));
+document.getElementById('headerClass').addEventListener('click', () => sortBy('class'));
+document.getElementById('navTopButton').addEventListener('click', navigateToTop);
+document.getElementById('navPageUpButton').addEventListener('click', navigatePageUp);
+document.getElementById('navPageDownButton').addEventListener('click', navigatePageDown);
+document.getElementById('navEndButton').addEventListener('click', navigateToEnd);
+
+// Log entry modal
+document.getElementById('modalOverlay').addEventListener('click', (e) => {
+	if (e.target === document.getElementById('modalOverlay')) closeModal();
+});
+document.getElementById('modalCloseX').addEventListener('click', () => closeModal());
+document.getElementById('modalCopyButton').addEventListener('click', copyLogEntry);
+document.getElementById('modalCloseButton').addEventListener('click', () => closeModal());
+
+// File info modal
+document.getElementById('fileInfoModalOverlay').addEventListener('click', (e) => {
+	if (e.target === document.getElementById('fileInfoModalOverlay')) closeFileInfoModal();
+});
+document.getElementById('fileInfoCloseX').addEventListener('click', () => closeFileInfoModal());
+document.getElementById('toggleViewButton').addEventListener('click', toggleFileView);
+document.getElementById('fileListCloseButton').addEventListener('click', () => closeFileInfoModal());
+
+// About modal
+document.getElementById('aboutModalOverlay').addEventListener('click', (e) => {
+	if (e.target === document.getElementById('aboutModalOverlay')) closeAboutModal();
+});
+document.getElementById('aboutCloseX').addEventListener('click', () => closeAboutModal());
 
 //=============================================================================
 // Initialize display
