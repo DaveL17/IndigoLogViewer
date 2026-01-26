@@ -225,7 +225,7 @@ document.addEventListener('click', function(event) {
 //=============================================================================
 function openHelp() {
     const helpUrl = 'https://github.com/DaveL17/IndigoLogViewer';
-	window.open(helpUrl, '_blank');
+	window.open(helpUrl, '_blank', 'noopener,noreferrer');
 
     // Close the hamburger menu
     document.getElementById('hamburgerDropdown').classList.remove('show');
@@ -1144,7 +1144,7 @@ document.readyState === 'loading' ? document.addEventListener('DOMContentLoaded'
 function escapeHtml(text) {
 	const div = document.createElement('div');
 	div.textContent = text;
-	return div.innerHTML;
+	return div.innerHTML.replace(/'/g, '&#39;');
 }
 
 //=============================================================================
