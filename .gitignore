@@ -78,3 +78,4 @@ pids
 /package.json
 /__tests__/log_viewer_app.test.js
 /jest.config.js
+/CLAUDE.md
