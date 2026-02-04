@@ -14,8 +14,8 @@
 </head>
 <body data-theme="light">
     <div class="hamburger-menu">
-        <button class="hamburger-button" id="hamburgerButton" title="Menu">☰</button>
-        <div class="hamburger-dropdown" id="hamburgerDropdown">
+        <button class="hamburger-button" id="hamburgerButton" title="Menu" aria-label="Menu" aria-expanded="false" aria-haspopup="true" aria-controls="hamburgerDropdown">☰</button>
+        <div class="hamburger-dropdown" id="hamburgerDropdown" role="menu">
             <div class="menu-item" id="selectFolderMenuItem">Choose Log Folder</div>
             <div class="menu-item" id="selectFilesMenuItem">Choose Log Files</div>
             <div class="menu-item" id="fileInfoMenuItem">File Info</div>
@@ -38,12 +38,12 @@
                 <div class="control-group">
                     <label>Class Filter</label>
                     <div class="class-filter-container">
-                        <button class="class-filter-button" id="classFilterButton">
+                        <button class="class-filter-button" id="classFilterButton" aria-expanded="false" aria-haspopup="true" aria-controls="classFilterDropdown">
                             <span>Class Filter</span><span>▼</span>
                         </button>
-                        <div class="class-filter-dropdown" id="classFilterDropdown">
+                        <div class="class-filter-dropdown" id="classFilterDropdown" role="listbox">
                             <div class="class-filter-item class-filter-toggle" id="classFilterToggle">
-                                <input type="checkbox" id="selectAllClasses" checked>
+                                <input type="checkbox" id="selectAllClasses" checked aria-controls="classFilterList">
                                 <label for="selectAllClasses">Select All / None</label>
                             </div>
                             <div class="class-filter-divider"></div>
@@ -112,11 +112,11 @@
     </div>
 
     <!-- Log Line Modal -->
-    <div class="modal-overlay" id="modalOverlay">
+    <div class="modal-overlay" id="modalOverlay" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
         <div class="modal-content">
             <div class="modal-header">
-                <h3 class="modal-title">Log Entry Details</h3>
-                <button class="modal-close" id="modalCloseX" title="Close">&times;</button>
+                <h3 class="modal-title" id="modalTitle">Log Entry Details</h3>
+                <button class="modal-close" id="modalCloseX" title="Close" aria-label="Close dialog">&times;</button>
             </div>
             <div class="modal-body">
                 <div class="modal-log-content" id="modalLogContent"></div>
@@ -129,11 +129,11 @@
     </div>
 
     <!-- File Info Modal -->
-    <div class="modal-overlay" id="fileInfoModalOverlay">
+    <div class="modal-overlay" id="fileInfoModalOverlay" role="dialog" aria-modal="true" aria-labelledby="fileInfoModalTitle">
         <div class="modal-content">
             <div class="modal-header">
-                <h3 class="modal-title">Loaded Log Files</h3>
-                <button class="modal-close" id="fileInfoCloseX" title="Close">&times;</button>
+                <h3 class="modal-title" id="fileInfoModalTitle">Loaded Log Files</h3>
+                <button class="modal-close" id="fileInfoCloseX" title="Close" aria-label="Close dialog">&times;</button>
             </div>
             <div class="modal-body">
                 <div id="fileListDisplay" class="file-list-view"></div>
@@ -151,11 +151,11 @@
     </div>
 
     <!-- About Modal -->
-    <div class="modal-overlay about-modal" id="aboutModalOverlay">
+    <div class="modal-overlay about-modal" id="aboutModalOverlay" role="dialog" aria-modal="true" aria-labelledby="aboutTitle">
         <div class="modal-content">
             <div class="modal-header">
                 <h3 class="modal-title" id="aboutTitle"></h3>  <!-- injected -->
-                <button class="modal-close" id="aboutCloseX" title="Close">&times;</button>
+                <button class="modal-close" id="aboutCloseX" title="Close" aria-label="Close dialog">&times;</button>
             </div>
             <div class="modal-body about-body">
                 <div>Written by: <span id="aboutAuthor"></span></div>  <!-- injected -->
@@ -173,7 +173,7 @@
     </div>
 
     <!-- Footer -->
-    <div class="footer" id="footer">No log files loaded</div>
+    <footer class="footer" id="footer">No log files loaded</footer>
 
     <script src="js/modals.js"></script>
     <script src="js/toasts.js"></script>

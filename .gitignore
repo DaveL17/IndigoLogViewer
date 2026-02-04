@@ -79,3 +79,6 @@ pids
 /__tests__/log_viewer_app.test.js
 /jest.config.js
 /CLAUDE.md
+/js/tests.js
+/tests.md
+/eslint.config.js

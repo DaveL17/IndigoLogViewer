@@ -186,7 +186,7 @@ renderChart(data, options = {}) {
                     label += value.toFixed(2) + ' KB';
                   }
                 } else {
-                  // For y axis, just use the plain value with locale formatting
+                  // For y-axis, just use the plain value with locale formatting
                   label += value.toLocaleString();
                 }
 
@@ -453,6 +453,8 @@ if (typeof document !== 'undefined') {
 // ============================================================================
 // Unit test exports
 // ============================================================================
+/* eslint-disable no-undef */
 if (typeof module !== 'undefined' && module.exports) {
   module.exports = { formatFileSize };
 }
+/* eslint-enable no-undef */
