@@ -1,4 +1,6 @@
 let logChart = null;
+let currentChartType = localStorage.getItem('chartType') || 'line';
+let sortedFiles = [];
 
 //=============================================================================
 // Open modal
@@ -52,47 +54,6 @@ function copyLogEntry() {
 		showToast('Failed to copy to clipboard', 'error');
 	});
 }
-
-// ============================================================================
-// File Info Modal
-// ============================================================================
-function openFileInfoModal() {
-    // Close hamburger menu
-    document.getElementById('hamburgerDropdown').classList.remove('show');
-
-    if (loadedFileInfo.length === 0) {
-        return; // Should not happen due to disabled state, but safe check
-    }
-
-    const fileInfoModal = document.getElementById('fileInfoModalOverlay');
-    const fileListDisplay = document.getElementById('fileListDisplay');
-
-    // Build file list table
-    let tableHtml = '<div class="file-info-table">';
-    tableHtml += '<div class="file-info-row file-info-header">';
-    tableHtml += '<div class="file-info-cell">File Name</div>';
-    tableHtml += '<div class="file-info-cell">Size</div>';
-    tableHtml += '<div class="file-info-cell">Entries</div>';
-    tableHtml += '</div>';
-
-    // Sort files by name
-    const sortedFiles = [...loadedFileInfo].sort((a, b) =>
-        a.name.localeCompare(b.name)
-    );
-
-    sortedFiles.forEach(file => {
-        tableHtml += '<div class="file-info-row">';
-        tableHtml += `<div class="file-info-cell" title="${escapeHtml(file.name)}">${escapeHtml(file.name)}</div>`;
-        tableHtml += `<div class="file-info-cell">${formatFileSize(file.size)}</div>`;
-        tableHtml += `<div class="file-info-cell">${file.entryCount.toLocaleString()}</div>`;
-        tableHtml += '</div>';
-    });
-
-    tableHtml += '</div>';
-    fileListDisplay.innerHTML = tableHtml;
-
-    fileInfoModal.classList.add('active');
-    document.body.style.overflow = 'hidden';
 
 // ============================================================================
 // Chart configuration and initialization
@@ -154,6 +115,7 @@ renderChart(data, options = {}) {
       options: {
         responsive: true,
         maintainAspectRatio: false,
+        grouped: options.grouped !== undefined ? options.grouped : true,
         plugins: {
           legend: {
             display: options.showLegend !== false,
@@ -222,6 +184,12 @@ getScalesConfig(chartType, yMin = null, yMax = null, y1Min = null, y1Max = null)
       color: gridColor
     },
     position: 'left',
+    title: {
+      display: true,
+      text: 'Lines',
+      color: textColor,
+      align: 'end',
+    },
     ticks: {
       precision: 0,
       color: textColor
@@ -234,6 +202,12 @@ getScalesConfig(chartType, yMin = null, yMax = null, y1Min = null, y1Max = null)
       color: gridColor
     },
     position: 'right',
+    title: {
+      display: true,
+      text: 'Size',
+      color: textColor,
+      align: 'end',
+    },
     ticks: {
       precision: 0,
       color: textColor,
@@ -281,8 +255,10 @@ getScalesConfig(chartType, yMin = null, yMax = null, y1Min = null, y1Max = null)
 // ============================================================================
 // Create the chart
 // ============================================================================
-function createLogChart() {
+function createLogChart(type = 'line') {
   const chartViewer = new LogChartViewer('logChart');
+
+  const isBar = type === 'bar';
 
   const barChartData = {
     labels: sortedFiles.map(file => file.name.split(' ')[0]),  // just the date part of the filename
@@ -293,6 +269,8 @@ function createLogChart() {
       borderColor: 'rgba(54, 162, 235, 1)',
       borderWidth: 1,
       yAxisID: 'y',
+      order: isBar ? 1 : undefined,
+      barPercentage: isBar ? 0.6 : undefined,
     },
     {
       label: 'Size',
@@ -301,21 +279,85 @@ function createLogChart() {
       borderColor: 'rgba(235, 162, 54, 1)',
       borderWidth: 1,
       yAxisID: 'y1',
+      order: isBar ? 2 : undefined,
+      barPercentage: isBar ? 1.0 : undefined,
     }]
   };
 
   chartViewer.renderChart(barChartData, {
-    type: 'line',
+    type: type,
     // title: 'Log Lines per File',
     showLegend: true,
+    grouped: !isBar,
   });
 
   return chartViewer;
 }
 
-// Initialize chart when modal opens
-logChart = createLogChart();
+// ============================================================================
+// File Info Modal
+// ============================================================================
+function openFileInfoModal() {
+    // Close hamburger menu
+    document.getElementById('hamburgerDropdown').classList.remove('show');
 
+    if (loadedFileInfo.length === 0) {
+        return; // Should not happen due to disabled state, but safe check
+    }
+
+    const fileInfoModal = document.getElementById('fileInfoModalOverlay');
+    const fileListDisplay = document.getElementById('fileListDisplay');
+
+    // Build file list table
+    let tableHtml = '<div class="file-info-table">';
+    tableHtml += '<div class="file-info-row file-info-header">';
+    tableHtml += '<div class="file-info-cell">File Name</div>';
+    tableHtml += '<div class="file-info-cell">Size</div>';
+    tableHtml += '<div class="file-info-cell">Entries</div>';
+    tableHtml += '</div>';
+
+    // Sort files by name
+    sortedFiles = [...loadedFileInfo].sort((a, b) =>
+        a.name.localeCompare(b.name)
+    );
+
+    sortedFiles.forEach(file => {
+        tableHtml += '<div class="file-info-row">';
+        tableHtml += `<div class="file-info-cell" title="${escapeHtml(file.name)}">${escapeHtml(file.name)}</div>`;
+        tableHtml += `<div class="file-info-cell">${formatFileSize(file.size)}</div>`;
+        tableHtml += `<div class="file-info-cell">${file.entryCount.toLocaleString()}</div>`;
+        tableHtml += '</div>';
+    });
+
+    tableHtml += '</div>';
+    fileListDisplay.innerHTML = tableHtml;
+
+    fileInfoModal.classList.add('active');
+    document.body.style.overflow = 'hidden';
+
+    // Initialize chart with cached type
+    logChart = createLogChart(currentChartType);
+
+    // Sync chart type button label to cached type
+    const chartTypeButton = document.getElementById('chartTypeButton');
+    if (chartTypeButton) {
+        chartTypeButton.textContent = (currentChartType === 'line') ? 'Bar Chart' : 'Line Chart';
+    }
+}
+
+// ============================================================================
+// Toggle between line and bar chart types
+// ============================================================================
+function toggleChartType() {
+    currentChartType = (currentChartType === 'line') ? 'bar' : 'line';
+    localStorage.setItem('chartType', currentChartType);
+    const btn = document.getElementById('chartTypeButton');
+    btn.textContent = (currentChartType === 'line') ? 'Bar Chart' : 'Line Chart';
+    if (logChart) {
+        logChart.destroy();
+        logChart = null;
+    }
+    logChart = createLogChart(currentChartType);
 }
 
 // ============================================================================
@@ -375,12 +417,17 @@ function toggleFileView() {
     fileList.classList.toggle('hidden');
     chartContainer.classList.toggle('visible');
 
+    const chartTypeButton = document.getElementById('chartTypeButton');
+    const chartVisible = chartContainer.classList.contains('visible');
+
     // Update button text
-    if (chartContainer.classList.contains('visible')) {
+    if (chartVisible) {
         toggleButton.textContent = 'Show List';
     } else {
         toggleButton.textContent = 'Show Chart';
     }
+
+    chartTypeButton.style.display = chartVisible ? '' : 'none';
 }
 
 //=============================================================================
@@ -395,12 +442,22 @@ function closeFileInfoModal(event) {
     fileInfoModal.classList.remove('active');
     document.body.style.overflow = '';
 
-    // Add this to clean up the chart
-      if (logChart) {
+    // Clean up the chart
+    if (logChart) {
         logChart.destroy();
         logChart = null;
-      }
     }
+
+    // Reset view state so list is shown on next open
+    document.getElementById('fileListDisplay').classList.remove('hidden');
+    document.querySelector('.chart-container').classList.remove('visible');
+    document.getElementById('toggleViewButton').textContent = 'Show Chart';
+    const chartTypeButton = document.getElementById('chartTypeButton');
+    if (chartTypeButton) {
+        chartTypeButton.textContent = 'Bar Chart';
+        chartTypeButton.style.display = 'none';
+    }
+}
 
 //=============================================================================
 // Format file size
@@ -448,6 +505,7 @@ if (typeof document !== 'undefined') {
         const target = document.getElementById("logChart");
         target.scrollIntoView({ behavior: "smooth", block: "start" });
     });
+    document.getElementById("chartTypeButton").addEventListener("click", toggleChartType);
 }
 
 // ============================================================================

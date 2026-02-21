@@ -85,7 +85,7 @@ For convenient access, serve the app from Indigo's built-in web server:
 
 Use the hamburger menu (☰) in the upper right corner to access features:
 
-**File Info** — View detailed statistics about loaded files including name, size, and entry count. Toggle between list and chart views. In chart view, click legend items to hide/show individual series.
+**File Info** — View detailed statistics about loaded files including name, size, and entry count. Toggle between list and chart views. In chart view, switch between line and bar chart styles using the **Bar Chart / Line Chart** button — your preference is saved across sessions. Click legend items to hide/show individual series.
 
 <img src="assets/images/fileInfoListView.png" alt="File Info List View" width="800" height="600">
 
