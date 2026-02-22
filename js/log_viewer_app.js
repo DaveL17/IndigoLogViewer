@@ -1,5 +1,3 @@
-console.log(APP_VERSION);
-
 let allLogEntries = [];
 let availableClasses = new Set();
 let availableDates = [];
@@ -119,13 +117,16 @@ function updateSortIndicators() {
 // ============================================================================
 function toggleClassFilter() {
     const dropdown = document.getElementById('classFilterDropdown');
+    const button = document.getElementById('classFilterButton');
     const classList = document.getElementById('classFilterList');
     const isOpen = dropdown.classList.contains('show');
 
     if (isOpen) {
         dropdown.classList.remove('show');
+        button.setAttribute('aria-expanded', 'false');
     } else {
         dropdown.classList.add('show');
+        button.setAttribute('aria-expanded', 'true');
         // Reset scroll position to top when opening
         if (classList) {
             classList.scrollTop = 0;
@@ -241,12 +242,15 @@ function openHelp() {
 //=============================================================================
 function toggleMenu() {
 	const dropdown = document.getElementById('hamburgerDropdown');
+	const button = document.getElementById('hamburgerButton');
 	const isOpen = dropdown.classList.contains('show');
 
 	if (isOpen) {
 		dropdown.classList.remove('show');
+		button.setAttribute('aria-expanded', 'false');
 	} else {
 		dropdown.classList.add('show');
+		button.setAttribute('aria-expanded', 'true');
 		updateMenuItems();
 	}
 }
@@ -276,31 +280,6 @@ document.addEventListener('click', function(event) {
 		dropdown.classList.remove('show');
 	}
 });
-
-//=============================================================================
-// Toast notification system
-//=============================================================================
-function showToast(message, type = 'info', duration = 4000) {
-	const toastContainer = document.getElementById('toastContainer');
-	const toast = document.createElement('div');
-	toast.className = `toast ${type}`;
-	toast.textContent = message;
-
-	toastContainer.appendChild(toast);
-
-	// Trigger show animation
-	setTimeout(() => toast.classList.add('show'), 100);
-
-	// Hide and remove after duration
-	setTimeout(() => {
-		toast.classList.add('hide');
-		setTimeout(() => {
-			if (toast.parentNode) {
-				toast.parentNode.removeChild(toast);
-			}
-		}, 300);
-	}, duration);
-}
 
 //=============================================================================
 // Color log message class field entries error=red, warning=orange, debug=green
@@ -892,9 +871,6 @@ function applyFilters() {
 //=============================================================================
 // Render virtual list
 //=============================================================================
-// Replace the row generation part in renderVirtualList() function
-// Find this section (around line 645-660) and replace it:
-
 function renderVirtualList() {
 	if (filteredEntries.length === 0) {
 		virtualSpacer.style.height = '0px';
@@ -1146,12 +1122,7 @@ function loadSavedTheme() {
 }
 
 //=============================================================================
-// Load saved theme when page loads
-//=============================================================================
-document.addEventListener('DOMContentLoaded', loadSavedTheme);
-
-//=============================================================================
-// If DOMContentLoaded already fired, call it immediately
+// Load saved theme when page loads (or immediately if DOM already ready)
 //=============================================================================
 document.readyState === 'loading' ? document.addEventListener('DOMContentLoaded', loadSavedTheme) : loadSavedTheme();
 
