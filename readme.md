@@ -1,6 +1,6 @@
 # Indigo Log Viewer
 
-![Version](https://img.shields.io/badge/version-2026.2.4-blue)
+![Version](https://img.shields.io/badge/version-2026.2.5-blue)
 ![Browser](https://img.shields.io/badge/browser-Safari%2018.6-brightgreen)
 ![License](https://img.shields.io/badge/license-MIT-lightgrey)
 
