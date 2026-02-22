@@ -95,6 +95,10 @@ Use the hamburger menu (☰) in the upper right corner to access features:
 
 *File Info — Chart View*
 
+<img src="assets/images/fileInfoBarChartView.png" alt="File Info Chart View" width="800" height="600">
+
+*File Info — Bar Chart View*
+
 **Light/Dark Theme** — Toggle between light and dark themes. Your preference is saved to browser local storage. Note that clearing browser cache may reset this setting.
 
 **Help** — Opens the GitHub repository and this readme file.
