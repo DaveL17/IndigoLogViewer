@@ -9,6 +9,7 @@
     --button-text: #ffffff;
     --debug-color: #28a745;
     --error-color: #dc3545;
+    --progress-color: #4CAF50;
     --gap-size: 5px;
     --header-bg: #f5f5f5;
     --input-bg: #ffffff;
@@ -40,6 +41,7 @@
     --input-bg: #1d1d1d;
     --modal-bg: #2d2d2d;
     --modal-overlay: rgba(0, 0, 0, 0.7);
+    --progress-color: #45a049;
     --scrollbar-thumb: #555555;
     --scrollbar-track: #2d2d2d;
     --select-bg: #2d2d2d;
@@ -98,8 +100,6 @@ body {
    UTILITY CLASSES
    ========================================================================== */
 .no-select {
-    -moz-user-select: none;
-    -ms-user-select: none;
     -webkit-user-select: none;
     user-select: none;
 }
@@ -234,7 +234,7 @@ body {
 
 .header-background-image {
     background-color: transparent;
-    background-image: url("/assets/images/headerBackgroundLight.png");
+    background-image: url("../assets/images/headerBackgroundLight.png");
     background-repeat: no-repeat;
     background-size: contain;
     height: 100%;
@@ -244,7 +244,7 @@ body {
 }
 
 [data-theme="dark"] .header-background-image {
-    background-image: url("/assets/images/headerBackground.png");
+    background-image: url("../assets/images/headerBackground.png");
 }
 
 .header-background-layer {
@@ -332,7 +332,6 @@ body {
     opacity: 1;
     transform: translateY(0);
     visibility: visible;
-    z-index: 9999;
 }
 
 .menu-item {
@@ -385,7 +384,6 @@ button {
     height: 36px;
     line-height: 1;
     padding: 8px 12px;
-    z-index: 10;
 }
 
 select {
@@ -398,7 +396,6 @@ select {
     font-weight: normal;
     padding-right: 30px;
     width: 200px;
-    z-index: 10;
 }
 
 [data-theme="dark"] select {
@@ -416,18 +413,11 @@ input[type="date"] {
 }
 
 [data-theme="dark"] input[type="date"] {
-    background-color: var(--input-bg);
-    border: 1px solid var(--border-color);
     color-scheme: dark;
 }
 
 input[type="date"]::-webkit-calendar-picker-indicator {
     cursor: pointer;
-    filter: invert(1);
-    opacity: 0.8;
-}
-
-[data-theme="dark"] input[type="date"]::-webkit-calendar-picker-indicator {
     filter: invert(1);
     opacity: 0.8;
 }
@@ -474,7 +464,7 @@ button:disabled {
 }
 
 .date-filter-group {
-    align-items: start;
+    align-items: flex-start;
     display: flex;
     flex-direction: column;
     gap: var(--gap-size);
@@ -750,7 +740,6 @@ button:disabled {
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-    word-break: break-word;
 }
 
 /* ==========================================================================
@@ -781,17 +770,6 @@ button:disabled {
     display: none;
 }
 
-.header-timestamp,
-.row-timestamp {
-    min-width: var(--timestamp-width, 180px);
-    width: var(--timestamp-width, 180px);
-}
-
-.header-class,
-.row-class {
-    min-width: var(--class-width, 150px);
-    width: var(--class-width, 150px);
-}
 
 /* ==========================================================================
    TOAST NOTIFICATIONS
@@ -906,7 +884,7 @@ button:disabled {
     align-items: center;
     background-color: var(--header-bg);
     border-bottom: 1px solid var(--border-color);
-    border-radius: 4px 4px 0 0;
+    border-radius: var(--border-radius) var(--border-radius) 0 0;
     display: flex;
     justify-content: space-between;
     padding: 15px 20px;
@@ -955,7 +933,7 @@ button:disabled {
 
 .modal-footer {
     background-color: var(--header-bg);
-    border-radius: 0 0 4px 4px;
+    border-radius: 0 0 var(--border-radius) var(--border-radius);
     border-top: 1px solid var(--border-color);
     display: flex;
     gap: 10px;
@@ -1071,7 +1049,7 @@ button:disabled {
 .file-list-button-group {
     display: flex;
     gap: 10px;
-    justify-content: end;
+    justify-content: flex-end;
 }
 
 .chart-container {
@@ -1108,7 +1086,7 @@ canvas {
 }
 
 .progress-bar {
-    background: linear-gradient(90deg, #4CAF50, #45a049);
+    background: var(--progress-color);
     height: 100%;
     transition: width 0.3s ease;
     width: 0;
