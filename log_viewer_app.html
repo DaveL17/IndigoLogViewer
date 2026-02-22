@@ -3,14 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Indigo Log Viewer — view and filter Indigo smart home automation log files">
     <meta http-equiv="Content-Security-Policy"
-          content="default-src 'self'; script-src 'self' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline';">
+          content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline';">
     <title id="tabTitle"></title>  <!-- injected -->
     <link rel="stylesheet" href="css/log_viewer_app.css">
     <link rel="icon" href="assets/images/favicon.ico">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.0/dist/chart.umd.min.js"
-            integrity="sha384-XcdcwHqIPULERb2yDEM4R0XaQKU3YnDsrTmjACBZyfdVVqjh6xQ4/DCMd7XLcA6Y"
-            crossorigin="anonymous"></script>
+    <script src="js/vendor/chart.umd.min.js"></script>
 </head>
 <body data-theme="light">
     <div class="hamburger-menu">
@@ -57,17 +56,20 @@
                 <div class="control-group">
                     <label>Text Search</label>
                     <div class="text-input-container">
+                        <!-- suppress HtmlFormInputWithoutLabel -->
                         <input type="text" id="textFilter" placeholder="Search log entries...">
-                        <button class="clear-input-button" id="clearTextButton" title="Clear search">&times;</button>
+                        <button class="clear-input-button" id="clearTextButton" title="Clear search" aria-label="Clear search">&times;</button>
                     </div>
                 </div>
                 <!-- Date Filter Controls-->
                 <div class="date-filter-group">
                     <label>Date Filter</label>
                     <div class="date-control-group">
+                        <!-- suppress HtmlFormInputWithoutLabel -->
                         <input type="date" id="startDateFilter" placeholder="Start Date">
+                        <!-- suppress HtmlFormInputWithoutLabel -->
                         <input type="date" id="endDateFilter" placeholder="End Date">
-                        <button class="clear-button" id="clearDateButton">Clear</button>
+                        <button class="clear-button" id="clearDateButton" aria-label="Clear date filter">Clear</button>
                     </div>
                 </div>
             </div>
