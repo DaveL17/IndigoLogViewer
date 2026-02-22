@@ -96,16 +96,21 @@ function applySorting() {
 // Update column sort indicators
 //=============================================================================
 function updateSortIndicators() {
-    // Clear all indicators
+    // Clear all indicators and reset aria-sort
     const indicators = document.querySelectorAll('.sort-indicator');
     indicators.forEach(indicator => {
         indicator.className = 'sort-indicator';
     });
+    document.querySelectorAll('.sortable').forEach(el => el.setAttribute('aria-sort', 'none'));
 
-    // Set the active indicator
+    // Set the active indicator and aria-sort
     const activeIndicator = document.getElementById(`sort${currentSort.column.charAt(0).toUpperCase() + currentSort.column.slice(1)}`);
     if (activeIndicator) {
         activeIndicator.className = `sort-indicator ${currentSort.direction}`;
+    }
+    const activeHeader = document.getElementById(`header${currentSort.column.charAt(0).toUpperCase() + currentSort.column.slice(1)}`);
+    if (activeHeader) {
+        activeHeader.setAttribute('aria-sort', currentSort.direction === 'asc' ? 'ascending' : 'descending');
     }
 }
 
@@ -547,6 +552,7 @@ async function loadLogFiles() {
 			const filesCompleted = processedFiles + skippedFiles;
 			const progressPercent = (filesCompleted / totalFiles) * 100;
 			progressBar.style.width = `${progressPercent}%`;
+			progressBar.setAttribute('aria-valuenow', Math.round(progressPercent));
 			progressCounter.textContent = `${filesCompleted}/${totalFiles}`;
 		}
 

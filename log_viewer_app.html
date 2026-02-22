@@ -78,30 +78,31 @@
     </div>
 
     <!-- Hidden file inputs -->
-    <input class="hidden-input" type="file" id="folderInput" webkitdirectory>  <!-- webkitdirectory is not an official attribute -->
-    <input class="hidden-input" type="file" id="fileInput" multiple>
+    <input class="hidden-input" type="file" id="folderInput" webkitdirectory aria-label="Choose log folder">  <!-- webkitdirectory is not an official attribute -->
+    <input class="hidden-input" type="file" id="fileInput" multiple aria-label="Choose log files">
 
     <!-- Toast notifications container -->
     <div class="toast-container" id="toastContainer"></div>
 
     <!-- Log Entry Table -->
+    <main>
     <div class="table-container">
         <div class="table-header">
-            <div class="header-timestamp sortable" id="headerTimestamp">
+            <div class="header-timestamp sortable" id="headerTimestamp" aria-sort="none">
                 Timestamp
                 <span class="sort-indicator" id="sortTimestamp"></span>
             </div>
-            <div class="header-class sortable" id="headerClass">
+            <div class="header-class sortable" id="headerClass" aria-sort="none">
                 Class
                 <span class="sort-indicator" id="sortClass"></span>
             </div>
             <div class="header-entry">
                 Log Entry (Click row for full details)
                 <div class="navigation-controls">
-                    <button class="nav-button" id="navTopButton" title="Go to top">Top</button>
-                    <button class="nav-button" id="navPageUpButton" title="Page up">PgUp</button>
-                    <button class="nav-button" id="navPageDownButton" title="Page down">PgDn</button>
-                    <button class="nav-button" id="navEndButton" title="Go to end">End</button>
+                    <button class="nav-button" id="navTopButton" title="Go to top" aria-label="Go to top">Top</button>
+                    <button class="nav-button" id="navPageUpButton" title="Page up" aria-label="Page up">PgUp</button>
+                    <button class="nav-button" id="navPageDownButton" title="Page down" aria-label="Page down">PgDn</button>
+                    <button class="nav-button" id="navEndButton" title="Go to end" aria-label="Go to end">End</button>
                 </div>
             </div>
         </div>
@@ -112,13 +113,14 @@
             </div>
         </div>
     </div>
+    </main>
 
     <!-- Log Line Modal -->
     <div class="modal-overlay" id="modalOverlay" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
         <div class="modal-content">
             <div class="modal-header">
                 <h3 class="modal-title" id="modalTitle">Log Entry Details</h3>
-                <button class="modal-close" id="modalCloseX" title="Close" aria-label="Close dialog">&times;</button>
+                <button class="modal-close" id="modalCloseX" title="Close" aria-label="Close log entry dialog">&times;</button>
             </div>
             <div class="modal-body">
                 <div class="modal-log-content" id="modalLogContent"></div>
@@ -135,12 +137,12 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h3 class="modal-title" id="fileInfoModalTitle">Loaded Log Files</h3>
-                <button class="modal-close" id="fileInfoCloseX" title="Close" aria-label="Close dialog">&times;</button>
+                <button class="modal-close" id="fileInfoCloseX" title="Close" aria-label="Close file info dialog">&times;</button>
             </div>
             <div class="modal-body">
                 <div id="fileListDisplay" class="file-list-view"></div>
                 <div class="chart-container chart-view" style="height: 100%;">
-                    <canvas id="logChart"></canvas>
+                    <canvas id="logChart" aria-label="Log entries per file chart">Chart not available</canvas>
                 </div>
             </div>
             <div class="modal-footer">
@@ -158,7 +160,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h3 class="modal-title" id="aboutTitle"></h3>  <!-- injected -->
-                <button class="modal-close" id="aboutCloseX" title="Close" aria-label="Close dialog">&times;</button>
+                <button class="modal-close" id="aboutCloseX" title="Close" aria-label="Close about dialog">&times;</button>
             </div>
             <div class="modal-body about-body">
                 <div>Written by: <span id="aboutAuthor"></span></div>  <!-- injected -->
@@ -168,10 +170,10 @@
     </div>
 
     <!-- Progress bar -->
-    <div id="loadingProgress" class="loading-progress" style="display: none;">
+    <div id="loadingProgress" class="loading-progress" role="status" aria-live="polite" style="display: none;">
       <div class="progress-text">Loading log files... <span id="progressCounter">0/0</span></div>
       <div class="progress-bar-container">
-        <div id="progressBar" class="progress-bar"></div>
+        <div id="progressBar" class="progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"></div>
       </div>
     </div>
 
