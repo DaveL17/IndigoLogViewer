@@ -29,7 +29,7 @@ No installation, server, or build tools required.
 - **Light/Dark Themes**: Switch themes with your preference saved locally
 - **Responsive Design**: Resizable columns to fit your workflow
 - **Multi-line Support**: Properly handles multi-line log entries
-- **No Dependencies**: Pure JavaScript with only Chart.js (loaded from CDN)
+- **No Dependencies**: Pure JavaScript with only Chart.js (bundled locally)
 
 ## Log Format
 
@@ -95,7 +95,7 @@ Use the hamburger menu (☰) in the upper right corner to access features:
 
 *File Info — Chart View*
 
-<img src="assets/images/fileInfoBarChartView.png" alt="File Info Chart View" width="800" height="600">
+<img src="assets/images/fileInfoBarChartView.png" alt="File Info Bar Chart View" width="800" height="600">
 
 *File Info — Bar Chart View*
 
@@ -163,7 +163,7 @@ The app supports full keyboard navigation:
 ## Technical Details
 
 - **Architecture**: Standalone HTML/CSS/JavaScript (no build system or framework)
-- **External Dependencies**: Chart.js 4.5.0 (loaded from CDN)
+- **External Dependencies**: Chart.js 4.5.0 (bundled locally)
 - **Virtual Scrolling**: Only visible rows rendered for performance
 - **Security**: All user content escaped to prevent XSS
 - **File Loading**: FileReader API with automatic retry logic (3 attempts, exponential backoff)
@@ -172,7 +172,7 @@ The app supports full keyboard navigation:
 
 ### Reporting Issues
 
-Found a bug or have a suggestion? Please report it using the [GitHub Issues](https://github.com/yourusername/IndigoLogViewer/issues) tab.
+Found a bug or have a suggestion? Please report it using the [GitHub Issues](https://github.com/DaveL17/IndigoLogViewer/issues) tab.
 
 ### Getting Help
 
