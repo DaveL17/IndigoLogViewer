@@ -375,13 +375,11 @@ function updateChartTheme() {
         const currentTheme = document.body.dataset.theme;
         const gridColor = (currentTheme === 'dark') ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)';
         const textColor = (currentTheme === 'dark') ? 'rgba(255, 255, 255, 0.7)' : 'rgba(0, 0, 0, 0.7)';
-        const lineColor = (currentTheme === 'dark') ? 'rgba(54, 162, 235, 0.6)' : 'rgba(54, 162, 235, 0.8)';
-        const lineBorderColor = 'rgba(54, 162, 235, 1)';
 
         // Update dataset colors
+        const linesAlpha = (currentTheme === 'dark') ? '0.6' : '0.8';
         chart.data.datasets.forEach(dataset => {
-            dataset.backgroundColor = lineColor;
-            dataset.borderColor = lineBorderColor;
+            dataset.backgroundColor = dataset.borderColor.replace('1)', `${linesAlpha})`);
         });
 
         // Update scales (axis labels and grid lines)
@@ -393,6 +391,11 @@ function updateChartTheme() {
         if (chart.options.scales.y) {
             chart.options.scales.y.ticks.color = textColor;
             chart.options.scales.y.grid.color = gridColor;
+        }
+
+        if (chart.options.scales.y1) {
+            chart.options.scales.y1.ticks.color = textColor;
+            chart.options.scales.y1.grid.color = gridColor;
         }
 
         // Update title and legend colors
@@ -467,7 +470,7 @@ function closeFileInfoModal(event) {
 //=============================================================================
 function formatFileSize(bytes) {
     if (bytes === 0) return '0 Bytes';
-    const k = 1024;
+    const k = 1000;
     const sizes = ['Bytes', 'KB', 'MB', 'GB'];
     const i = Math.floor(Math.log(bytes) / Math.log(k));
     return Math.round((bytes / Math.pow(k, i)) * 100) / 100 + ' ' + sizes[i];

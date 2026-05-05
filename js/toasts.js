@@ -33,6 +33,7 @@ function showToast(message, type = 'info', duration = 4000) {
 
         // Use transitionend event instead of fixed timeout
         const handleTransitionEnd = () => {
+            clearTimeout(fallbackTimeout);
             toast.removeEventListener('transitionend', handleTransitionEnd);
             toast.remove();
         };
@@ -40,7 +41,7 @@ function showToast(message, type = 'info', duration = 4000) {
         toast.addEventListener('transitionend', handleTransitionEnd);
 
         // Fallback in case transition doesn't fire
-        setTimeout(() => {
+        const fallbackTimeout = setTimeout(() => {
             toast.remove();
         }, 500);
     }, duration);

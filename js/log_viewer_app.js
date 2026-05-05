@@ -686,13 +686,16 @@ async function readFileContent(file, retryCount = 0, maxRetries = 3) {
             }
         };
 
+        let intentionalAbort = false;
         reader.onabort = () => {
-            // Don't retry aborted operations
-            reject(new Error(`File read was aborted: ${file.name}`));
+            if (!intentionalAbort) {
+                reject(new Error(`File read was aborted: ${file.name}`));
+            }
         };
 
         // Extended timeout for network files and files being written to
         const timeout = setTimeout(() => {
+            intentionalAbort = true;
             reader.abort();
 
             // Retry on timeout if we have retries left
@@ -1006,6 +1009,7 @@ function scrollToSelectedRow() {
 // Navigate to top of entry list
 //=============================================================================
 function navigateToTop() {
+	if (filteredEntries.length === 0) return;
 	scrollContainer.scrollTop = 0;
 	selectedRowIndex = 0;
 	requestAnimationFrame(renderVirtualList);
@@ -1015,6 +1019,7 @@ function navigateToTop() {
 // Navigate to end of entry list
 //=============================================================================
 function navigateToEnd() {
+	if (filteredEntries.length === 0) return;
 	scrollContainer.scrollTop = scrollContainer.scrollHeight;
 	selectedRowIndex = filteredEntries.length - 1;
 	requestAnimationFrame(renderVirtualList);
@@ -1154,6 +1159,7 @@ document.getElementById('endDateFilter').addEventListener('change', applyFilters
 // Keyboard navigation
 //=============================================================================
 document.addEventListener('keydown', (e) => {
+	if (['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement?.tagName)) return;
 	// Close modal with Escape key
 	if (e.key === 'Escape') {
 		closeModal();
