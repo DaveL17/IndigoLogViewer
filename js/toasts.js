@@ -50,7 +50,11 @@ function showToast(message, type = 'info', duration = 4000) {
     toast.addEventListener('click', () => {
         clearTimeout(hideTimeout);
         toast.classList.add('hide');
-        setTimeout(() => toast.remove(), 300);
+        const clickFallback = setTimeout(() => toast.remove(), 500);
+        toast.addEventListener('transitionend', () => {
+            clearTimeout(clickFallback);
+            toast.remove();
+        }, { once: true });
     });
 
     return toast; // Return toast element for external control if needed
