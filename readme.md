@@ -35,8 +35,8 @@ No installation, server, or build tools required.
 
 The viewer expects tab-delimited log entries in this format:
 
-```
-[Timestamp][Message Class][Message]
+```text
+YYYY-MM-DD HH:MM:SS.fff	Message Class	Message
 ```
 
 Example:
@@ -61,7 +61,7 @@ Multi-line log entries (continuation lines without timestamps) are fully support
 
 **Choose Log Files** — Select multiple specific files at once, including non-contiguous files.
 
-> **Note**: Log files are not monitored in real-time. To view new entries, reload the files using the menu.
+> **Note**: Log files are not monitored in real-time. To view new entries, select **Choose Log Folder** or **Choose Log Files** from the menu again.
 
 ### Serving from Indigo Web Server
 
@@ -101,7 +101,7 @@ Use the hamburger menu (☰) in the upper right corner to access features:
 
 **Light/Dark Theme** — Toggle between light and dark themes. Your preference is saved to browser local storage. Note that clearing browser cache may reset this setting.
 
-**Help** — Opens the GitHub repository and this readme file.
+**Help** — Opens the GitHub repository.
 
 **About** — Version and author information.
 
