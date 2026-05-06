@@ -1,6 +1,6 @@
 //=============================================================================
 // Common config values
 //=============================================================================
-const APP_VERSION = "2026.2.6";
+const APP_VERSION = "2026.5.1";
 const APP_NAME = "Indigo Log Viewer";
 const AUTHOR = "DaveL17";
