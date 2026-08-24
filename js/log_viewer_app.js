@@ -660,6 +660,7 @@ async function loadLogFiles() {
 	} catch (error) {
 		// Hide progress bar on error
 		progressContainer.style.display = 'none';
+		console.error('Failed to load log files: ', error);
 		const sourceText = inputSource === 'folder' ? 'selected folder' : 'selected files';
 		showToast(`No log files found matching pattern "YYYY-MM-DD Events.*" in ${sourceText}`, 'error');
 	}
