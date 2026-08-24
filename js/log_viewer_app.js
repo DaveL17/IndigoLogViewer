@@ -433,7 +433,6 @@ function selectFolder() {
 	// Reset both inputs to ensure clean state
 	folderInput.value = '';
 	fileInput.value = '';
-	loadedFileInfo = [];
 	folderInput.click();
 	document.getElementById('hamburgerDropdown').classList.remove('show');
 }
@@ -447,7 +446,6 @@ function selectFiles() {
 	// Reset both inputs to ensure clean state
 	folderInput.value = '';
 	fileInput.value = '';
-	loadedFileInfo = [];
 	fileInput.click();
 	document.getElementById('hamburgerDropdown').classList.remove('show');
 }
@@ -478,6 +476,7 @@ async function loadLogFiles() {
     allLogEntries = [];
     availableClasses.clear();
     selectedClasses.clear(); // Reset selected classes
+    loadedFileInfo = [];
     clearError();
 
     // Reset virtual scrolling state
@@ -1198,7 +1197,7 @@ document.readyState === 'loading' ? document.addEventListener('DOMContentLoaded'
 function escapeHtml(text) {
 	const div = document.createElement('div');
 	div.textContent = text;
-	return div.innerHTML.replace(/'/g, '&#39;');
+	return div.innerHTML.replace(/"/g, '&quot;').replace(/'/g, '&#39;');
 }
 
 //=============================================================================

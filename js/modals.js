@@ -140,8 +140,8 @@ class LogChartViewer {
 
 								// Only format if this dataset uses the y1 axis
 								if (context.dataset.yAxisID === 'y1') {
-									if (value > 9999) {
-										value = value / 1000;
+									if (value > 999999) {
+										value = value / 1000000;
 										label += value.toFixed(2) + ' GB';
 									} else if (value > 999) {
 										value = value / 1000;
@@ -214,8 +214,8 @@ class LogChartViewer {
 			precision: 0,
 			color: textColor,
 			callback: function(value, index, ticks) {
-				if (value > 9999) {
-					value = value / 1000;
+				if (value > 999999) {
+					value = value / 1000000;
 					return value.toLocaleString() + ' GB';
 				} else if (value > 999) {
 					value = value / 1000;
