@@ -82,3 +82,5 @@ pids
 /js/tests.js
 /tests.md
 /eslint.config.js
+/.claude/
+/todo.md
