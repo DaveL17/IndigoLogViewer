@@ -227,6 +227,63 @@ document.addEventListener('click', function(event) {
 }, true); // Use capture phase
 
 //=============================================================================
+// Export filtered log entries to a text file
+//=============================================================================
+function exportFilteredEntries() {
+	if (filteredEntries.length === 0) {
+		showToast('No log entries to export', 'error');
+		document.getElementById('hamburgerDropdown').classList.remove('show');
+		return;
+	}
+
+	const content = filteredEntries.map(entry => entry.originalLine).join('\n');
+
+	const pad = n => String(n).padStart(2, '0');
+	const now = new Date();
+	const stamp = `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())}_${pad(now.getHours())}${pad(now.getMinutes())}${pad(now.getSeconds())}`;
+	const suggestedName = `indigo_log_export_${stamp}.txt`;
+
+	if (window.showSaveFilePicker) {
+		(async () => {
+			try {
+				const handle = await window.showSaveFilePicker({
+					suggestedName,
+					types: [{ description: 'Text File', accept: { 'text/plain': ['.txt'] } }]
+				});
+				const writable = await handle.createWritable();
+				await writable.write(content);
+				await writable.close();
+				showToast('Log entries exported successfully', 'success');
+			} catch (err) {
+				if (err.name !== 'AbortError') {
+					console.error('Failed to export log entries: ', err);
+					showToast('Export failed', 'error');
+				}
+			}
+		})();
+	} else {
+		try {
+			const blob = new Blob([content], { type: 'text/plain' });
+			const url = URL.createObjectURL(blob);
+			const link = document.createElement('a');
+			link.href = url;
+			link.download = suggestedName;
+			document.body.appendChild(link);
+			link.click();
+			document.body.removeChild(link);
+			URL.revokeObjectURL(url);
+			showToast('Log entries exported successfully', 'success');
+		} catch (err) {
+			console.error('Failed to export log entries: ', err);
+			showToast('Export failed', 'error');
+		}
+	}
+
+	// Close the hamburger menu
+	document.getElementById('hamburgerDropdown').classList.remove('show');
+}
+
+//=============================================================================
 // Help Menu item
 //=============================================================================
 function openHelp() {
@@ -267,6 +324,10 @@ function updateMenuItems() {
 	// Update file info menu item state. Disabled when no files have been loaded.
 	const fileInfoMenuItem = document.getElementById('fileInfoMenuItem');
 	loadedFileInfo.length === 0 ? fileInfoMenuItem.classList.add('disabled') : fileInfoMenuItem.classList.remove('disabled');
+
+	// Update export menu item state. Disabled when there are no filtered entries to export.
+	const exportMenuItem = document.getElementById('exportMenuItem');
+	filteredEntries.length === 0 ? exportMenuItem.classList.add('disabled') : exportMenuItem.classList.remove('disabled');
 }
 
 //=============================================================================
@@ -1446,6 +1507,7 @@ document.getElementById('hamburgerButton').addEventListener('click', toggleMenu)
 document.getElementById('selectFolderMenuItem').addEventListener('click', selectFolder);
 document.getElementById('selectFilesMenuItem').addEventListener('click', selectFiles);
 document.getElementById('fileInfoMenuItem').addEventListener('click', openFileInfoModal);
+document.getElementById('exportMenuItem').addEventListener('click', exportFilteredEntries);
 document.getElementById('themeMenuItem').addEventListener('click', toggleTheme);
 document.getElementById('helpMenuItem').addEventListener('click', openHelp);
 document.getElementById('aboutDialog').addEventListener('click', openAboutModal);
